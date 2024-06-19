@@ -1,32 +1,24 @@
-<aside class="main-sidebar sidebar-light-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-image: url('{{ asset('imagenes/sistema/aside1.jpg') }}');background-repeat: no-repeat;background-size: 100% 100%;">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-        <img src="{{asset('imagenes/sistema/petu1.png')}}" alt="M & M" class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">M & M</span>
+    <a href="{{ route('dashboard') }}" class="brand-link bg-light" style="text-decoration: none;background-color: rgba(39, 39, 39, 0.8);">
+        <img src="{{asset('imagenes/sistema/logo_mgl.jpg')}}" alt="M & M" class="brand-image img-circle elevation-3" style="opacity: .8;">
+        <span class="brand-text font-weight-light"><strong>MGL - Tech</strong></span>
     </a>
-    <div class="sidebar">
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+    <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition" style="background-color: rgba(39, 39, 39, 0.8)">
+        <div class="user-panel d-flex">
             <div class="image">
                 <img src="{{asset('imagenes/usuarios/usuario-inicial.jpg')}}" class="img-circle elevation-2" alt="User Image">
             </div>
-            <div class="info">
-                <a href="#" class="d-block">Alexander Pierce</a>
-            </div>
-        </div>
-        <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                    aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
+            <div class="info" style="font-size: 0.85em;">
+                <h5 class="text-white text-small">{{session('nombres_completos')}}</h5>
+                @if (session('rol_principal_id') < 4)
+                    <h6 class="text-white">{{session('rol_principal')}}</h6>
+                @endif
             </div>
         </div>
         <!-- Sidebar Menu -->
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"data-accordion="false">
+        <nav>
+            <ul class="nav nav-pills nav-sidebar flex-column text-sm nav-compact" data-widget="treeview" role="menu"data-accordion="false">
                 @foreach ($menusComposer as $key => $item)
                     @if ($item['menu_id'] != 0)
                         @break
@@ -39,3 +31,4 @@
     </div>
     <!-- /.sidebar -->
 </aside>
+

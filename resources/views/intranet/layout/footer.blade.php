@@ -1,8 +1,7 @@
-<footer class="app-footer" style="font-size: 0.8em;"> <!--begin::To the end-->
-    <div class="float-end d-none d-sm-inline">Version 2.0</div> <!--end::To the end--> <!--begin::Copyright--> <strong>
-        Copyright © 2014-2024&nbsp;
-        <a href="#" class="text-decoration-none">Maya & Moya - Sistem</a>.
-    </strong>
-    Todos lo derechos reservados.
-    <!--end::Copyright-->
+<footer class="main-footer main-footer text-sm">
+    <strong>Copyright © 2024 <a href="#">MGL -Tech</a>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+        <b>Version</b> 3.0
+    </div>
 </footer>

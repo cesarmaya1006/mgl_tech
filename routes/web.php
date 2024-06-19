@@ -8,6 +8,7 @@ use App\Http\Controllers\Config\PermisoController;
 use App\Http\Controllers\Config\PermisoRolController;
 use App\Http\Controllers\Config\RolController;
 use App\Http\Controllers\Empresa\AreaController;
+use App\Http\Controllers\Empresa\CargoController;
 use App\Http\Controllers\Empresa\EmpGrupoController;
 use App\Http\Controllers\Empresa\EmpresaController;
 use App\Http\Middleware\AdminEmp;
@@ -85,7 +86,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         });
         // ------------------------------------------------------------------------------------
         // ------------------------------------------------------------------------------------
-        // Ruta Administrador del SEmpresa
+        // Ruta Administrador del Empresa
         // ------------------------------------------------------------------------------------
         Route::controller(EmpresaController::class)->prefix('empresas')->group(function () {
             Route::get('', 'index')->name('empresa.index');
@@ -102,7 +103,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     Route::prefix('configuracion')->middleware(AdminEmp::class)->group(function () {
         // ------------------------------------------------------------------------------------
-        // Ruta Administrador del Sistema Roles
+        // Ruta Administrador del Sistema Areas
         Route::controller(AreaController::class)->prefix('areas')->group(function () {
             Route::get('', 'index')->name('areas.index');
             Route::get('crear', 'create')->name('areas.create');
@@ -112,6 +113,19 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::delete('eliminar/{id}', 'destroy')->name('areas.destroy');
             Route::get('getDependencias/{id}', 'getDependencias')->name('areas.getDependencias');
             Route::get('getAreas', 'getAreas')->name('areas.getAreas');
+        });
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Cargos
+        Route::controller(CargoController::class)->prefix('cargos')->group(function () {
+            Route::get('', 'index')->name('cargos.index');
+            Route::get('crear', 'create')->name('cargos.create');
+            Route::get('editar/{id}', 'edit')->name('cargos.edit');
+            Route::post('guardar', 'store')->name('cargos.store');
+            Route::put('actualizar/{id}', 'update')->name('cargos.update');
+            Route::delete('eliminar/{id}', 'destroy')->name('cargos.destroy');
+            Route::get('getCargos', 'getCargos')->name('cargos.getCargos');
+            Route::get('getCargosTodos', 'getCargosTodos')->name('cargos.getCargosTodos');
+            Route::get('getAreas', 'getAreas')->name('cargos.getAreas');
         });
         // ----------------------------------------------------------------------------------------
     });

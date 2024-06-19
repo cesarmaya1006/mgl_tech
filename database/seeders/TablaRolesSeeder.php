@@ -59,5 +59,11 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name'=>'areas.edit'])->syncRoles([$rol1]);
         Permission::create(['name'=>'areas.destroy'])->syncRoles([$rol1]);
 
+        Permission::create(['name'=>'cargos.index'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name'=>'cargos.create'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name'=>'cargos.edit'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name'=>'cargos.destroy'])->syncRoles([$rol1,$rol3]);
+
+
     }
 }

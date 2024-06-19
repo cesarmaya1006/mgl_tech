@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Empresa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Empresa\Area\ValidacionArea;
 use App\Models\Empresa\Area;
 use App\Models\Empresa\EmpGrupo;
 use App\Models\User;
@@ -22,8 +23,8 @@ class AreaController extends Controller
         if ($usuario->hasRole('Super Administrador')) {
             return view('intranet.empresa.area.index_admin', compact('grupos'));
         } else {
-            $areas = $usuario->empleado->cargo->area->empresa->areas;
-            return view('intranet.empresa.area.index', compact('areas'));
+            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
+            return view('intranet.empresa.area.index', compact('grupo'));
         }
     }
 
@@ -32,15 +33,23 @@ class AreaController extends Controller
      */
     public function create()
     {
-        //
+        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
+        if ($usuario->hasRole('Super Administrador')) {
+            $grupos = EmpGrupo::get();
+            return view('intranet.empresa.area.crear', compact('grupos'));
+        } else {
+            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
+            return view('intranet.empresa.area.crear', compact('grupo'));
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ValidacionArea $request)
     {
-        //
+        Area::create($request->all());
+        return redirect('dashboard/configuracion/areas')->with('mensaje', 'Área creada con éxito');
     }
 
     /**
@@ -56,7 +65,15 @@ class AreaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $usuario = User::with('roles')->findOrFail(session('id_usuario'));
+        $area_edit = Area::findOrFail($id);
+        if ($usuario->hasRole('Super Administrador')) {
+            $grupos = EmpGrupo::get();
+            return view('intranet.empresa.area.editar', compact('grupos','area_edit'));
+        } else {
+            $grupo = $usuario->empleado->cargo->area->empresa->grupo;
+            return view('intranet.empresa.area.editar', compact('grupo','area_edit'));
+        }
     }
 
     /**
@@ -64,15 +81,29 @@ class AreaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        Area::findOrFail($id)->update($request->all());
+        return redirect('dashboard/configuracion/areas')->with('mensaje', 'Área actualizada con exito');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $empresa = Area::findOrFail($id);
+            if ($empresa->cargos->count() > 0) {
+                return response()->json(['mensaje' => 'ng']);
+            } else {
+                if (Area::destroy($id)) {
+                    return response()->json(['mensaje' => 'ok']);
+                } else {
+                    return response()->json(['mensaje' => 'ng']);
+                }
+            }
+        } else {
+            abort(404);
+        }
     }
 
     public function getDependencias(Request $request,$id){

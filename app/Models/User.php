@@ -90,8 +90,16 @@ class User extends Authenticatable implements MustVerifyEmail
         $roles = str_replace('"','', $roles);
         //$roles = explode(',',$roles);
         $roles = $this->roles;
+        if ($this->empleado) {
+            $nombres_completos = $this->empleado->nombres . ' ' . $this->empleado->apellidos;
+        }else{
+            $nombres_completos = $this->name;
+        }
         Session::put([
             'id_usuario' => $this->id,
+            'nombres_completos' => $nombres_completos,
+            'rol_principal' => $roles[0]['name'],
+            'rol_principal_id' => $roles[0]['id'],
             'roles' => $roles,
             /*
             'config_empresa_id' => $this->config_empresa_id,

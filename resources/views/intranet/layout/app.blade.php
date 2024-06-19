@@ -7,7 +7,7 @@
     @yield('css_pagina')
 </head>
 
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed text-sm layout-footer-fixed">
     <div class="wrapper">
         <div class="preloader flex-column justify-content-center align-items-center">
             <img class="animation__shake" src="{{ asset('imagenes/sistema/logo_maya.png') }}" alt="AdminLTELogo"

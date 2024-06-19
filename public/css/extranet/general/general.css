@@ -4,3 +4,76 @@
 .mini_sombra{
     box-shadow: 5px 5px 3px 0px rgba(0,0,0,0.75);
 }
+
+.btn-sombra {
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.75);
+}
+
+.sombra_general {
+    -webkit-box-shadow: 8px 8px 4px 0px rgba(0, 0, 0, 0.85);
+    -moz-box-shadow: 8px 8px 4px 0px rgba(0, 0, 0, 0.85);
+    box-shadow: 8px 8px 4px 0px rgba(0, 0, 0, 0.85);
+}
+
+.mini_sombra_general {
+    -webkit-box-shadow: 4px 4px 2px 0px rgba(0, 0, 0, 0.85);
+    -moz-box-shadow: 4px 4px 2px 0px rgba(0, 0, 0, 0.85);
+    box-shadow: 4px 4px 2px 0px rgba(0, 0, 0, 0.85);
+}
+
+.btn-accion-tabla {
+    cursor: pointer;
+    border: none;
+    background: 0;
+    padding: 0 0 0 5px;
+    font-size: 14px !important;
+    line-height: 1.5;
+}
+
+.box-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5% 0;
+}
+
+.img-circle {
+    background-color: white;
+    padding: 5px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+label.requerido:after {
+    content: ' *';
+    color: red;
+}
+
+.card-proyectos {
+    -webkit-box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.50);
+    -moz-box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.50);
+    box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.50);
+}
+
+tr {
+    white-space: nowrap;
+}
+
+.card-outline {
+    border-image: linear-gradient(45deg, rgb(0, 95, 131), rgb(0, 188, 181)) 1;
+}
+
+
+.results tr[visible='false'],
+.no-result {
+    display: none;
+}
+
+.results tr[visible='true'] {
+    display: table-row;
+}
+
+.remitente {
+    position: relative;
+    right: 0;
+}
+
