@@ -1,25 +1,25 @@
 @extends('intranet.layout.app')
 
 @section('css_pagina')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap5.min.css" />
+
 @endsection
 
 @section('titulo_pagina')
-    <i class="fas fa-project-diagram mr-3" aria-hidden="true"></i> Configuración Áreas
+    <i class="fas fa-project-diagram mr-3" aria-hidden="true"></i> Configuración Empleados
 @endsection
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-    <li class="breadcrumb-item active">Áreas</li>
+    <li class="breadcrumb-item active">Empleados</li>
 @endsection
 
 @section('titulo_card')
-    Listado de Areas
+    Listado de Empleados
 @endsection
 
 @section('botones_card')
-    @can('areas.create')
-        <a href="{{ route('areas.create') }}" class="btn btn-info btn-sm btn-sombra text-center pl-5 pr-5 float-md-end">
+    @can('empleados.create')
+        <a href="{{ route('empleados.create') }}" class="btn btn-info btn-sm btn-sombra text-center pl-5 pr-5 float-md-end">
             <i class="fa fa-plus-circle mr-3" aria-hidden="true"></i>
             Nuevo registro
         </a>
@@ -27,56 +27,58 @@
 @endsection
 
 @section('cuerpo')
-    <div class="row">
-        <div class="col-12 col-md-3 form-group" id="caja_empresas">
-            <label for="empresa_id">Empresa</label>
-            <select id="empresa_id" class="form-control form-control-sm" data_url="{{ route('areas.getAreas') }}">
-                <option value="">Elija empresa</option>
-                @foreach ($grupo->empresas as $empresa)
-                    <option value="{{ $empresa->id }}">
-                        {{ $empresa->empresa }}
-                    </option>
-                @endforeach
-            </select>
+    @can('empleados.index')
+        <div class="row">
+            <div class="col-12 col-md-3 form-group" id="caja_empresas">
+                <label for="empresa_id">Empresa</label>
+                <select id="empresa_id" class="form-control form-control-sm" data_url="{{ route('areas.getAreas') }}">
+                    <option value="">Elija empresa</option>
+                    @foreach ($grupo->empresas as $empresa)
+                        <option value="{{ $empresa->id }}">
+                            {{ $empresa->empresa }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-    </div>
-    <hr>
-    <div class="row d-flex justify-content-md-center">
-        <input type="hidden" name="titulo_tabla" id="titulo_tabla" value="Listado de Áreas">
-        <input type="hidden" id="control_dataTable" value="1">
-        <input type="hidden" id="areas_edit" data_url="{{ route('areas.edit', ['id' => 1]) }}">
-        <input type="hidden" id="areas_destroy" data_url="{{ route('areas.destroy', ['id' => 1]) }}">
-        <input type="hidden" id="id_areas_getDependencias" data_url = "{{ route('areas.getDependencias', ['id' => 1]) }}">
-        @csrf @method('delete')
+        <hr>
+        <div class="row d-flex justify-content-md-center">
+            <input type="hidden" name="titulo_tabla" id="titulo_tabla" value="Listado de Áreas">
+            <input type="hidden" id="control_dataTable" value="1">
+            <input type="hidden" id="areas_edit" data_url="{{ route('areas.edit', ['id' => 1]) }}">
+            <input type="hidden" id="areas_destroy" data_url="{{ route('areas.destroy', ['id' => 1]) }}">
+            <input type="hidden" id="id_areas_getDependencias" data_url = "{{ route('areas.getDependencias', ['id' => 1]) }}">
+            @csrf @method('delete')
 
-        <div class="col-12 table-responsive">
-            <table class="table display table-striped table-hover table-sm  tabla-borrando tabla_data_table"
-                id="tablaAreas">
-                <thead>
-                    <tr>
-                        <th class="text-center">Id</th>
-                        <th class="text-center">Area</th>
-                        <th class="text-center">Area Superior</th>
-                        <th class="text-center">Dependencias</th>
-                        <td></td>
-                    </tr>
-                </thead>
-                <tbody id="tbody_areas">
+            <div class="col-12 table-responsive">
+                <table class="table display table-striped table-hover table-sm  tabla-borrando tabla_data_table"
+                    id="tablaAreas">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">Area</th>
+                            <th class="text-center">Area Superior</th>
+                            <th class="text-center">Dependencias</th>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_areas">
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-    @can('areas.edit')
-    <input type="hidden" id="permiso_areas_edit" value="1">
-    @else
-    <input type="hidden" id="permiso_areas_edit" value="0">
-    @endcan
+        @can('areas.edit')
+        <input type="hidden" id="permiso_areas_edit" value="1">
+        @else
+        <input type="hidden" id="permiso_areas_edit" value="0">
+        @endcan
 
-    @can('areas.destroy')
-    <input type="hidden" id="permiso_areas_destroy" value="1">
-    @else
-    <input type="hidden" id="permiso_areas_destroy" value="0">
+        @can('areas.destroy')
+        <input type="hidden" id="permiso_areas_destroy" value="1">
+        @else
+        <input type="hidden" id="permiso_areas_destroy" value="0">
+        @endcan
     @endcan
 @endsection
 

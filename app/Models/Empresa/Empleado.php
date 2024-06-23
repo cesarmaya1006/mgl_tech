@@ -25,10 +25,11 @@ class Empleado extends Model
         return $this->belongsTo(Cargo::class, 'cargo_id', 'id');
     }
     //----------------------------------------------------------------------------------
-    public function empleados()
+    public function empresas_tranv ()
     {
-        return $this->hasMany(Empleado::class, 'cargo_id', 'id');
+        return $this->belongsToMany(Empresa::class,'tranv_empresas','empleado_id','empresa_id');
     }
     //----------------------------------------------------------------------------------
+
     //==================================================================================
 }

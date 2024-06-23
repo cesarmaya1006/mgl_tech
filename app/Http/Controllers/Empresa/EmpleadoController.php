@@ -3,7 +3,16 @@
 namespace App\Http\Controllers\Empresa;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Empresa\Usuario\ValidaUsuario;
+use App\Models\Config\TipoDocumento;
+use App\Models\Empresa\Cargo;
+use App\Models\Empresa\EmpGrupo;
+use App\Models\Empresa\Empleado;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Intervention\Image\Laravel\Facades\Image;
+use Spatie\Permission\Models\Role;
 
 class EmpleadoController extends Controller
 {
@@ -12,7 +21,9 @@ class EmpleadoController extends Controller
      */
     public function index()
     {
-        //
+
+        $grupos = EmpGrupo::get();
+        return view('intranet.empresa.empleado.index', compact('grupos'));
     }
 
     /**
@@ -20,15 +31,76 @@ class EmpleadoController extends Controller
      */
     public function create()
     {
-        //
+        $grupos = EmpGrupo::get();
+        $usuario = User::findOrFail(session('id_usuario'));
+        $transversal = false;
+        $tiposdocu = TipoDocumento::get();
+        $roles = Role::get();
+        if (session('rol_principal_id') > 2) {
+            if ($usuario->empleado->empresas_tranv->count() > 1) {
+                $transversal = true;
+            }
+        }
+        return view('intranet.empresa.empleado.crear', compact('grupos', 'usuario', 'transversal', 'tiposdocu','roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ValidaUsuario $request)
     {
-        //
+        $usuario_new = User::create([
+            'name' => ucwords(strtolower($request['nombres'])) . ' ' . ucwords(strtolower($request['apellidos'])),
+            'email' => strtolower($request['email']),
+            'password' => bcrypt(utf8_encode($request['identificacion'])),
+        ])->syncRoles($request['roles']);
+
+        $nombrefoto = 'usuario-inicial.jpg';
+        // - - - - - - - - - - - - - - - - - - - - - - - -
+        if ($request->hasFile('foto')) {
+            $ruta = Config::get('constantes.folder_img_usuarios');
+            $ruta = trim($ruta);
+
+            $foto = $request->foto;
+            $imagen_foto = Image::read($foto);
+            $nombrefoto = time() . $foto->getClientOriginalName();
+            $imagen_foto->resize(400, 500);
+            $imagen_foto->save($ruta . $nombrefoto, 100);
+        }
+        // - - - - - - - - - - - - - - - - - - - - - - - -
+        $lider = 0;
+        if (isset($request['lider'])) {
+            if ($request['lider']== '1') {
+                $lider = 1;
+            }
+        }
+        // - - - - - - - - - - - - - - - - - - - - - - - -
+        $mgl = 0;
+        if (isset($request['mgl'])) {
+            if ($request['mgl']== '1') {
+                $mgl = 1;
+            }
+        }
+        // - - - - - - - - - - - - - - - - - - - - - - - -
+        $empleado_new = Empleado::create([
+            'id' => $usuario_new->id,
+            'cargo_id' => $request['cargo_id'],
+            'tipo_documento_id' => $request['tipo_documento_id'],
+            'identificacion' => $request['identificacion'],
+            'nombres' => ucwords(strtolower($request['nombres'])),
+            'apellidos' => ucwords(strtolower($request['apellidos'])),
+            'telefono' => $request['telefono'],
+            'direccion' => $request['direccion'],
+            'foto' => $nombrefoto,
+            'lider' => $lider,
+            'mgl' => $mgl,
+        ]);
+
+        if (isset($request['empresa_id'])) {
+            $empleado_new->empresas_tranv()->sync($request['empresa_id']);
+        }
+
+        return redirect('dashboard/configuracion/empleados')->with('mensaje', 'Empleado creado con éxito');
     }
 
     /**
@@ -61,5 +133,14 @@ class EmpleadoController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getCargos(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['cargos' => Cargo::where('area_id', $_GET['id'])->get()]);
+        } else {
+            abort(404);
+        }
     }
 }

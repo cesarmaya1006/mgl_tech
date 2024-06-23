@@ -10,6 +10,7 @@ use App\Http\Controllers\Config\RolController;
 use App\Http\Controllers\Empresa\AreaController;
 use App\Http\Controllers\Empresa\CargoController;
 use App\Http\Controllers\Empresa\EmpGrupoController;
+use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
 use App\Http\Middleware\AdminEmp;
 use App\Http\Middleware\SuperAdmin;
@@ -128,5 +129,19 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getAreas', 'getAreas')->name('cargos.getAreas');
         });
         // ----------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Empleados
+        Route::controller(EmpleadoController::class)->prefix('empleados')->group(function () {
+            Route::get('', 'index')->name('empleados.index');
+            Route::get('crear', 'create')->name('empleados.create');
+            Route::get('editar/{id}', 'edit')->name('empleados.edit');
+            Route::post('guardar', 'store')->name('empleados.store');
+            Route::put('actualizar/{id}', 'update')->name('empleados.update');
+            Route::delete('eliminar/{id}', 'destroy')->name('empleados.destroy');
+            Route::put('activar/{id}', 'activar')->name('empleados.activar');
+            Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
+            Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
+        });
+        // ----------------------------------------------------------------------------------------
+
     });
 });
