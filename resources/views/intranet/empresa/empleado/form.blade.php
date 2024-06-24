@@ -10,6 +10,7 @@
                     value="{{$rol->name}}"
                     id="check_{{$rol->id}}"
                     name="roles[]"
+                    {{isset($empleado_edit)?($empleado_edit->usuario->hasRole($rol->name)?'checked':''):''}}
                     >
                 <label class="form-check-label" for="flexCheckDisabled">
                     {{$rol->name}}
@@ -23,6 +24,7 @@
                         value="{{$rol->name}}"
                         id="check_{{$rol->id}}"
                         name="roles[]"
+                        {{isset($empleado_edit)?($empleado_edit->usuario->hasRole($rol->name)?'checked':''):''}}
                         {{$rol->name=='Empleado'?'required':''}}>
                     <label class="form-check-label" for="flexCheckDisabled">
                         {{$rol->name}}
@@ -40,7 +42,7 @@
             <select id="emp_grupo_id" class="form-control form-control-sm" data_url="{{route('grupo_empresas.getEmpresas')}}" required>
                 <option value="">Elija grupo empresarial</option>
                 @foreach ($grupos as $grupo)
-                    <option value="{{ $grupo->id }}" {{isset($empleado_edit)? ($empleado_edit->cargo->area->empressa->emp_grupo_id==$grupo->id? 'selected':''):''}}>
+                    <option value="{{ $grupo->id }}" {{isset($empleado_edit)? ($empleado_edit->cargo->area->empresa->emp_grupo_id==$grupo->id? 'selected':''):''}}>
                         {{ $grupo->grupo }}
                     </option>
                 @endforeach
@@ -52,12 +54,20 @@
             <label class="requerido" for="empresa_id" id="label_empresa_id">Empresa</label>
             <select id="empresa_id" class="form-control form-control-sm" data_url="{{ route('areas.getAreas') }}">
                 <option value="">{{session('rol_principal_id')== 1?'Elija grupo':'Elija empresa'}}</option>
-                @if ($transversal)
-                    @foreach ($usuario->empleado->empresas_tranv as $empresa)
-                        <option value="{{ $empresa->id }}" {{isset($empleado_edit) && $empleado_edit->cargo->area->empresa_id==$empresa->id? 'selected':''}}>
-                            {{ $empresa->empresa }}
-                        </option>
-                    @endforeach
+                @if (isset($empleado_edit))
+                    @if (session('rol_principal_id')== 3)
+                        @foreach ($usuario->empleado->empresas_tranv as $empresa)
+                            <option value="{{ $empresa->id }}" {{isset($empleado_edit) && $empleado_edit->cargo->area->empresa_id==$empresa->id? 'selected':''}}>
+                                {{ $empresa->empresa }}
+                            </option>
+                        @endforeach
+                    @else
+                        @foreach ($empleado_edit->cargo->area->empresa->grupo->empresas as $empresa)
+                            <option value="{{ $empresa->id }}" {{isset($empleado_edit) && $empleado_edit->cargo->area->empresa_id==$empresa->id? 'selected':''}}>
+                                {{ $empresa->empresa }}
+                            </option>
+                        @endforeach
+                    @endif
                 @endif
             </select>
         </div>
@@ -80,7 +90,15 @@
     <div class="col-12 col-md-3 form-group" id="caja_areas">
         <label class="requerido" for="cargo_id">Cargo</label>
         <select id="cargo_id" class="form-control form-control-sm" name="cargo_id" >
-            <option value="">Elija area</option>
+            @if (isset($empleado_edit))
+                @foreach ($empleado_edit->cargo->area->cargos as $cargo)
+                    <option value="{{ $cargo->id }}" {{$empleado_edit->cargo_id==$cargo->id? 'selected':''}}>
+                        {{ $cargo->cargo }}
+                    </option>
+                @endforeach
+            @else
+                <option value="">Elija area</option>
+            @endif
         </select>
     </div>
 </div>
@@ -176,14 +194,14 @@
     <div class="col-12" id="check_usuTranv_all">
         <div class="form-group">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" name="usuario_tranv" id="usuario_tranv" {{isset($usuario_edit)?$usuario_edit->empresas_tranv->count()>0 ?'checked':'':''}}>
+                <input class="form-check-input" type="checkbox" value="1" name="usuario_tranv" id="usuario_tranv" {{isset($empleado_edit)?$empleado_edit->empresas_tranv->count()>0 ?'checked':'':''}}>
                 <label class="form-check-label" for="usuario_tranv">
                     Usuario Transversal
                 </label>
             </div>
         </div>
     </div>
-    <div class="col-12 col-md-6 table-responsive {{isset($usuario_edit)?$usuario_edit->empresas_tranv->count()>0 ?'':'d-none':'d-none'}}" id="id_tabla_transv" style="max-height: 800px;">
+    <div class="col-12 col-md-6 table-responsive {{isset($empleado_edit)?$empleado_edit->empresas_tranv->count()>0 ?'':'d-none':'d-none'}}" id="id_tabla_transv" style="max-height: 800px;">
         <table class="table table-hover table-bordered table-sm align-middle">
             <thead>
                 <tr>
@@ -206,9 +224,9 @@
                                         value="{{$empresa->id}}"
                                         name="empresa_id[]"
                                         id="input_checkbox{{$empresa->id}}"
-                                        {{isset($usuario_edit)?($usuario_edit->empresas_tranv->where('id',$empresa->id)->count()>0?($usuario_edit->empresas_tranv->where('id',$empresa->id)->first()->id=$empresa->id?'checked':''):''):''}}
+                                        {{isset($empleado_edit)?($empleado_edit->empresas_tranv->where('id',$empresa->id)->count()>0?($empleado_edit->empresas_tranv->where('id',$empresa->id)->first()->id=$empresa->id?'checked':''):''):''}}
                                         >
-                                    <label class="form-check-label" id="label_checkbox{{$empresa->id}}" for="lider">{{isset($usuario_edit)?'':'No'}}</label>
+                                    <label class="form-check-label" id="label_checkbox{{$empresa->id}}" for="lider">{{isset($empleado_edit)?'':'No'}}</label>
                                 </div>
                             </td>
                         </tr>

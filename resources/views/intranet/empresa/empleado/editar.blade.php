@@ -9,8 +9,8 @@
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('usuarios.index') }}">Usuarios</a></li>
-    <li class="breadcrumb-item active">Usuarios - Crear</li>
+    <li class="breadcrumb-item"><a href="{{ route('empleados.index') }}">Usuarios</a></li>
+    <li class="breadcrumb-item active">Usuarios - Editar</li>
 @endsection
 
 @section('titulo_card')
@@ -18,7 +18,7 @@
 @endsection
 
 @section('botones_card')
-    <a href="{{route('usuarios.index')}}" class="btn btn-success btn-sm mini_sombra pl-5 pr-5 float-md-end" style="font-size: 0.8em;">
+    <a href="{{route('empleados.index')}}" class="btn btn-success btn-sm mini_sombra pl-5 pr-5 float-md-end" style="font-size: 0.8em;">
         <i class="fas fa-reply mr-2"></i>
         Volver
     </a>
@@ -26,7 +26,7 @@
 
 @section('cuerpo')
 <div class="row d-flex justify-content-center">
-    <form class="col-12 form-horizontal" action="{{ route('usuarios.update',['id'=>$area_edit]) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+    <form class="col-12 form-horizontal" action="{{ route('empleados.update',['id'=>$empleado_edit]) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
         @csrf
         @method('put')
         @include('intranet.empresa.empleado.form')
@@ -46,5 +46,5 @@
 @endsection
 
 @section('scripts_pagina')
-<script src="{{ asset('js/intranet/empresa/empleados/crear.js') }}"></script>
+<script src="{{ asset('js/intranet/empresa/empleados/editar.js') }}"></script>
 @endsection

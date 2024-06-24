@@ -62,6 +62,7 @@ class TablaUsuariosSeeder extends Seeder
             'foto' => 'usuario-inicial.jpg',
             'lider' => 1
         ]);
+        DB::table('tranv_empresas')->insert(['empleado_id' => 3,'empresa_id' => 3,'created_at' => Carbon::now()->format('Y-m-d H:i:s'),]);
         DB::table('tranv_empresas')->insert(['empleado_id' => 3,'empresa_id' => 4,'created_at' => Carbon::now()->format('Y-m-d H:i:s'),]);
         DB::table('tranv_empresas')->insert(['empleado_id' => 3,'empresa_id' => 5,'created_at' => Carbon::now()->format('Y-m-d H:i:s'),]);
 

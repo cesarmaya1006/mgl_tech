@@ -138,8 +138,13 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::put('actualizar/{id}', 'update')->name('empleados.update');
             Route::delete('eliminar/{id}', 'destroy')->name('empleados.destroy');
             Route::put('activar/{id}', 'activar')->name('empleados.activar');
-            Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
             Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+            Route::get('getEmpresas', 'getEmpresas')->name('empleados.getEmpresas');
+            Route::get('getAreas', 'getAreas')->name('empleados.getAreas');
+            Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
+            Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
+
         });
         // ----------------------------------------------------------------------------------------
 
