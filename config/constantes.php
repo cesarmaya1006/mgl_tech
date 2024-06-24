@@ -7,5 +7,7 @@ return [
     "folder_img_empresas" => public_path() . '/imagenes/empresas/ ',
     //--------------------------------------------------------------------------------
     "folder_doc_historial" => public_path() . '/documentos/folder_doc_historial ',
+    //--------------------------------------------------------------------------------
+    "folder_doc_proyectos" => public_path() . '/documentos/proyectos ',
 
 ];

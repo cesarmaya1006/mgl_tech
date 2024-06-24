@@ -12,7 +12,9 @@ use App\Http\Controllers\Empresa\CargoController;
 use App\Http\Controllers\Empresa\EmpGrupoController;
 use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
+use App\Http\Controllers\Proyectos\ProyectoController;
 use App\Http\Middleware\AdminEmp;
+use App\Http\Middleware\Empleado;
 use App\Http\Middleware\SuperAdmin;
 use Illuminate\Support\Facades\Route;
 
@@ -148,5 +150,24 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         });
         // ----------------------------------------------------------------------------------------
 
+    });
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    Route::middleware(Empleado::class)->group(function (){
+        // ------------------------------------------------------------------------------------
+        // Ruta Administrador del Sistema Areas
+        Route::controller(ProyectoController::class)->prefix('proyectos')->group(function () {
+            Route::get('', 'index')->name('proyectos.index');
+            Route::get('crear', 'create')->name('proyectos.create');
+            Route::get('editar/{id}', 'edit')->name('proyectos.edit');
+            Route::post('guardar', 'store')->name('proyectos.store');
+            Route::put('actualizar/{id}', 'update')->name('proyectos.update');
+            Route::delete('eliminar/{id}', 'destroy')->name('proyectos.destroy');
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            Route::get('getEmpresas', 'getEmpresas')->name('proyectos.getEmpresas');
+            Route::get('getAreas', 'getAreas')->name('proyectos.getAreas');
+            Route::get('getCargos', 'getCargos')->name('proyectos.getCargos');
+            Route::get('getEmpleados', 'getEmpleados')->name('proyectos.getEmpleados');
+        });
+        // ------------------------------------------------------------------------------------
     });
 });

@@ -3,6 +3,7 @@
 namespace App\Models\Empresa;
 
 use App\Models\Config\TipoDocumento;
+use App\Models\Proyectos\Proyecto;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,6 +37,11 @@ class Empleado extends Model
         return $this->belongsToMany(Empresa::class,'tranv_empresas','empleado_id','empresa_id');
     }
     //----------------------------------------------------------------------------------
-
     //==================================================================================
+    //----------------------------------------------------------------------------------
+    public function proyectos()
+    {
+        return $this->hasMany(Proyecto::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
 }

@@ -67,6 +67,8 @@ class TablaMenusSeeder extends Seeder
                             ['nombre' => 'Cargos', 'menu_id' => '2',  'url' => 'dashboard/configuracion/cargos', 'orden' => '2',  'icono' => 'fas fa-user-tie', 'Array_1' => []],
                             //Menu Roles
                             ['nombre' => 'Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/empleados', 'orden' => '2',  'icono' => 'fas fa-users', 'Array_1' => []],
+                            //Menu Roles
+                            ['nombre' => 'Permisos Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/empleados_permisos', 'orden' => '2',  'icono' => 'fas fa-user-shield', 'Array_1' => []],
 
                         ]
                     ],
@@ -164,21 +166,21 @@ class TablaMenusSeeder extends Seeder
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 2,]);
-        for ($i = 16; $i < 33; $i++) {
+        for ($i = 17; $i < 34; $i++) {
             DB::table('menu_rol')->insert(['menu_id' => $i, 'rol_id' => 2,]);
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 3,]);
         DB::table('menu_empresas')->insert(['menu_id' => 1, 'empresa_id' => 3,]);
-        for ($i = 11; $i < 16; $i++) {
+        for ($i = 11; $i < 17; $i++) {
             DB::table('menu_rol')->insert(['menu_id' => $i, 'rol_id' => 3,]);
             DB::table('menu_empresas')->insert(['menu_id' => $i, 'empresa_id' => 3,]);
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 4,]);
-        DB::table('menu_rol')->insert(['menu_id' => 16, 'rol_id' => 4,]);
+        DB::table('menu_rol')->insert(['menu_id' => 17, 'rol_id' => 4,]);
 
-        for ($i = 33; $i < 39; $i++) {
+        for ($i = 34; $i < 40; $i++) {
             DB::table('menu_rol')->insert(['menu_id' => $i, 'rol_id' => 4,]);
             DB::table('menu_empresas')->insert(['menu_id' => $i, 'empresa_id' => 3,]);
         }
