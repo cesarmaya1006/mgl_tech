@@ -48,6 +48,7 @@ class Menu extends Model
 
         if ($front) {
             if (in_array(1, $ids,true)) {
+
                 return $this->whereHas('roles_menu', function ($query) use($ids) {
                     $query->whereIn('rol_id', $ids)->orderby('menu_id');
                 })->orderby('menu_id')
@@ -55,6 +56,7 @@ class Menu extends Model
                     ->get()
                     ->toArray();
             } else {
+
                 $id_empresa = $usuario->empleado->cargo->area->empresa_id;
                 return $this->whereHas('roles_menu', function ($query) use($ids) {
                     $query->whereIn('rol_id', $ids)->orderby('menu_id');

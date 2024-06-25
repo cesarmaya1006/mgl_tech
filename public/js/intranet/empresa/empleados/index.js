@@ -52,6 +52,7 @@ function llenar_tabla_empleados(data,filtro) {
     respuesta_thead_html += '<th class="text-center" >Teléfono</th>';
     respuesta_thead_html += '<th class="text-center" >Dirección</th>';
     respuesta_thead_html += '<th class="text-center" >Estado</th>';
+    respuesta_thead_html += '<th class="text-center" >Lider</th>';
     respuesta_thead_html += '<th class="text-center" ></td>';
     respuesta_thead_html += "</tr>";
     // -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
@@ -84,6 +85,14 @@ function llenar_tabla_empleados(data,filtro) {
                             estado = "Inactivo";
                         }
                         respuesta_tabla_html += '<td class="text-center"><span class="btn-xs pl-3 pr-3 text-center bg-' + estado_bg + ' rounded">' + estado + "</span></td>";
+                        if (empleado.lider == 1) {
+                            lider = "Si";
+                            lider_bg = "success";
+                        } else {
+                            lider = "No";
+                            lider_bg = "danger";
+                        }
+                        respuesta_tabla_html += '<td class="text-center text-'+lider_bg+'">' + lider + "</td>";
                         respuesta_tabla_html += '<td class="d-flex justify-content-evenly align-cargos-center">';
                         if (permiso_empleados_edit == 1) {
                             respuesta_tabla_html += '<a href="' + empleados_edit_fin + empleado.id + '" class="btn-accion-tabla tooltipsC"';
@@ -120,6 +129,14 @@ function llenar_tabla_empleados(data,filtro) {
                         estado = "Inactivo";
                     }
                     respuesta_tabla_html += '<td class="text-center"><span class="btn-xs pl-3 pr-3 text-center bg-' + estado_bg + ' rounded">' + estado + "</span></td>";
+                    if (empleado.lider == 1) {
+                        lider = "Si";
+                        lider_bg = "success";
+                    } else {
+                        lider = "No";
+                        lider_bg = "danger";
+                    }
+                    respuesta_tabla_html += '<td class="text-center text-'+lider_bg+'">' + lider + "</td>";
                     respuesta_tabla_html += '<td class="d-flex justify-content-evenly align-cargos-center">';
                     if (permiso_empleados_edit == 1) {
                         respuesta_tabla_html += '<a href="' + empleados_edit_fin + empleado.id + '" class="btn-accion-tabla tooltipsC"';
@@ -154,6 +171,14 @@ function llenar_tabla_empleados(data,filtro) {
                     estado = "Inactivo";
                 }
                 respuesta_tabla_html += '<td class="text-center"><span class="btn-xs pl-3 pr-3 text-center bg-' + estado_bg + ' rounded">' + estado + "</span></td>";
+                if (empleado.lider == 1) {
+                    lider = "Si";
+                    lider_bg = "success";
+                } else {
+                    lider = "No";
+                    lider_bg = "danger";
+                }
+                respuesta_tabla_html += '<td class="text-center text-'+lider_bg+'">' + lider + "</td>";
                 respuesta_tabla_html += '<td class="d-flex justify-content-evenly align-cargos-center">';
                 if (permiso_empleados_edit == 1) {
                     respuesta_tabla_html += '<a href="' + empleados_edit_fin + empleado.id + '" class="btn-accion-tabla tooltipsC"';
@@ -184,6 +209,14 @@ function llenar_tabla_empleados(data,filtro) {
                 estado = "Inactivo";
             }
             respuesta_tabla_html += '<td class="text-center"><span class="btn-xs pl-3 pr-3 text-center bg-' + estado_bg + ' rounded">' + estado + "</span></td>";
+            if (empleado.lider == 1) {
+                lider = "Si";
+                lider_bg = "success";
+            } else {
+                lider = "No";
+                lider_bg = "danger";
+            }
+            respuesta_tabla_html += '<td class="text-center text-'+lider_bg+'">' + lider + "</td>";
             respuesta_tabla_html += '<td class="d-flex justify-content-evenly align-cargos-center">';
             if (permiso_empleados_edit == 1) {
                 respuesta_tabla_html += '<a href="' + empleados_edit_fin + empleado.id + '" class="btn-accion-tabla tooltipsC"';

@@ -43,23 +43,16 @@ $(document).ready(function () {
             success: function (respuesta) {
                 console.log(respuesta);
                 var respuesta_html = "";
-                if (respuesta.areasPadre.length > 0) {
-                    respuesta_html += '<option value="">Elija área</option>';
-                    $.each(respuesta.areasPadre, function (index, item) {
-                        respuesta_html +=
-                            '<option value="' +
-                            item.id +
-                            '">' +
-                            item.area +
-                            "</option>";
+                if (respuesta.empleados.length > 0) {
+                    respuesta_html += '<option value="">Elija Líder</option>';
+                    $.each(respuesta.empleados, function (index, item) {
+                        respuesta_html += '<option value="' + item.id + '">' + item.nombres + ' ' + item.apellidos + '   --   cargo : ' + item.cargo.cargo + "</option>";
                     });
-                    $("#area_id").html(respuesta_html);
-                    $("#col_caja_areas").removeClass("d-none");
-                    $("#area_id").prop("required", true);
+                    $("#empleado_id").html(respuesta_html);
+                    $("#empleado_id").prop("required", true);
                 } else {
-                    $("#area_id").html(respuesta_html);
-                    $("#col_caja_areas").addClass("d-none");
-                    $("#area_id").prop("required", false);
+                    $("#empleado_id").html(respuesta_html);
+                    $("#empleado_id").prop("required", false);
                 }
             },
             error: function () {},

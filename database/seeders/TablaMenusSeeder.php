@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Config\Menu;
+use App\Models\Empresa\Empresa;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -160,6 +161,7 @@ class TablaMenusSeeder extends Seeder
         // ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== ========== ==========
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         $menus = Menu::get();
+        $empresas = Empresa::get();
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         foreach ($menus as $menu) {
             DB::table('menu_rol')->insert(['menu_id' => $menu->id, 'rol_id' => 1,]);
@@ -171,10 +173,15 @@ class TablaMenusSeeder extends Seeder
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 3,]);
-        DB::table('menu_empresas')->insert(['menu_id' => 1, 'empresa_id' => 3,]);
+        foreach ($empresas as $empresa) {
+            DB::table('menu_empresas')->insert(['menu_id' => 1, 'empresa_id' => $empresa->id,]);
+        }
+
         for ($i = 11; $i < 17; $i++) {
             DB::table('menu_rol')->insert(['menu_id' => $i, 'rol_id' => 3,]);
-            DB::table('menu_empresas')->insert(['menu_id' => $i, 'empresa_id' => 3,]);
+            foreach ($empresas as $empresa) {
+                DB::table('menu_empresas')->insert(['menu_id' => $i, 'empresa_id' => $empresa->id,]);
+            }
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
         DB::table('menu_rol')->insert(['menu_id' => 1, 'rol_id' => 4,]);
@@ -182,7 +189,10 @@ class TablaMenusSeeder extends Seeder
 
         for ($i = 34; $i < 40; $i++) {
             DB::table('menu_rol')->insert(['menu_id' => $i, 'rol_id' => 4,]);
-            DB::table('menu_empresas')->insert(['menu_id' => $i, 'empresa_id' => 3,]);
+            foreach ($empresas as $empresa) {
+                DB::table('menu_empresas')->insert(['menu_id' => $i, 'empresa_id' => $empresa->id,]);
+            }
+
         }
         // -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * -- * --
 

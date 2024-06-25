@@ -19,7 +19,7 @@
 
 @section('botones_card')
     <a href="{{ route('proyectos.index') }}" class="btn btn-primary btn-xs btn-sombra pl-5 pr-5 float-md-end">
-        <i class="fas fa-reply mr-2"></i>Volver
+        <i class="fas fa-reply mr-2 ml-2"></i><span class="mr-3">Volver</span>
     </a>
 @endsection
 
@@ -29,7 +29,7 @@
             enctype="multipart/form-data">
             @csrf
             @method('post')
-            @include('intranet.proyectos.proyecto.form')
+            @include('intranet.proyectos.proyecto.crear.form')
             <div class="row mt-5">
                 <div class="col-12 col-md-6 mb-4 mb-md-0 d-grid gap-2 d-md-block ">
                     <button type="submit" class="btn btn-primary btn-sm btn-sombra pl-sm-5 pr-sm-5"

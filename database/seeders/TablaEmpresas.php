@@ -29,7 +29,7 @@ class TablaEmpresas extends Seeder
                 'direccion' => 'Calle 76 # 13-02',
                 'contacto' => 'Juana Suarez',
                 'cargo' => 'Gerente',
-                'logo' => 'images.jpeg',
+                'logo' => 'empresa1.png',
 
             ],
             [
@@ -42,7 +42,7 @@ class TablaEmpresas extends Seeder
                 'direccion' => 'Calle 76 # 14-03',
                 'contacto' => 'Juana Suarez',
                 'cargo' => 'Gerente',
-                'logo' => 'images.jpeg',
+                'logo' => 'empresa2.png',
 
             ],
             [
@@ -55,7 +55,7 @@ class TablaEmpresas extends Seeder
                 'direccion' => 'Calle 76 # 15-04',
                 'contacto' => 'Jorge Dueñas',
                 'cargo' => 'Gerente Software',
-                'logo' => 'empresa1.png',
+                'logo' => 'empresa3.png',
 
             ],
             [
@@ -68,7 +68,7 @@ class TablaEmpresas extends Seeder
                 'direccion' => 'Calle 76 # 15-04',
                 'contacto' => 'Julio Cortez',
                 'cargo' => 'Administrador',
-                'logo' => 'empresa1.png',
+                'logo' => 'empresa4.png',
 
             ],
 
@@ -82,7 +82,7 @@ class TablaEmpresas extends Seeder
                 'direccion' => 'Calle 76 # 16-05',
                 'contacto' => 'Monica moya',
                 'cargo' => 'Gerente',
-                'logo' => 'empresa1.png',
+                'logo' => 'empresa5.png',
 
             ],
         ];

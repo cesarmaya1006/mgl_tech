@@ -4,6 +4,8 @@ namespace App\Models\Empresa;
 
 use App\Models\Config\TipoDocumento;
 use App\Models\Proyectos\Proyecto;
+use App\Models\Proyectos\ProyectoAdicion;
+use App\Models\Proyectos\ProyectoCambio;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -44,4 +46,15 @@ class Empleado extends Model
         return $this->hasMany(Proyecto::class, 'empleado_id', 'id');
     }
     //----------------------------------------------------------------------------------
+    public function adiciones()
+    {
+        return $this->hasMany(ProyectoAdicion::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function cambios_proy()
+    {
+        return $this->hasMany(ProyectoCambio::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+
 }
