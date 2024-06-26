@@ -3,9 +3,14 @@
 namespace App\Models\Empresa;
 
 use App\Models\Config\TipoDocumento;
+use App\Models\Proyectos\Componente;
+use App\Models\Proyectos\ComponenteAdicion;
+use App\Models\Proyectos\ComponenteCambio;
+use App\Models\Proyectos\Historial;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Proyectos\ProyectoAdicion;
 use App\Models\Proyectos\ProyectoCambio;
+use App\Models\Proyectos\Tarea;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -46,7 +51,7 @@ class Empleado extends Model
         return $this->hasMany(Proyecto::class, 'empleado_id', 'id');
     }
     //----------------------------------------------------------------------------------
-    public function adiciones()
+    public function adiciones_proy()
     {
         return $this->hasMany(ProyectoAdicion::class, 'empleado_id', 'id');
     }
@@ -54,6 +59,38 @@ class Empleado extends Model
     public function cambios_proy()
     {
         return $this->hasMany(ProyectoCambio::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function componentes()
+    {
+        return $this->hasMany(Componente::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function adiciones_comp()
+    {
+        return $this->hasMany(ComponenteAdicion::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function cambios_comp()
+    {
+        return $this->hasMany(ComponenteCambio::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function tareas()
+    {
+        return $this->hasMany(Tarea::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
+    public function historiales()
+    {
+        return $this->hasMany(Historial::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------
+    public function historiales_asig()
+    {
+        return $this->hasMany(Tarea::class, 'empleado_id', 'id');
     }
     //----------------------------------------------------------------------------------
 

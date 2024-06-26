@@ -144,7 +144,7 @@ class TablaUsuariosSeeder extends Seeder
             ]);
             $usuario_array->syncRoles(['Empleado']);
             if ($empleado['lider']==1) {
-                $usuario_array->syncPermissions(['proyectos.index', 'proyectos.create','proyectos.edit']);
+                $usuario_array->syncPermissions(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion','caja_presupuestos']);
             }
             $empleado_array = Empleado::create([
                 'id' => $usuario_array->id,

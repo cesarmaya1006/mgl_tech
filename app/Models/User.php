@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Empresa\Empleado;
+use App\Models\Sistema\Mensaje;
+use App\Models\Sistema\Notificacion;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -75,12 +77,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     //----------------------------------------------------------------------------------
     //----------------------------------------------------------------------------------
-    /*public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'config_usuario_rol', 'config_usuario_id', 'config_rol_id')->withPivot('estado');
-    }*/
-    //----------------------------------------------------------------------------------
     //==================================================================================
+    //----------------------------------------------------------------------------------
+    public function notificaciones()
+    {
+        return $this->belongsTo(Notificacion::class, 'usuario_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function mensajes_remitente()
+    {
+        return $this->belongsTo(Mensaje::class, 'remitente_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
+    public function mensajes_destinatario()
+    {
+        return $this->belongsTo(Mensaje::class, 'destinatario_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
     //==================================================================================
     public function setSession()
     {
@@ -101,45 +114,15 @@ class User extends Authenticatable implements MustVerifyEmail
             'rol_principal' => $roles[0]['name'],
             'rol_principal_id' => $roles[0]['id'],
             'roles' => $roles,
-            /*
-            'config_empresa_id' => $this->config_empresa_id,
-            'config_tipo_documento_id' => $this->config_tipo_documento_id,
-            'identificacion' => $this->identificacion,
-            'nombres' => $this->nombres,
-            'apellidos' => $this->apellidos,
-            'email' => $this->email,
-            'telefono' => $this->telefono,
-            'direccion' => $this->direccion,
-            'estado' => $this->estado,
-            'foto' => $this->foto,
-            'lider' => $this->lider,
-            'rol' => $rol,*/
+            'cant_notificaciones' => Notificacion::where('usuario_id',$this->id)->count(),
         ]);
-        /*
-        Session::put([
-            'cant_notificaciones' => Notificacion::where('config_usuario_id',5)->count(),
-        ]);
-
         if ($this->empleado) {
             Session::put([
-            'empresa_cargo_id' => $this->empleado->cargo->cargo,
+            'cargo_id' => $this->empleado->cargo->cargo,
+            'empresa_id' => $this->empleado->cargo->area->empresa->id,
             'mgl' => $this->empleado->mgl?1:0,
             ]);
         }
-        if ($this->empresa) {
-            Session::put([
-                'empresa' => $this->empresa->nombres,
-            ]);
-        }
-        if ($this->config_empresa_id!=null) {
-            $apariencia = ConfigApariencia::where('config_empresa_id',$this->config_empresa_id)->first();
-        } else {
-            $apariencia = ConfigApariencia::findOrFail(1);
-        }
-        Session::put([
-            'apariencia' => $apariencia,
-        ]);*/
-
     }
     //==========================================================================================
 }

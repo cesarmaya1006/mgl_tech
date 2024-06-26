@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             TablaRolesSeeder::class,
             TablaMenusSeeder::class,
             TablaUsuariosSeeder::class,
+            TablaProyectos::class,
 
         ]);
     }

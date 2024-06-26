@@ -100,6 +100,10 @@ class EmpleadoController extends Controller
             'mgl' => $mgl,
         ]);
 
+        if ($lider) {
+            $usuario_new->syncPermissions(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
+        }
+
         if (isset($request['empresa_id'])) {
             $empleado_new->empresas_tranv()->sync($request['empresa_id']);
         }
@@ -192,8 +196,13 @@ class EmpleadoController extends Controller
             'mgl' => $mgl,
         ]);
 
+        if ($lider) {
+            $usuario_editar->revokePermissionTo(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
+            $usuario_editar->givePermissionTo(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
+        }
+
         if (isset($request['empresa_id'])) {
-            $usuario_editar->empleado->empresas_tranv()->sync($request['empresa_id']);
+            $usuario_editar->givePermissionTo(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
         }
 
         return redirect('dashboard/configuracion/empleados')->with('mensaje', 'Empleado actualizado con éxito');

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('notificaciones', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
-            $table->unsignedBigInteger('empleado_id');
-            $table->foreign('empleado_id', 'fk_empleado_notificaciones')->references('id')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('usuario_id');
+            $table->foreign('usuario_id', 'fk_usuario_notificaciones')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->dateTime('fec_creacion');
             $table->string('titulo', 255);
             $table->longText('mensaje');

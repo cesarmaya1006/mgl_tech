@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('mensajes', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
             $table->unsignedBigInteger('remitente_id');
-            $table->foreign('remitente_id', 'fk_empleado_remitente_mensaje')->references('id')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('remitente_id', 'fk_usuario_remitente_mensaje')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('destinatario_id')->nullable();
-            $table->foreign('destinatario_id', 'fk_empleado_destinatario_mensaje')->references('id')->on('empleados')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('destinatario_id', 'fk_usuario_destinatario_mensaje')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->dateTime('fec_creacion');
             $table->longText('mensaje');
             $table->integer('impacto')->default(1);

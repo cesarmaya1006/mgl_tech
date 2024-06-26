@@ -12,6 +12,7 @@ use App\Http\Controllers\Empresa\CargoController;
 use App\Http\Controllers\Empresa\EmpGrupoController;
 use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
+use App\Http\Controllers\Proyectos\ComponenteController;
 use App\Http\Controllers\Proyectos\ProyectoController;
 use App\Http\Middleware\AdminEmp;
 use App\Http\Middleware\Empleado;
@@ -156,18 +157,31 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         // ------------------------------------------------------------------------------------
         // Ruta Administrador del Sistema Areas
         Route::controller(ProyectoController::class)->prefix('proyectos')->group(function () {
+            Route::middleware(SuperAdmin::class)->group(function(){
+                Route::get('proyecto_empresas', 'proyecto_empresas')->name('proyectos.proyecto_empresas');
+                Route::get('getproyectos/{estado}/{config_empresa_id}', 'getproyectos')->name('proyectos.getproyectos');
+            });
             Route::get('', 'index')->name('proyectos.index');
             Route::get('crear', 'create')->name('proyectos.create');
             Route::get('editar/{id}', 'edit')->name('proyectos.edit');
+            Route::get('detalle/{id}', 'show')->name('proyectos.detalle');
             Route::post('guardar', 'store')->name('proyectos.store');
             Route::put('actualizar/{id}', 'update')->name('proyectos.update');
             Route::delete('eliminar/{id}', 'destroy')->name('proyectos.destroy');
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            Route::get('gestion/{id}/{notificacion_id?}', 'gestion')->name('proyectos.gestion');
+            Route::get('expotar_informeproyecto/{id}', 'expotar_informeproyecto')->name('proyectos.expotar_informeproyecto');
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Route::get('getEmpresas', 'getEmpresas')->name('proyectos.getEmpresas');
-            Route::get('getAreas', 'getAreas')->name('proyectos.getAreas');
-            Route::get('getCargos', 'getCargos')->name('proyectos.getCargos');
             Route::get('getEmpleados', 'getEmpleados')->name('proyectos.getEmpleados');
         });
         // ------------------------------------------------------------------------------------
+        Route::controller(ComponenteController::class)->prefix('componentes')->group(function(){
+            Route::get('crear/{proyecto_id}', 'create')->name('componentes.create');
+            Route::post('guardar/{proyecto_id}', 'store')->name('componentes.store');
+            Route::get('editar/{id}', 'edit')->name('componentes.edit');
+            Route::put('actualizar/{id}', 'update')->name('componentes.update');
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        });
     });
 });

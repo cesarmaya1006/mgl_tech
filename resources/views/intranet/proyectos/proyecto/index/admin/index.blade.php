@@ -67,9 +67,9 @@
             <div class="col-12 col-md-8">
                 <div class="row p-1 d-flex align-items-center">
                     <div class="col-12 col-md-4 p-2">
-                        <a href="#" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <a href="{{route('grupo_empresas.index')}}" class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3>{{$grupos->count()}}</h3>
                                 <p>Grupos Empresariales</p>
                             </div>
                             <div class="icon text-cyan">
@@ -78,10 +78,30 @@
                         </a>
                     </div>
                     <div class="col-12 col-md-4 p-2">
-                        <a href="#" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <a href="{{route('empresa.index')}}" class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
-                                <h3>150</h3>
-                                <p>Empresas</p>
+                                @php
+                                    $empresas_num = 0;
+                                    $usuarios_num = 0;
+                                    $proyectosActivos = 0;
+                                    $proyectosTerminados = 0;
+                                    $proyectosTotal = 0;
+                                    foreach ($grupos as $grupo) {
+                                        $empresas_num+=$grupo->empresas->count();
+                                        foreach ($grupo->empresas as $empresa) {
+                                            $proyectosActivos += $empresa->proyectos->whereIn('estado',['Activo'])->count();
+                                            $proyectosTerminados += $empresa->proyectos->where('estado','Terminado')->count();
+                                            $proyectosTotal += $empresa->proyectos->count();
+                                            foreach ($empresa->areas as $area) {
+                                                foreach ($area->cargos as $cargo) {
+                                                    $usuarios_num+= $cargo->empleados->count();
+                                                }
+                                            }
+                                        }
+                                    }
+                                @endphp
+                                <h3>{{$empresas_num}}</h3>
+                                <p>Empresas Totales</p>
                             </div>
                             <div class="icon text-dark">
                                 <i class="fas fa-bezier-curve"></i>
@@ -89,10 +109,10 @@
                         </a>
                     </div>
                     <div class="col-12 col-md-4 p-2">
-                        <a href="#" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <a href="{{route('empleados.index')}}" class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
-                                <h3>150</h3>
-                                <p>Usuarios</p>
+                                <h3>{{$usuarios_num}}</h3>
+                                <p>Usuarios Totales</p>
                             </div>
                             <div class="icon text-success">
                                 <i class="fas fa-users"></i>
@@ -102,9 +122,9 @@
                 </div>
                 <div class="row p-1 d-flex align-items-center">
                     <div class="col-12 col-md-4 p-2">
-                        <a href="#" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <a href="{{route('proyectos.proyecto_empresas')}}" class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3>{{$proyectosActivos}}</h3>
                                 <p>Proyectos Activos</p>
                             </div>
                             <div class="icon text-info">
@@ -113,26 +133,26 @@
                         </a>
                     </div>
                     <div class="col-12 col-md-4 p-2">
-                        <a href="#" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <div class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3>{{$proyectosTerminados}}</h3>
                                 <p>Proyectos Terminados</p>
                             </div>
                             <div class="icon text-warning">
                                 <i class="fas fa-bezier-curve"></i>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     <div class="col-12 col-md-4 p-2">
-                        <a href="#" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <div class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
-                                <h3>150</h3>
+                                <h3>{{$proyectosTotal}}</h3>
                                 <p>Total Proyectos</p>
                             </div>
                             <div class="icon text-teal">
                                 <i class="fas fa-bezier-curve"></i>
                             </div>
-                        </a>
+                        </div>
                     </div>
                 </div>
             </div>
