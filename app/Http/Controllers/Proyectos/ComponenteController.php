@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Proyectos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Empresa\Empleado;
+use App\Models\Proyectos\Componente;
 use App\Models\Proyectos\Proyecto;
+use App\Models\Sistema\Notificacion;
 use Illuminate\Http\Request;
 
 class ComponenteController extends Controller
@@ -61,7 +63,42 @@ class ComponenteController extends Controller
      */
     public function store(Request $request, $proyecto_id)
     {
-        dd($request->all());
+        $proyecto = Proyecto::findOrFail($proyecto_id);
+        switch ($request['impacto']) {
+            case 'Alto':
+                $impacto_num = 50;
+                break;
+            case 'Medio-alto':
+                $impacto_num = 40;
+                break;
+            case 'Medio':
+                $impacto_num = 30;
+                break;
+            case 'Medio-bajo':
+                $impacto_num = 20;
+                break;
+            default:
+                $impacto_num = 10;
+                break;
+        }
+        $request['impacto_num'] = $impacto_num;
+        $componente = Componente::create($request->all());
+        //-----------------------------------------------------------------------------------
+        $componente->proyecto->miembros_proyecto()->attach($request['empleado_id']);
+        //-----------------------------------------------------------------------------------
+        $dia_hora = date('Y-m-d H:i:s');
+        $notificacion['usuario_id'] =  $request['empleado_id'];
+        $notificacion['fec_creacion'] =  $dia_hora;
+        $notificacion['titulo'] =  'Se creo un nuevo componente y te fue asignado ';
+        $notificacion['mensaje'] =  'Se creo una nuevo componente al proyecto ' .$componente->proyecto->titulo. ' y te fue asignado -> ' .ucfirst($request['titulo']);
+        $notificacion['link'] =  route('proyectos.gestion', ['id' => $proyecto_id]);
+        $notificacion['id_link'] =  $proyecto_id;
+        $notificacion['tipo'] =  'componente';
+        $notificacion['accion'] =  'creacion';
+        Notificacion::create($notificacion);
+        //------------------------------------------------------------------------------------------
+        return redirect('dashboard/proyectos/gestion/'.$proyecto_id)->with('mensaje', 'Componente creado con éxito');
+
     }
 
     /**

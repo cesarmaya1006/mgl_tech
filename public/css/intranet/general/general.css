@@ -1,15 +1,17 @@
-.sombra{
-    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.75);
-}
-.mini_sombra{
-    box-shadow: 5px 5px 3px 0px rgba(0,0,0,0.75);
+.sombra {
+    box-shadow: 10px 10px 5px 0px rgba(0, 0, 0, 0.75);
 }
 
-.btn-sombra{
-    box-shadow: 5px 5px 3px 0px rgba(0,0,0,0.75);
+.mini_sombra {
+    box-shadow: 5px 5px 3px 0px rgba(0, 0, 0, 0.75);
 }
-.btn-mini_sombra{
-    box-shadow: 3px 3px 1px 0px rgba(0,0,0,0.75);
+
+.btn-sombra {
+    box-shadow: 5px 5px 3px 0px rgba(0, 0, 0, 0.75);
+}
+
+.btn-mini_sombra {
+    box-shadow: 3px 3px 1px 0px rgba(0, 0, 0, 0.75);
 }
 
 .sombra_general {
@@ -79,14 +81,66 @@ tr {
     position: relative;
     right: 0;
 }
-.buttons-excel{
+
+.buttons-excel {
     margin-right: 2px;
 }
 
-.btn-xs
-{
+.btn-xs {
     padding: 1px 5px !important;
     font-size: 12px !important;
     line-height: 1.5 !important;
     border-radius: 5px !important;
+}
+
+@media (min-width: 375px) {
+    .datos_componente, .datos_componente-sm {
+        font-size: 0.8em;
+    }
+
+    .acordeon_empresa, .acordeon_empresa-sm {
+        font-size: 0.8em;
+    }
+    .tarea_gestpresup_proy, .tarea_gestpresup_proy-sm {
+        font-size: 0.8em;
+    }
+}
+
+@media (min-width: 376px) {
+    .datos_componente, .datos_componente-sm, .datos_componente-md {
+        font-size: 0.9em;
+    }
+
+    .acordeon_empresa, .acordeon_empresa-sm, .acordeon_empresa-md {
+        font-size: 0.9em;
+    }
+    .tarea_gestpresup_proy, .tarea_gestpresup_proy-sm, .tarea_gestpresup_proy-md {
+        font-size: 0.8em;
+    }
+}
+
+@media (min-width: 992px) {
+    .datos_componente, .datos_componente-sm, .datos_componente-md, .datos_componente-lg {
+        font-size: 1em;
+    }
+
+    .acordeon_empresa, .acordeon_empresa-sm, .acordeon_empresa-md, .acordeon_empresa-lg {
+        font-size: 1em;
+    }
+    .tarea_gestpresup_proy, .tarea_gestpresup_proy-sm, .tarea_gestpresup_proy-md, .tarea_gestpresup_proy-lg {
+        font-size: 0.9em;
+    }
+}
+
+@media (min-width: 1200px) {
+    .datos_componente, .datos_componente-sm, .datos_componente-md, .datos_componente-lg, .datos_componente-xl {
+        font-size: 1em;
+    }
+
+    .acordeon_empresa, .acordeon_empresa-sm, .acordeon_empresa-md, .acordeon_empresa-lg, .acordeon_empresa-xl {
+        font-size: 1em;
+    }
+    .tarea_gestpresup_proy, .tarea_gestpresup_proy-sm, .tarea_gestpresup_proy-md, .tarea_gestpresup_proy-lg, .tarea_gestpresup_proy-xl {
+        font-size: 0.9em;
+    }
 }

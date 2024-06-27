@@ -27,10 +27,7 @@ function llenar_tabla_empleados(data,filtro) {
     const permiso_empleados_activar = $("#permiso_empleados_activar").val();
     // -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
     var empleados_edit_ini = $("#empleados_edit").attr("data_url");
-    empleados_edit_ini = empleados_edit_ini.substring(
-        0,
-        empleados_edit_ini.length - 1
-    );
+    empleados_edit_ini = empleados_edit_ini.substring(0,empleados_edit_ini.length - 1);
     const empleados_edit_fin = empleados_edit_ini;
     // -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-
     respuesta_thead_html += "<tr>";

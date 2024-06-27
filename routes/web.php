@@ -14,6 +14,7 @@ use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
 use App\Http\Controllers\Proyectos\ComponenteController;
 use App\Http\Controllers\Proyectos\ProyectoController;
+use App\Http\Controllers\Proyectos\TareaController;
 use App\Http\Middleware\AdminEmp;
 use App\Http\Middleware\Empleado;
 use App\Http\Middleware\SuperAdmin;
@@ -181,6 +182,17 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::post('guardar/{proyecto_id}', 'store')->name('componentes.store');
             Route::get('editar/{id}', 'edit')->name('componentes.edit');
             Route::put('actualizar/{id}', 'update')->name('componentes.update');
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        });
+        // ------------------------------------------------------------------------------------
+        Route::controller(TareaController::class)->prefix('tareas')->group(function(){
+            Route::get('gestion/{id}/{notificacion_id?}', 'gestion')->name('tareas.gestion');
+            Route::get('crear/{componente_id}', 'create')->name('tareas.create');
+            Route::post('guardar/{componente_id}', 'store')->name('tareas.store');
+            Route::get('editar/{id}', 'edit')->name('tareas.edit');
+            Route::put('actualizar/{id}', 'update')->name('tareas.update');
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            Route::get('getapitareas/{componente_id}/{estado}', 'getapitareas')->name('tareas.getapitareas');
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });
     });

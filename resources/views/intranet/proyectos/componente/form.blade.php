@@ -53,10 +53,10 @@
             <input type="number" min="0" max="{{ $proyecto->presupuesto - $proyecto->componentes->sum('presupuesto') }}"
                    value="0.00" step="0.01" class="form-control form-control-sm text-end" name="presupuesto" id="presupuesto" required>
         </div>
-        <div class="col-12 col-md-3 ml-md-5">
-            <span class="form-control form-control-sm">Presupuesto de total del proyecto: <strong class="float-end">${{ number_format($proyecto->presupuesto + $proyecto->adiciones->sum('adicion'), 2) }}</strong></span>
-            <span class="form-control form-control-sm">Presupuesto de asignado del proyecto: <strong class="float-end">${{ number_format($proyecto->componentes->sum('presupuesto'), 2) }}</strong></span>
-            <span class="form-control form-control-sm">Presupuesto de disponible del proyecto: <strong class="float-end">${{ number_format(($proyecto->presupuesto + $proyecto->adiciones->sum('adicion')) - $proyecto->componentes->sum('presupuesto'), 2) }}</strong></span>
+        <div class="col-12 col-md-4 ml-md-5">
+            <span class="form-control form-control-sm">Presupuesto de total del proyecto: <strong class="float-end" style="font-size: 0.75em;">${{ number_format($proyecto->presupuesto + $proyecto->adiciones->sum('adicion'), 2) }}</strong></span>
+            <span class="form-control form-control-sm">Presupuesto de asignado del proyecto: <strong class="float-end" style="font-size: 0.75em;">${{ number_format($proyecto->componentes->sum('presupuesto'), 2) }}</strong></span>
+            <span class="form-control form-control-sm">Presupuesto de disponible del proyecto: <strong class="float-end" style="font-size: 0.75em;">${{ number_format(($proyecto->presupuesto + $proyecto->adiciones->sum('adicion')) - $proyecto->componentes->sum('presupuesto'), 2) }}</strong></span>
         </div>
     </div>
     <hr>

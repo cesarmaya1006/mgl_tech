@@ -1,0 +1,50 @@
+
+#treeview1-style .treeview .list-group-item {
+    cursor: pointer
+}
+
+#treeview1-style .treeview span.indent {
+    margin-left: 10px;
+    margin-right: 10px
+}
+
+#treeview1-style .treeview span.icon {
+    width: 12px;
+    margin-right: 5px
+}
+
+#treeview1-style .treeview .node-disabled {
+    color: silver;
+    cursor: not-allowed
+}
+
+#treeview1-style .node-treeview1 {}
+
+#treeview2 .node-treeview1:not(.node-disabled):hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+#treeview2 .treeview .list-group-item {
+    cursor: pointer
+}
+
+#treeview2 .treeview span.indent {
+    margin-left: 10px;
+    margin-right: 10px
+}
+
+#treeview2 .treeview span.icon {
+    width: 12px;
+    margin-right: 5px
+}
+
+#treeview2 .treeview .node-disabled {
+    color: silver;
+    cursor: not-allowed
+}
+
+#treeview2 .node-treeview2 {}
+
+#treeview2 .node-treeview2:not(.node-disabled):hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
