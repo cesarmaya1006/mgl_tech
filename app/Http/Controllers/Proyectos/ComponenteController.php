@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Proyectos;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa\Empleado;
 use App\Models\Proyectos\Componente;
+use App\Models\Proyectos\ComponenteCambio;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Sistema\Notificacion;
 use Illuminate\Http\Request;
@@ -97,6 +98,14 @@ class ComponenteController extends Controller
         $notificacion['accion'] =  'creacion';
         Notificacion::create($notificacion);
         //------------------------------------------------------------------------------------------
+        // - - - - - - - - - - - - - - - - - - - - - - - -
+        ComponenteCambio::create([
+            'empleado_id' => $request['empleado_id'],
+            'componente_id' => $componente->id,
+            'fecha' => $request['fec_creacion'],
+            'cambio' => 'Se crea nuevo componente',
+        ]);
+        // - - - - - - - - - - - - - - - - - - - - - - - -
         return redirect('dashboard/proyectos/gestion/'.$proyecto_id)->with('mensaje', 'Componente creado con éxito');
 
     }

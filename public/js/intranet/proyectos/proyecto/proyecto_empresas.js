@@ -42,7 +42,7 @@ $(document).ready(function () {
                     $.each(proyecto.miembros_proyecto, function (index, miembro_equipo){
                         respuesta_html +='<li class="list-inline-item">';
                         if (proyecto.lider.id != miembro_equipo.id ) {
-                            respuesta_html +='<img alt="Avatar" class="table-avatar" title="' + miembro_equipo.nombres + ' ' + miembro_equipo.apellidos + '" src="' + $('#folder_imagenes_usuario').val() + '/' + miembro_equipo.foto + '">';
+                            respuesta_html +='<div class="image"><img src="' + $('#folder_imagenes_usuario').val() + '/' + miembro_equipo.foto + '" class="img-circle elevation-2" alt="' + miembro_equipo.nombres + ' ' + miembro_equipo.apellidos + '" title="' + miembro_equipo.nombres + ' ' + miembro_equipo.apellidos + '" style="max-height:50px;width:auto;"></div>';
                         }
 
                         respuesta_html +='</li>';

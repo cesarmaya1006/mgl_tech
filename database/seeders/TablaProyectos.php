@@ -34,7 +34,7 @@ class TablaProyectos extends Seeder
                 $lideres = $this->getEmpleados($empresa->id);
                 $cantProyectos = rand(2, 6);
                 if (mt_rand(1, 5000)%2==0) {
-                    $presupuesto = random_int(8, 15)* 1000000;
+                    $presupuesto = random_int(8, 15)* 10000;
                     $titulo = 'Prueba Seeder con presupuesto - ' . $empresa->id;
                     $objetivo = 'Verificar la creacion de proyectos mediante seeders con presupuesto - Empresa id:' . $empresa->id . ' --- Nombre de la empresa:' . $empresa->empresa;
                 } else {
@@ -47,6 +47,18 @@ class TablaProyectos extends Seeder
                 $fec_creacion = date("Y-m-d", strtotime($fecha_ini . "+ " . $dias_fecha . " days"));
                 for ($i = 1; $i < $cantProyectos; $i++) {
                     $presupuesto = $presupuesto * random_int(3, 7);
+                    if ($presupuesto<1000000) {
+                        $presupuesto = $presupuesto * 20;
+                    }
+                    if ($presupuesto<5000000) {
+                        $presupuesto = $presupuesto * 10;
+                    }
+                    if ($presupuesto<10000000) {
+                        $presupuesto = $presupuesto * 5;
+                    }
+                    if ($presupuesto>120000000) {
+                        $presupuesto = rand(95,120) * 1000000;
+                    }
                     $lider = $lideres->random();
                     $proyecto_new = Proyecto::create([
                         'empleado_id' => $lider->id,
