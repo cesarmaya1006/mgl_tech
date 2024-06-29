@@ -32,14 +32,14 @@ class Tarea extends Model
     //----------------------------------------------------------------------------------
     //==================================================================================
     //----------------------------------------------------------------------------------
-    public function tareas()
+    public function subtareas()
     {
-        return $this->hasMany(Tarea::class, 'tareas_id', 'id');
+        return $this->hasMany(Tarea::class, 'tarea_id', 'id');
     }
     //----------------------------------------------------------------------------------
     public function historiales()
     {
-        return $this->hasMany(Historial::class, 'tareas_id', 'id');
+        return $this->hasMany(Historial::class, 'tarea_id', 'id');
     }
     //----------------------------------------------------------------------------------
 

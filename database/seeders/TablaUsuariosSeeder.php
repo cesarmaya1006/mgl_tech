@@ -36,13 +36,13 @@ class TablaUsuariosSeeder extends Seeder
             'name' => 'Cesar Maya',
             'email' => 'cesarmaya1006@gmail.com',
             'password' => bcrypt('123456789')
-        ])->syncRoles($roles);
+        ])->syncRoles('Super Administrador');
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         $usuario2 = User::create([
             'name' => 'Daniel Lopez',
             'email' => 'dlopez@gmail.com',
             'password' => bcrypt('123456789')
-        ])->syncRoles(['Super Administrador', 'Administrador']);
+        ])->syncRoles(['Administrador']);
         // -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
         $usuario3 = User::create([
             'name' => 'Monica Moya',

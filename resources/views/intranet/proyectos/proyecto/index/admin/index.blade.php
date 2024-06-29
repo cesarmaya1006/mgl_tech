@@ -1,9 +1,7 @@
 @extends('intranet.layout.app')
 
 @section('css_pagina')
-    <link rel="stylesheet" href="{{ asset('css/intranet/general/ninja/color-switcher.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/intranet/general/ninja/custom.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/intranet/general/ninja/materialdesignicons.css') }}">
+
 @endsection
 
 @section('titulo_pagina')
@@ -122,7 +120,7 @@
                 </div>
                 <div class="row p-1 d-flex align-items-center">
                     <div class="col-12 col-md-4 p-2">
-                        <a href="{{route('proyectos.proyecto_empresas')}}" class="small-box bg-light mini_sombra" style="text-decoration: none;">
+                        <div class="small-box bg-light mini_sombra" style="text-decoration: none;">
                             <div class="inner">
                                 <h3>{{$proyectosActivos}}</h3>
                                 <p>Proyectos Activos</p>
@@ -130,7 +128,7 @@
                             <div class="icon text-info">
                                 <i class="fas fa-bezier-curve"></i>
                             </div>
-                        </a>
+                        </div>
                     </div>
                     <div class="col-12 col-md-4 p-2">
                         <div class="small-box bg-light mini_sombra" style="text-decoration: none;">
@@ -160,8 +158,11 @@
         <hr>
         <div class="row d-flex justify-content-evenly">
             @foreach ($grupos as $grupo)
-                <div class="col-12 text-center mt-3 mb-2">
+                <div class="col-12 text-center mt-3">
                     <h3>{{$grupo->grupo}}</h3>
+                </div>
+                <div class="col-12">
+                    <hr>
                 </div>
                 @foreach ($grupo->empresas as $empresa)
                     <div class="card col-12 col-md-5">
@@ -176,51 +177,95 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 table-responsive">
-                                    <table class="table">
+                                    <table class="table table-hover table-sm ">
                                         <tbody>
                                             <tr>
-                                                <th scope="row">Cantidad de Usuarios</th>
-                                                @php
-                                                    $empleados_act = 0;
-                                                    $empleados_inac = 0;
-                                                    foreach ($empresa->areas as $area) {
-                                                        foreach ($area->cargos as $cargo) {
-                                                            foreach ($cargo->empleados as $empleado) {
-                                                                if ($empleado->estado) {
-                                                                    $empleados_act++;
-                                                                } else {
-                                                                    $empleados_inac++;
-                                                                }
+                                                <th scope="row">Email:</th>
+                                                <td colspan="2" >{{$empresa->email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Teléfono:</th>
+                                                <td colspan="2" >{{$empresa->telefono}}</td>
+                                            </tr>
+                                            @php
+                                                $empleados_act = 0;
+                                                $empleados_inac = 0;
+                                                foreach ($empresa->areas as $area) {
+                                                    foreach ($area->cargos as $cargo) {
+                                                        foreach ($cargo->empleados as $empleado) {
+                                                            if ($empleado->estado) {
+                                                                $empleados_act++;
+                                                            } else {
+                                                                $empleados_inac++;
                                                             }
                                                         }
                                                     }
+                                                }
+                                                $cantDocumentos =0;
+                                                $PesoDocus =0;
+                                            @endphp
+                                            @foreach ($empresa->proyectos as $proyecto)
+                                                @php
+                                                    $cantDocumentos+= $proyecto->documentos->count();
+                                                    $PesoDocus+= $proyecto->documentos->sum('peso');
                                                 @endphp
-                                                <td>Activos:</td>
-                                                <td class="text-right">{{$empleados_act}}</td>
-                                                <td>Inactivos:</td>
-                                                <td class="text-right">{{$empleados_inac}}</td>
+                                                @foreach ($proyecto->componentes as $componente)
+                                                    @php
+                                                        $tareasActivas = $componente->tareas->where('estado','Activa')->count();
+                                                        $tareasVencidas = $componente->tareas->where('fec_limite','>=', date('Y-m-d'))->count();
+                                                        $cantDocumentos+= $componente->documentos->count();
+                                                        $PesoDocus+= $componente->documentos->sum('peso');
+                                                    @endphp
+                                                    @foreach ($componente->tareas as $tarea)
+                                                        @foreach ($tarea->historiales as $historial)
+                                                            @php
+                                                                $cantDocumentos+= $historial->documentos->count();
+                                                                $PesoDocus+= $historial->documentos->sum('peso');
+                                                            @endphp
+                                                        @endforeach
+                                                        @foreach ($tarea->subtareas as $subtarea)
+                                                            @foreach ($subtarea->historiales as $historial)
+                                                                @php
+                                                                    $cantDocumentos+= $historial->documentos->count();
+                                                                    $PesoDocus+= $historial->documentos->sum('peso');
+                                                                @endphp
+                                                            @endforeach
+                                                        @endforeach
+                                                    @endforeach
+                                                @endforeach
+                                            @endforeach
+                                            <tr>
+                                                <th scope="row">Cantidad de Usuarios</th>
+                                                <td class="align-middle pl-2 pr-2" style="min-width: 100px;">Activos:<span class="float-end badge bg-primary">{{$empleados_act}}</span></td>
+                                                <td class="align-middle pl-2 pr-2" style="min-width: 100px;">Inactivos:<span class="float-end badge bg-secondary">{{$empleados_inac}}</span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">Cantidad de Proyectos</th>
-                                                <td>Activos:</td>
-                                                <td class="text-right">{{$empresa->proyectos->where('estado',1)->count()}}</td>
-                                                <td>Inactivos:</td>
-                                                <td class="text-right">{{$empresa->proyectos->where('estado',0)->count()}}</td>
+                                                <th scope="row" class="align-middle">Cantidad de Proyectos</th>
+                                                <td class="align-middle pl-2 pr-2 d-grid gap-2 {{ $empresa->proyectos->where('estado', 'Activo')->count() > 0 ? 'ver_modal_proyectos':''}}"
+                                                    style="cursor: pointer;"
+                                                    data_id = "{{$empresa->id}}"
+                                                    data_url = "{{route('proyectos.getproyectos', ['estado' => 'todos', 'config_empresa_id' => $empresa->id] )}}">
+                                                    @if ($empresa->proyectos->where('estado', 'Activo')->count() > 0)
+                                                        <button class="btn btn-outline-primary btn-xs"> Activos:<span class="float-end badge bg-primary mt-1 ml-1">{{$empresa->proyectos->where('estado', 'Activo')->count()}}</span></button>
+                                                    @else
+                                                    Activos:<span class="float-end badge bg-primary mt-1">{{$empresa->proyectos->where('estado', 'Activo')->count()}}</span>
+                                                    @endif
+
+                                                </td>
+                                                <td class="align-middle pl-2 pr-2">Inactivos:<span class="float-end badge bg-secondary">{{$empresa->proyectos->where('estado', 'Inactivo')->count() +$empresa->proyectos->where('progreso', 100)->count()}}</span></td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">Estadística de tareas</th>
-                                                <td>Activas:</td>
-                                                <td class="text-right">0</td>
-                                                <td>Vencidas:</td>
-                                                <td class="text-right">0</td>
+                                                <td class="align-middle pl-2 pr-2">Activos:<span class="float-end badge bg-primary">{{$tareasActivas}}</span></td>
+                                                <td class="align-middle pl-2 pr-2">Inactivos:<span class="float-end badge bg-danger">{{$tareasVencidas}}</span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">Total Documentos</th>
-                                                <td colspan="4" class="text-center">50</td>
+                                                <th scope="row">Total Documentos:</th>
+                                                <td colspan="2" class="align-middle text-center"><span class="badge bg-success">{{$cantDocumentos}}</span></td>
                                             </tr>
                                             <tr>
-                                                <th scope="row">Uso de espacio en el servidor</th>
-                                                <td colspan="4" class="text-center">150Mb</td>
+                                                <th scope="row">Uso de espacio en el servidor:</th>
+                                                <td colspan="2" class="align-middle text-center"><span class="badge bg-warning">{{$PesoDocus * 1000*1000}} Mb</span></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -250,8 +295,47 @@
 @endsection
 
 @section('modales')
+<!-- Modal proyectos empresas  -->
+<div class="modal fade" id="proyectosModal" tabindex="-1" aria-labelledby="proyectosModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="proyectosModalLabel">Modal title</h5>
+                <button type="button" class="btn-close boton_cerrar_modal" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="font-size: 0.8em;">
+                <table class="table table-striped table-hover table-sm display nowrap" style="width:100%" id="tabla_proyectos">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>#</th>
+                            <th>Proyecto</th>
+                            <th>Lider</th>
+                            <th>Miembros de Equipo</th>
+                            <th>Gestión/Días</th>
+                            <th>Progreso proyecto</th>
+                            <th class="text-center">Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody_proyectos">
+
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary btn-xs btn-sombra boton_cerrar_modal"><span class="pl-4 pr-4">Cerrar</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="folder_imagenes_usuario" value="{{asset('imagenes/usuarios/')}}">
+<input type="hidden" id="input_getdetalleproyecto" value="{{route('proyectos.detalle',['id' => 1])}}">
+<!-- Fin Modal proyectos empresas  -->
 @endsection
 
 @section('scripts_pagina')
-    <script src="{{ asset('js/intranet/proyectos/proyecto/index.js') }}"></script>
+@include('intranet.layout.data_table')
+<script src="{{ asset('js/intranet/proyectos/proyecto/index.js') }}"></script>
 @endsection

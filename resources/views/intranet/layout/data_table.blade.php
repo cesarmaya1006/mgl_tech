@@ -51,17 +51,15 @@
 
         var buttons_t = '';
         if (buttons) {
-            buttons_t = [{extend: 'excel',title:titulo},
-                         {extend: 'pdf',title: titulo}];
+            buttons_t = [{extend: 'excel',title:titulo},{extend: 'pdf',title: titulo}];
+            layout_var = [{top2Start: {pageLength: paginacion}},{top2End: null},{topStart: {buttons: buttons_t}},{topEnd: 'search'}];
+        }else{
+            layout_var = [{topStart: {pageLength: paginacion}},{topEnd: 'search'}];
         }
         $(tabla).DataTable({
+            scrollX: true,
             lengthMenu: [5, 10, 15, 25, 50, 75, 100],
-            layout: {
-                top2Start: {pageLength: paginacion},
-                top2End: null,
-                topStart: {buttons: buttons_t},
-                topEnd: 'search',
-            },
+            layout: {layout_var},
             language: {
                 sProcessing: "Procesando...",
                 sLengthMenu: "Mostrar _MENU_ resultados",

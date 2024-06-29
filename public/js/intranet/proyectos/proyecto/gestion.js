@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    asignarDataTable_ajax(".tabla_tareas_componente",5,"portrait","Legal","listado de tareas",true);
+    llenar_tabla_ini();
 
     $(".check_tabla_tarea").change(function () {
         var arrayChecks = [];
@@ -14,11 +14,13 @@ $(document).ready(function () {
             $("#check_Cerradas").prop("checked", false);
             arrayChecks = [$(this).val()];
         } else {
-            $(".check_tabla_tarea").each(function () {
-                if (this.checked) {
-                    if ($(this).val() != "Todas") {
-                        $("#check_Todas").prop("checked", false);
-                        arrayChecks.push($(this).val());
+            var sList = "";
+            $('input[type=checkbox]').each(function (index,item) {
+                if ($(item).hasClass('check_tabla_tarea_' + data_componente_id) && $(item).is(':checked')) {
+                    if ($(item).val() != "Todas") {
+                        arrayChecks.push($(item).val());
+                    }else{
+                        $(item).prop("checked", false);
                     }
                 }
             });
@@ -30,24 +32,52 @@ $(document).ready(function () {
         var data = {
             estados: estados,
         };
-        if (this.checked) {
-            $.ajax({
-                url: data_url,
-                type: "GET",
-                data: data,
-                success: function (respuesta) {
-                    llenar_tabla_empleados(respuesta.tareas,tabla_tareas_componente,data_permiso_ver_tareas,id_tbody);
-                },
-                error: function () {},
-            });
-
-        }else{
-            var tareas =[];
-            llenar_tabla_empleados(tareas,tabla_tareas_componente,data_permiso_ver_tareas,id_tbody);
-        }
+        $.ajax({
+            url: data_url,
+            type: "GET",
+            data: data,
+            success: function (respuesta) {
+                llenar_tabla_empleados(respuesta.tareas,tabla_tareas_componente,data_permiso_ver_tareas,id_tbody);
+            },
+            error: function () {},
+        });
     });
     // ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== ===== =====
 });
+
+function llenar_tabla_ini(){
+    const data_permiso_ver_tareas = $(this).attr('data_permiso_ver_tareas');
+    var id_tbody = '';
+    var data_componente_id = "";
+    var tabla_tareas_componente = "";
+    var arrayChecks = [];
+    var sList = "";
+    var data_url = '';
+    $('input[type=checkbox]').each(function (index,item) {
+        if ($(item).hasClass('check_tabla_tarea_' + data_componente_id) && $(item).is(':checked')) {
+            if ($(item).val() == "Activas") {
+                arrayChecks.push($(item).val());
+                data_url = $(item).attr('data_url');
+                data_componente_id = $(item).attr("data_componente_id");
+                var data = {
+                    estados: arrayChecks,
+                };
+                tabla_tareas_componente = "#tabla_tareas_componente_" + data_componente_id;
+                id_tbody = '#tbody_' + data_componente_id;
+                $.ajax({
+                    url: data_url,
+                    type: "GET",
+                    data: data,
+                    success: function (respuesta) {
+                        llenar_tabla_empleados(respuesta.tareas,tabla_tareas_componente,data_permiso_ver_tareas,id_tbody);
+                    },
+                    error: function () {},
+                });
+            }
+        }
+    });
+    // - * - - * - - * - - * - - * - - * - - * - - * - - * - - * - - * - - * - -
+}
 
 function llenar_tabla_empleados(data,tabla,data_permiso_ver_tareas,id_tbody) {
     var table = new DataTable(tabla);
@@ -101,7 +131,7 @@ function llenar_tabla_empleados(data,tabla,data_permiso_ver_tareas,id_tbody) {
         }
         respuesta_tbody_html+='<td class="text-center" style="white-space:nowrap;"><span class="bg-' + bg_estado + ' pl-3 pr-3 " style="font-size: 0.85em;">' + tarea.estado + '</span></td>';
         respuesta_tbody_html+='<td class="text-center" style="white-space:nowrap;">' + tarea.impacto + '</td>';
-        respuesta_tbody_html+='<td class="text-wrap" style="width: 600px;">' + tarea.objetivo + '</td>';
+        respuesta_tbody_html+='<td width="25%"><p class="text-wrap" style="text-align: justify;width: 250px;">' + tarea.objetivo + '</p></td>';
         respuesta_tbody_html+='</tr>';
     });
     // -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*- -*-

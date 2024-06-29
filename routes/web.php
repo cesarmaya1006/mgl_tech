@@ -13,6 +13,7 @@ use App\Http\Controllers\Empresa\EmpGrupoController;
 use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
 use App\Http\Controllers\Proyectos\ComponenteController;
+use App\Http\Controllers\Proyectos\HistorialController;
 use App\Http\Controllers\Proyectos\ProyectoController;
 use App\Http\Controllers\Proyectos\TareaController;
 use App\Http\Middleware\AdminEmp;
@@ -148,17 +149,16 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getAreas', 'getAreas')->name('empleados.getAreas');
             Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
             Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
-
         });
         // ----------------------------------------------------------------------------------------
 
     });
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    Route::middleware(Empleado::class)->group(function (){
+    Route::middleware(Empleado::class)->group(function () {
         // ------------------------------------------------------------------------------------
         // Ruta Administrador del Sistema Areas
         Route::controller(ProyectoController::class)->prefix('proyectos')->group(function () {
-            Route::middleware(SuperAdmin::class)->group(function(){
+            Route::middleware(SuperAdmin::class)->group(function () {
                 Route::get('proyecto_empresas', 'proyecto_empresas')->name('proyectos.proyecto_empresas');
                 Route::get('getproyectos/{estado}/{config_empresa_id}', 'getproyectos')->name('proyectos.getproyectos');
             });
@@ -177,7 +177,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getEmpleados', 'getEmpleados')->name('proyectos.getEmpleados');
         });
         // ------------------------------------------------------------------------------------
-        Route::controller(ComponenteController::class)->prefix('componentes')->group(function(){
+        Route::controller(ComponenteController::class)->prefix('componentes')->group(function () {
             Route::get('crear/{proyecto_id}', 'create')->name('componentes.create');
             Route::post('guardar/{proyecto_id}', 'store')->name('componentes.store');
             Route::get('editar/{id}', 'edit')->name('componentes.edit');
@@ -185,7 +185,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });
         // ------------------------------------------------------------------------------------
-        Route::controller(TareaController::class)->prefix('tareas')->group(function(){
+        Route::controller(TareaController::class)->prefix('tareas')->group(function () {
             Route::get('gestion/{id}/{notificacion_id?}', 'gestion')->name('tareas.gestion');
             Route::get('crear/{componente_id}', 'create')->name('tareas.create');
             Route::post('guardar/{componente_id}', 'store')->name('tareas.store');
@@ -195,5 +195,20 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getapitareas/{componente_id}/{estado}', 'getapitareas')->name('tareas.getapitareas');
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });
+        // ------------------------------------------------------------------------------------
+        Route::controller(HistorialController::class)->prefix('historiales')->group(function () {
+            Route::get('crear/{id}', 'create')->name('historiales.create');
+            Route::post('guardar', 'store')->name('historiales.store');
+            Route::get('gestion/{id}', 'gestion')->name('historiales.gestion');
+        });
+        // ----------------------------------------------------------------------------------------
+        // Ruta sub-tareas
+        // ------------------------------------------------------------------------------------
+        Route::controller(TareaController::class)->prefix('subtareas')->group(function () {
+            Route::get('crear/{id}', 'subtareas_create')->name('subtareas.create');
+            Route::post('guardar', 'subtareas_store')->name('subtareas.store');
+            Route::get('gestion/{id}/{notificacion_id?}', 'subtareas_gestion')->name('subtareas.gestion');
+        });
+        // ----------------------------------------------------------------------------------------
     });
 });

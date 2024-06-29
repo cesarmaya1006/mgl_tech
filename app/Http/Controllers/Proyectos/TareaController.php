@@ -247,11 +247,17 @@ class TareaController extends Controller
     public function getapitareas(Request $request, $componente_id, $estado)
     {
         if ($request->ajax()) {
-            if (in_array("Todas", $request['estados'])) {
-                return response()->json(['tareas' => Tarea::where('componente_id', $componente_id)->with('componente')->with('empleado')->get()]);
+            if ($request['estados']!=null) {
+                if (in_array("Todas", $request['estados'])) {
+                    return response()->json(['tareas' => Tarea::where('componente_id', $componente_id)->with('componente')->with('empleado')->get()]);
+                } else {
+                    return response()->json(['tareas' => Tarea::where('componente_id', $componente_id)->whereIn('estado', $request['estados'])->with('componente')->with('empleado')->get()]);
+                }
             } else {
-                return response()->json(['tareas' => Tarea::where('componente_id', $componente_id)->whereIn('estado', $request['estados'])->with('componente')->with('empleado')->get()]);
+                return response()->json(['tareas' => Tarea::where('componente_id', $componente_id)->where('estado', 'vacio')->with('componente')->with('empleado')->get()]);
             }
+
+
         } else {
             abort(404);
         }

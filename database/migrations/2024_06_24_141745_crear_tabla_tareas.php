@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('tareas', function (Blueprint $table) {
             $table->bigIncrements('id')->autoIncrement();
-            $table->unsignedBigInteger('tareas_id')->nullable();
-            $table->foreign('tareas_id', 'fk_tareas_tarea')->references('id')->on('tareas')->onDelete('restrict')->onUpdate('restrict');
+            $table->unsignedBigInteger('tarea_id')->nullable();
+            $table->foreign('tarea_id', 'fk_tareas_tarea')->references('id')->on('tareas')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('componente_id')->nullable();
             $table->foreign('componente_id', 'fk_componente_tarea')->references('id')->on('componentes')->onDelete('restrict')->onUpdate('restrict');
             $table->unsignedBigInteger('empleado_id');

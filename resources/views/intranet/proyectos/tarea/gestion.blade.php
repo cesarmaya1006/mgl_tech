@@ -220,6 +220,142 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="historiales-tab" data-bs-toggle="tab" data-bs-target="#historiales" type="button" role="tab" aria-controls="historiales" aria-selected="true">Historiales</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="sub_tareas-tab" data-bs-toggle="tab" data-bs-target="#sub_tareas" type="button" role="tab" aria-controls="sub_tareas" aria-selected="false">Sub - Tareas</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="historiales" role="tabpanel" aria-labelledby="historiales-tab">
+                    <div class="row">
+                        <div class="col-12 mb-3 d-grid gap-2 d-md-block pt-md-2 pr-md-2">
+                            @if (session('rol_principal_id') == 1 ||
+                                 auth()->user()->hasPermissionTo('historiales.create')||
+                                 $tarea->componente->proyecto->empleado_id == session('id_usuario')||
+                                 $tarea->componente->empleado_id == session('id_usuario'))
+                                 <a href="{{route('historiales.create',['id'=>$tarea->id])}}" class="btn btn-success btn-xs btn-sombra text-center pl-3 pr-3 float-md-end mt-3 mt-md-0" style="font-size: 0.9em;">
+                                    <i class="fas fa-plus-circle mr-2"></i>
+                                    Nuevo historial
+                                </a>
+                            @endif
+                        </div>
+                        <div class="col-12 table-responsive">
+                            <table class="table table-striped table-hover table-sm w-100 display nowrap" style="width:100%" id="tablas_gestion_historiales">
+                                <thead class="thead-light w-100">
+                                    <tr style="width: 100%">
+                                        <td>id</td>
+                                        <td>Titulo</td>
+                                        <td>Fecha</td>
+                                        <td>Usuario historial</td>
+                                        <td>Usuario asignado</td>
+                                        <td>Avance Progresivo</td>
+                                        @if ($tarea->componente->presupuesto > 0)
+                                        <td>Costo</td>
+                                        @endif
+                                        <td>Resumen</td>
+                                        <td>Documentos</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($tarea->historiales as $historial)
+                                        <tr>
+                                            <td>{{ $historial->id }}</td>
+                                            <td class="text-left">{{ $historial->titulo }}</td>
+                                            <td>{{ $historial->fecha }}</td>
+                                            <td class="text-left">{{ $historial->empleado->nombres . ' ' . $historial->empleado->apellidos }}</td>
+                                            <td class="text-left">{{ $historial->asignado->nombres . ' ' . $historial->asignado->apellidos }}</td>
+                                            <td class="text-center">{{ $historial->progreso }} %</td>
+                                            @if ($tarea->componente->presupuesto > 0)
+                                                <td class="text-right"> $ {{ number_format($historial->costo , 2) }}</td>
+                                            @endif
+                                            <td width="25%" class="text-left text-wrap">{{ $historial->resumen }}</td>
+                                            <td class="d-flex flex-column">
+                                                @foreach ($historial->documentos as $documento)
+                                                    <span><a href="{{ asset('documentos/folder_doc_historial/' . $documento->url) }}"target="_blank">{{ $documento->titulo }}</a></span>
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success">
+                                                    <i class="fas fa-file-upload" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="sub_tareas" role="tabpanel" aria-labelledby="sub_tareas-tab">
+                    <div class="row">
+                        <div class="col-12 mb-3 d-grid gap-2 d-md-block pt-md-2 pr-md-2">
+                            @if (session('rol_principal_id') == 1 ||
+                                 auth()->user()->hasPermissionTo('subtareas.create')||
+                                 $tarea->componente->proyecto->empleado_id == session('id_usuario')||
+                                 $tarea->componente->empleado_id == session('id_usuario'))
+                                 <a href="{{route('subtareas.create',['id'=>$tarea->id])}}" class="btn btn-success btn-xs btn-sombra text-center pl-3 pr-3 float-md-end mt-3 mt-md-0 ml-md-4" style="font-size: 0.9em;">
+                                    <i class="fas fa-plus-circle mr-2"></i>
+                                    Crear Subtarea
+                                </a>
+                            @endif
+                        </div>
+                        <div class="col-12">
+                            <table class="table table-striped table-hover table-sm w-100 display nowrap" style="width:100%" id="tablas_gestion_sub_tarea">
+                                <thead class="thead-light w-100">
+                                    <tr style="width: 100%">
+                                        <td></td>
+                                        <td>Título</td>
+                                        <td>Fecha Inicial</td>
+                                        <td>Fecha Límite</td>
+                                        <td>Estado</td>
+                                        <td>Usuario sub-tarea</td>
+                                        <td>Usuario Asignado</td>
+                                        <td>Objetivo</td>
+                                        <td>Documentos</td>
+                                        <td></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($tarea->subtareas as $subtarea)
+                                        <tr class="{{$subtarea->progreso < 100?'table-info':'table-success'}}"">
+                                            <td>
+                                                <a href="{{route('subtareas.gestion',['id' => $subtarea->id])}}" class="btn btn-outline-primary btn-xs pl-3 pr-3">Gestionar la sub-tarea</a>
+                                            </td>
+                                            <td class="text-left">{{ $subtarea->titulo }}</td>
+                                            <td>{{ $subtarea->fec_creacion }}</td>
+                                            <td>{{ $subtarea->fec_limite }}</td>
+                                            <td>{{ $subtarea->progreso < 100?$subtarea->estado:'Completada' }}</td>
+                                            <td class="text-left">{{ $subtarea->responsable->nombres . ' ' . $subtarea->responsable->apellidos }}</td>
+                                            <td class="text-left">{{ $subtarea->asignado!=null? $subtarea->asignado->nombres . ' ' . $subtarea->asignado->apellidos : ''}}</td>
+                                            <td width="25%" class="text-left text-wrap">{{ $subtarea->objetivo }}</td>
+                                            <td class="d-flex flex-column">
+                                                @foreach ($subtarea->historiales as $historial)
+                                                    @foreach ($historial->documentos as $documento)
+                                                        <span><a href="{{ asset('documentos/folder_doc_historial/' . $documento->url) }}"target="_blank">{{ $documento->titulo }}</a></span>
+                                                    @endforeach
+                                                @endforeach
+                                            </td>
+                                            <td>
+                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success">
+                                                    <i class="fas fa-file-upload" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('footer_card')
@@ -229,5 +365,6 @@
 @endsection
 
 @section('scripts_pagina')
+    @include('intranet.layout.data_table')
     <script src="{{ asset('js/intranet/proyectos/tareas/gestion.js') }}"></script>
 @endsection

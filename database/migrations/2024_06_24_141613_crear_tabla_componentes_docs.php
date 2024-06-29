@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('titulo', 255);
             $table->string('tipo', 50);
             $table->string('url', 255);
-            $table->double('peso', 255);
+            $table->double('peso');
             $table->timestamps();
             $table->charset = 'utf8';
             $table->collation = 'utf8_spanish_ci';

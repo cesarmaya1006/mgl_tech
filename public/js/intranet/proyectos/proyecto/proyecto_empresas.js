@@ -26,7 +26,7 @@ $(document).ready(function () {
                     respuesta_html +='</td>';
                     respuesta_html +='<td style="white-space:nowrap;">' + proyecto.id + '</td>';
                     respuesta_html +='<td style="white-space:nowrap;">';
-                    respuesta_html +='<button class="btn btn-link" style="text-decoration: none;" >' + proyecto.titulo + '</button >';
+                    respuesta_html +='<a href="' + $('#input_getdetalleproyecto').val().replace('detalle/1','detalle/'+proyecto.id)  + '" class="btn btn-link" style="text-decoration: none;" >' + proyecto.titulo + '</a >';
                     respuesta_html +='<br>';
                     respuesta_html +='<small class="ml-4">Creado ' + proyecto.fec_creacion + '</small>';
                     respuesta_html +='</td>';

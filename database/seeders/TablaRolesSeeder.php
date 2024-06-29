@@ -91,9 +91,10 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'componentes.edit'])->syncRoles([$rol1]);
         Permission::create(['name' => 'componentes.destroy'])->syncRoles([$rol1]);
         //---------------------------------------------------------------------------------------------
-        Permission::create(['name' => 'ver_componentes'])->syncRoles([$rol1]);
+        Permission::create(['name' => 'gestion_ver_componentes_info'])->syncRoles([$rol1]);
         Permission::create(['name' => 'ver_presupuesto_componentes'])->syncRoles([$rol1]);
         Permission::create(['name' => 'ver_tareas_componentes'])->syncRoles([$rol1]);
+        // - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - * -
 
         // Permisos Tareas
         Permission::create(['name' => 'tareas.index'])->syncRoles([$rol1, $rol4]);
@@ -108,7 +109,18 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'tareas_gestion_ver_presupuesto_proyecto'])->syncRoles([$rol1]);
         Permission::create(['name' => 'tareas_gestion_ver_presupuesto_componente'])->syncRoles([$rol1]);
         Permission::create(['name' => 'tareas_gestion_ver_datos_comp'])->syncRoles([$rol1]);
+        // Permisos historial
+        Permission::create(['name' => 'historiales.index'])->syncRoles([$rol1, $rol4]);
+        Permission::create(['name' => 'historiales.create'])->syncRoles([$rol1]);
+        Permission::create(['name' => 'historiales.edit'])->syncRoles([$rol1]);
+        Permission::create(['name' => 'historiales.destroy'])->syncRoles([$rol1]);
+        Permission::create(['name' => 'historiales.gestion'])->syncRoles([$rol1]);
+        //---------------------------------------------------------------------------------------------
+        // Permisos Subtareas
+        Permission::create(['name' => 'subtareas.create'])->syncRoles([$rol1]);
+        Permission::create(['name' => 'subtareas.gestion'])->syncRoles([$rol1]);
+        //---------------------------------------------------------------------------------------------
+
 
     }
-
 }
