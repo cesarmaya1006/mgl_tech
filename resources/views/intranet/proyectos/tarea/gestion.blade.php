@@ -1,6 +1,7 @@
 @extends('intranet.layout.app')
 
 @section('css_pagina')
+
 @endsection
 
 @section('titulo_pagina')
@@ -245,7 +246,7 @@
                             @endif
                         </div>
                         <div class="col-12 table-responsive">
-                            <table class="table table-striped table-hover table-sm w-100 display nowrap" style="width:100%" id="tablas_gestion_historiales">
+                            <table class="table table-striped table-hover table-sm w-100 nowrap" style="width:100%" id="tablas_gestion_historiales">
                                 <thead class="thead-light w-100">
                                     <tr style="width: 100%">
                                         <td>id</td>
@@ -258,8 +259,8 @@
                                         <td>Costo</td>
                                         @endif
                                         <td>Resumen</td>
-                                        <td>Documentos</td>
                                         <td></td>
+                                        <td>Documentos</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -275,15 +276,18 @@
                                                 <td class="text-right"> $ {{ number_format($historial->costo , 2) }}</td>
                                             @endif
                                             <td width="25%" class="text-left text-wrap">{{ $historial->resumen }}</td>
-                                            <td class="d-flex flex-column">
+                                            <td>
+                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success btn_new_doc_hist"
+                                                   data-toggle="modal" data-target="#docHistorialNew"
+                                                   data_id = "{{ $historial->id }}"
+                                                   data_cajaid="caja_doc_hist_{{ $historial->id }}">
+                                                    <i class="fas fa-file-upload" aria-hidden="true"></i>
+                                                </a>
+                                            </td>
+                                            <td class="d-flex flex-column" id="caja_doc_hist_{{ $historial->id }}">
                                                 @foreach ($historial->documentos as $documento)
                                                     <span><a href="{{ asset('documentos/folder_doc_historial/' . $documento->url) }}"target="_blank">{{ $documento->titulo }}</a></span>
                                                 @endforeach
-                                            </td>
-                                            <td>
-                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success">
-                                                    <i class="fas fa-file-upload" aria-hidden="true"></i>
-                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -317,8 +321,8 @@
                                         <td>Usuario sub-tarea</td>
                                         <td>Usuario Asignado</td>
                                         <td>Objetivo</td>
-                                        <td>Documentos</td>
                                         <td></td>
+                                        <td>Documentos</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -334,17 +338,20 @@
                                             <td class="text-left">{{ $subtarea->responsable->nombres . ' ' . $subtarea->responsable->apellidos }}</td>
                                             <td class="text-left">{{ $subtarea->asignado!=null? $subtarea->asignado->nombres . ' ' . $subtarea->asignado->apellidos : ''}}</td>
                                             <td width="25%" class="text-left text-wrap">{{ $subtarea->objetivo }}</td>
-                                            <td class="d-flex flex-column">
+                                            <td>
+                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success btn_new_doc_hist"
+                                                data-toggle="modal" data-target="#docHistorialNew"
+                                                data_id = "{{ $subtarea->historial->id }}"
+                                                data_cajaid="caja_doc_hist_{{ $subtarea->historial->id }}">
+                                                 <i class="fas fa-file-upload" aria-hidden="true"></i>
+                                             </a>
+                                            </td>
+                                            <td class="d-flex flex-column" id="caja_doc_hist_sub_{{ $subtarea->id }}">
                                                 @foreach ($subtarea->historiales as $historial)
                                                     @foreach ($historial->documentos as $documento)
                                                         <span><a href="{{ asset('documentos/folder_doc_historial/' . $documento->url) }}"target="_blank">{{ $documento->titulo }}</a></span>
                                                     @endforeach
                                                 @endforeach
-                                            </td>
-                                            <td>
-                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success">
-                                                    <i class="fas fa-file-upload" aria-hidden="true"></i>
-                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -356,12 +363,42 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="ruta_docs_histotiales" data_url="{{ asset('documentos/folder_doc_historial/') }}">
 @endsection
 
 @section('footer_card')
 @endsection
 
 @section('modales')
+<!-- Modal -->
+<div class="modal fade" id="docHistorialNew" tabindex="-1" role="dialog" aria-labelledby="docHistorialNewLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="docHistorialNewLabel">Añadir Documento al historial</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="modal-body form-horizontal" id="form_historiales_store" action="{{route('historiales.guardar_doc_hist')}}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                @csrf
+                @method('post')
+                <div class="row">
+                    <div class="col-12 form-group">
+                        <label for="docu_historial">Documento Adjunto</label>
+                        <input type="hidden" id="historial_id" name="historial_id" required>
+                        <input type="file" class="form-control form-control-sm" name="docu_historial" id="docu_historial" aria-describedby="helpId" required>
+                        <small id="helpId" class="form-text text-muted">Tamaño maximo 20Mb</small>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="guardarArchivos">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts_pagina')

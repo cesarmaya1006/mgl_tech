@@ -213,11 +213,11 @@ foreach ($proyecto->componentes as $componente) {
                                                             <div class="post">
                                                                 <div class="user-block">
                                                                     <img class="img-circle img-bordered-sm"
-                                                                        title="{{ $historial->responsable->nombres . ' ' . $historial->responsable->apellidos }}"
-                                                                        src="{{ asset('imagenes/hojas_de_vida/' . $historial->responsable->foto) }}"
-                                                                        alt="{{ $historial->responsable->nombres . ' ' . $historial->responsable->apellidos }}">
+                                                                        title="{{ $historial->empleado->nombres . ' ' . $historial->empleado->apellidos }}"
+                                                                        src="{{ asset('imagenes/hojas_de_vida/' . $historial->empleado->foto) }}"
+                                                                        alt="{{ $historial->empleado->nombres . ' ' . $historial->empleado->apellidos }}">
                                                                     <span
-                                                                        class="username">{{ $historial->responsable->nombres . ' ' . $historial->responsable->apellidos }}</span>
+                                                                        class="username">{{ $historial->empleado->nombres . ' ' . $historial->empleado->apellidos }}</span>
                                                                     <span
                                                                         class="description">{{ $historial->titulo }}
                                                                         -

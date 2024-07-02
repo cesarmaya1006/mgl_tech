@@ -265,7 +265,7 @@
                                             </tr>
                                             <tr>
                                                 <th scope="row">Uso de espacio en el servidor:</th>
-                                                <td colspan="2" class="align-middle text-center"><span class="badge bg-warning">{{$PesoDocus * 1000*1000}} Mb</span></td>
+                                                <td colspan="2" class="align-middle text-center"><span class="badge bg-warning">{{number_format(($PesoDocus/1000),3,',','.')}} Mb</span></td>
                                             </tr>
                                         </tbody>
                                     </table>

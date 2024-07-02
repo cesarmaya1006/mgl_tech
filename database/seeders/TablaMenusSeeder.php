@@ -69,7 +69,7 @@ class TablaMenusSeeder extends Seeder
                             //Menu Roles
                             ['nombre' => 'Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/empleados', 'orden' => '2',  'icono' => 'fas fa-users', 'Array_1' => []],
                             //Menu Roles
-                            ['nombre' => 'Permisos Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/empleados_permisos', 'orden' => '2',  'icono' => 'fas fa-user-shield', 'Array_1' => []],
+                            ['nombre' => 'Permisos Empleados', 'menu_id' => '2',  'url' => 'dashboard/configuracion/permisoscargos', 'orden' => '2',  'icono' => 'fas fa-user-shield', 'Array_1' => []],
 
                         ]
                     ],

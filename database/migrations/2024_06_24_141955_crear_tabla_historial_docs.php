@@ -15,9 +15,9 @@ return new class extends Migration
             $table->bigIncrements('id')->autoIncrement();
             $table->unsignedBigInteger('historial_id');
             $table->foreign('historial_id', 'fk_historial_doc')->references('id')->on('historiales')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('titulo', 255);
-            $table->string('tipo', 50);
-            $table->string('url', 255);
+            $table->string('titulo');
+            $table->string('tipo');
+            $table->string('url');
             $table->double('peso');
             $table->timestamps();
             $table->charset = 'utf8';

@@ -120,6 +120,9 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'subtareas.create'])->syncRoles([$rol1]);
         Permission::create(['name' => 'subtareas.gestion'])->syncRoles([$rol1]);
         //---------------------------------------------------------------------------------------------
+        // Permisos Premisos Empleados
+        Permission::create(['name' => 'permisoscargos.index'])->syncRoles([$rol1,$rol3]);
+        //---------------------------------------------------------------------------------------------
 
 
     }

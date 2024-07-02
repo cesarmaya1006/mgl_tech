@@ -12,6 +12,7 @@ use App\Http\Controllers\Empresa\CargoController;
 use App\Http\Controllers\Empresa\EmpGrupoController;
 use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
+use App\Http\Controllers\Empresa\PermisoEmpleadoController;
 use App\Http\Controllers\Proyectos\ComponenteController;
 use App\Http\Controllers\Proyectos\HistorialController;
 use App\Http\Controllers\Proyectos\ProyectoController;
@@ -151,7 +152,15 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
         });
         // ----------------------------------------------------------------------------------------
+        // Ruta Permisos Empleados
+        Route::controller(PermisoEmpleadoController::class)->prefix('permisoscargos')->group(function(){
+            Route::get('', 'index')->name('permisoscargos.index');
+            Route::get('getAreas', 'getAreas')->name('permisoscargos.getAreas');
+            Route::get('getCargos', 'getCargos')->name('permisoscargos.getCargos');
 
+
+        });
+        // ----------------------------------------------------------------------------------------
     });
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     Route::middleware(Empleado::class)->group(function () {
@@ -200,6 +209,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('crear/{id}', 'create')->name('historiales.create');
             Route::post('guardar', 'store')->name('historiales.store');
             Route::get('gestion/{id}', 'gestion')->name('historiales.gestion');
+            Route::post('guardar_doc_hist', 'guardar_doc_hist')->name('historiales.guardar_doc_hist');
+
         });
         // ----------------------------------------------------------------------------------------
         // Ruta sub-tareas

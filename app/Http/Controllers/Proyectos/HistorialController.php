@@ -154,6 +154,40 @@ class HistorialController extends Controller
         }
     }
 
+    public function guardar_doc_hist(Request $request)
+    {
+        if ($request->ajax()) {
+            // - - - - - - - - - - - - - - - - - - - - - - - -
+            if ($request->hasFile('docu_historial')) {
+                $ruta = Config::get('constantes.folder_doc_historial');
+                $ruta = trim($ruta);
+                $fichero_subido = $ruta . time() . '-' . basename($_FILES['docu_historial']['name']);
+
+
+                $archivo = $request->docu_historial;
+                $titulo = $archivo->getClientOriginalName();
+                $tipo = $archivo->getClientMimeType();
+                $url = time() . '-' . basename($_FILES['docu_historial']['name']);
+                $peso = $archivo->getSize() / 1000;
+                move_uploaded_file($_FILES['docu_historial']['tmp_name'], $fichero_subido);
+                HistorialDoc::create([
+                    'historial_id' => $request['historial_id'],
+                    'titulo' => $titulo,
+                    'tipo' => $tipo,
+                    'url' => $url,
+                    'peso' => $peso,
+                ]);
+                return response()->json(['mensaje' => 'ok','titulo' =>$titulo,'url' =>$url]);
+            }else{
+                return response()->json(['mensaje' => 'ng']);
+            }
+            // - - - - - - - - - - - - - - - - - - - - - - - -
+            return 'ok';
+        } else {
+            abort(404);
+        }
+    }
+
     public function mime_content_type($filename)
     {
 
