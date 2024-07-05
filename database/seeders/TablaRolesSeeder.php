@@ -79,6 +79,11 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'proyectos.gestion'])->syncRoles([$rol1]);
         Permission::create(['name' => 'proyectos.proyecto_empresas'])->syncRoles([$rol1]);
         //---------------------------------------------------------------------------------------------
+        //vistas
+        Permission::create(['name' => 'proyectos.ver_datos_empresa'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name' => 'proyectos.ver_estadistica_tareas'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name' => 'proyectos.ver_calendario_tareas'])->syncRoles([$rol1,$rol3]);
+        //---------------------------------------------------------------------------------------------
         Permission::create(['name' => 'caja_presupuestos'])->syncRoles([$rol1]);
         Permission::create(['name' => 'exportar_proyecto'])->syncRoles([$rol1]);
         Permission::create(['name' => 'personal_asignado_proyecto'])->syncRoles([$rol1]);

@@ -10,6 +10,8 @@ use App\Models\Empresa\Cargo;
 use App\Models\Empresa\EmpGrupo;
 use App\Models\Empresa\Empleado;
 use App\Models\Empresa\Empresa;
+use App\Models\Proyectos\Proyecto;
+use App\Models\Proyectos\Tarea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
@@ -266,6 +268,42 @@ class EmpleadoController extends Controller
                                                                 ->with('empresas_tranv')
                                                                 ->with('usuario')
                                                                 ->where('cargo_id', $_GET['id'])->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function getproyectos(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['proyectos' => Proyecto::where('estado', 'Activo')->with('miembros_proyecto')->with('lider')->whereHas('miembros_proyecto', function ($q) use ($request) {$q->where('empleado_id', $request['empleado_id']);})->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function getproyectosLider(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['proyectos' => Proyecto::where('empleado_id', $request['empleado_id'])->where('estado', 'Activo')->with('miembros_proyecto')->with('lider')->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function getTareas(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['tareas' => Tarea::where('estado', 'Activa')->where('empleado_id', $request['empleado_id'])->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function getTareasVencidas(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['tareas' => Tarea::where('estado', 'Activa')->where('empleado_id', $request['empleado_id'])->where('fec_limite','<',date('Y-m-d'))->get()]);
         } else {
             abort(404);
         }

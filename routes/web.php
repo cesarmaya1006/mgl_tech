@@ -150,6 +150,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getAreas', 'getAreas')->name('empleados.getAreas');
             Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
             Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
+
         });
         // ----------------------------------------------------------------------------------------
         // Ruta Permisos Empleados
@@ -219,6 +220,17 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('crear/{id}', 'subtareas_create')->name('subtareas.create');
             Route::post('guardar', 'subtareas_store')->name('subtareas.store');
             Route::get('gestion/{id}/{notificacion_id?}', 'subtareas_gestion')->name('subtareas.gestion');
+        });
+        // ----------------------------------------------------------------------------------------
+        // ----------------------------------------------------------------------------------------
+        // Ruta get-pryectos
+        // ------------------------------------------------------------------------------------
+        Route::controller(EmpleadoController::class)->prefix('empleados')->group(function () {
+            Route::get('getproyectos', 'getproyectos')->name('empleados.getproyectos');
+            Route::get('getproyectosLider', 'getproyectosLider')->name('empleados.getproyectosLider');
+            Route::get('getTareas', 'getTareas')->name('empleados.getTareas');
+            Route::get('getTareasVencidas', 'getTareasVencidas')->name('empleados.getTareasVencidas');
+
         });
         // ----------------------------------------------------------------------------------------
     });
