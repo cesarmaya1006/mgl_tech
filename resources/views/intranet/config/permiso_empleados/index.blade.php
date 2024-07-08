@@ -77,7 +77,7 @@
     <div class="row">
         <div class="col-12">
             <table class="table table-striped table-hover table-bordered border-primary table-sm" id="tabla_permisos_cargos">
-                <thead>
+                <thead id="thead_permisos">
                     <tr>
                         <th scope="col"><h5><strong>Permisos / Cargos</strong></h5></th>
                         @foreach ($grupos as $grupo)
@@ -91,7 +91,7 @@
                         @endforeach
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbody_permisos">
                     <tr>
                         @php
                             $cantCargos =0;
@@ -180,6 +180,7 @@
         </div>
     </div>
     <!-- ---------------------------------------------------------------------- -->
+    <input type="hidden" id="route_permisoscargos_getCambioCargo" data_url="{{route('permisoscargos.getCambioCargo')}}">
 @else
 <div class="row d-flex justify-content-center">
     <div class="col-12 col-md-6">

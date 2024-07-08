@@ -1,6 +1,8 @@
 @extends('intranet.layout.app')
 
 @section('css_pagina')
+<!-- fullCalendar -->
+<link rel="stylesheet" href="{{asset('lte/plugins/fullcalendar/main.css')}}">
 
 @endsection
 
@@ -170,7 +172,7 @@
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingGrupo">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseGrupo" aria-expanded="false" aria-controls="flush-collapseGrupo">
-                                <h5>Información <strong>{{$empleado->cargo->area->empresa->grupo->grupo}}</strong></h5>
+                                <h6>Información <strong>{{$empleado->cargo->area->empresa->grupo->grupo}}</strong></h6>
                             </button>
                         </h2>
                         <div id="flush-collapseGrupo" class="accordion-collapse collapse" aria-labelledby="flush-headingGrupo" data-bs-parent="#accordionFlushProyectos">
@@ -205,8 +207,8 @@
                                                                         $empleados_inac = 0;
                                                                         foreach ($empresa->areas as $area) {
                                                                             foreach ($area->cargos as $cargo) {
-                                                                                foreach ($cargo->empleados as $empleado) {
-                                                                                    if ($empleado->estado) {
+                                                                                foreach ($cargo->empleados as $empleado_for) {
+                                                                                    if ($empleado_for->estado) {
                                                                                         $empleados_act++;
                                                                                     } else {
                                                                                         $empleados_inac++;
@@ -316,8 +318,8 @@
                                                                 $empleados_inac = 0;
                                                                 foreach ($empleado->cargo->area->empresa->areas as $area) {
                                                                     foreach ($area->cargos as $cargo) {
-                                                                        foreach ($cargo->empleados as $empleado) {
-                                                                            if ($empleado->estado) {
+                                                                        foreach ($cargo->empleados as $empleado_for) {
+                                                                            if ($empleado_for->estado) {
                                                                                 $empleados_act++;
                                                                             } else {
                                                                                 $empleados_inac++;
@@ -404,18 +406,25 @@
                     @endcan
                     @can('proyectos.ver_estadistica_tareas')
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                    Estadisticas
+                            <h2 class="accordion-header" id="flush-headingestadisticas">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseestadisticas" aria-expanded="false" aria-controls="flush-collapseestadisticas">
+                                    <h6><strong>Estadísticas</strong></h6>
                                 </button>
                             </h2>
-                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushProyectos">
+                            <div id="flush-collapseestadisticas" class="accordion-collapse collapse" aria-labelledby="flush-headingestadisticas" data-bs-parent="#accordionFlushProyectos">
                                 <div class="accordion-body">
                                     <div class="row">
+                                        @php
+                                            $tamañoGraficos = 350;
+                                        @endphp
+                                        @if ($empleado->proyectos->where('estado','Activo')->where('progreso','<','100')->count()>0)
+                                            <div class="col-12 col-md-6">
+                                                <div id="tareasProyectosLider" style="height:{{$tamañoGraficos}}px;"></div>
+                                            </div>
+                                        @endif
                                         <div class="col-12 col-md-6 p-3">
-                                            <div id="container" style="height:400px;"></div>
+                                            <div id="container" style="height:{{$tamañoGraficos}}px;"></div>
                                         </div>
-                                        <div class="col-12 col-md-6"></div>
                                         <div class="col-12 col-md-6"></div>
                                         <div class="col-12 col-md-6"></div>
                                     </div>
@@ -423,18 +432,63 @@
                             </div>
                         </div>
                     @endcan
-                    @can('proyectos.ver_calendario_tareas')
+                    @if (auth()->user()->hasPermissionTo('proyectos.ver_calendario_tareas') &&
+                        $empleado->tareas->where('estado','Activa')->where(''))
                         <div class="accordion-item">
-                            <h2 class="accordion-header" id="flush-headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                    Calendario Tareas
+                            <h2 class="accordion-header" id="flush-headingCalendario">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseCalendario" aria-expanded="false" aria-controls="flush-collapseCalendario">
+                                    <h6><strong>Calendario Tareas</strong></h6>
                                 </button>
                             </h2>
-                            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushProyectos">
-                                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                            <div id="flush-collapseCalendario" class="accordion-collapse" aria-labelledby="flush-headingCalendario" data-bs-parent="#accordionFlushProyectos">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-12 mb-4">
+                                            <div class="row">
+                                                <div class="col-12 col-md-4">
+                                                    <div class="container-fluid">
+                                                        <p><span class="badge pl-4 pr-4 mr-5" style="background-color: rgba(0, 200, 250, 0.8);color: transparent; min-width: 25px; ">..........</span> Tarea Vigentes</p>
+                                                        <p><span class="badge pl-4 pr-4 mr-5" style="background-color: rgba(255, 180, 0, 0.8);color: transparent; min-width: 25px; ">..........</span> Tareas próxima a vencer</p>
+                                                        <p><span class="badge pl-4 pr-4 mr-5" style="background-color: rgba(255, 0, 0, 0.8);color: transparent; min-width: 25px; ">..........</span> Tarea Vencida</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 col-md-8">
+                                                    @if ($empleado->proyectos->where('estado','Activo')->count() > 0)
+                                                    <div class="row">
+                                                        <div class="col-12 col-md-4">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="tareasTipo" id="flexRadioMisTareas" value="mias" checked>
+                                                                <label class="form-check-label" for="flexRadioMisTareas">Mis Tareas</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="tareasTipo" id="flexRadiotareasProyectos" value="proyectos">
+                                                                <label class="form-check-label" for="flexRadiotareasProyectos">Tareas por proyecto (Lider)</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 col-md-8 form-group d-none" id="selectProyectosCaja">
+                                                            <label class="requerido" for="proyecto_id">Lider del Proyecto</label>
+                                                            <select id="proyecto_id" class="form-control form-control-sm" data_url="{{route('empleados.calendar_empleado_proy')}}" required>
+                                                                <option value="">Elija un proyecto</option>
+                                                                @foreach ($empleado->proyectos as $proyecto)
+                                                                    <option value="{{$proyecto->id}}">{{$proyecto->titulo}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <!-- THE CALENDAR -->
+                                            <div id="calendar"></div>
+                                            <input type="hidden" id="array_events_calendario" data_url="{{route('empleados.calendar_empleado')}}">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    @endcan
+                    @endif
                 </div>
             </div>
         </div>
@@ -528,7 +582,8 @@
 <input type="hidden" id="ruta_tareas_gestion" data_url="{{ route('tareas.gestion', ['id' => 1]) }}">
 <input type="hidden" id="folder_imagenes_usuario" value="{{asset('imagenes/usuarios/')}}">
 <input type="hidden" id="input_getdetalleproyecto" value="{{route('proyectos.detalle',['id' => 1])}}">
-
+<input type="hidden" id="id_usuario" value="{{session('id_usuario')}}" data_url_proyLider="{{route('empleados.getProyectosGraficosLider')}}">
+<input type="hidden" id="empleados_calendar_empleado" data_url="{{route('empleados.calendar_empleado')}}" >
 <!-- Fin Modal proyectos empresas  -->
 @endsection
 
@@ -536,5 +591,10 @@
 @include('intranet.layout.data_table')
 <script src="{{asset('js/intranet/general/ninja/highcharts.js')}}"></script>
 <script src="{{asset('js/intranet/general/ninja/highcharts-3d.js')}}"></script>
+
+<script src="{{ asset('lte/plugins/moment/moment.min.js') }}"></script>
+<script src="{{ asset('lte/plugins/fullcalendar/main.js') }}"></script>
+<script src='{{ asset('lte/plugins/fullcalendar/locales/es.js') }}'></script>
+
 <script src="{{ asset('js/intranet/proyectos/proyecto/index_emp.js') }}"></script>
 @endsection

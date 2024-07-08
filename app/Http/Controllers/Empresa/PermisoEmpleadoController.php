@@ -9,6 +9,7 @@ use App\Models\Empresa\EmpGrupo;
 use App\Models\Empresa\Empleado;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class PermisoEmpleadoController extends Controller
 {
@@ -73,14 +74,42 @@ class PermisoEmpleadoController extends Controller
 
     public function getAreas(Request $request){
         if ($request->ajax()) {
-            return response()->json(['areas' => Area::where('empresa_id',$_GET['id'])->get()]);
+            return response()->json(['areas' => Area::with('cargos')->with('cargos.cargos_permisos')->where('empresa_id',$_GET['id'])->get()]);
         } else {
             abort(404);
         }
     }
     public function getCargos(Request $request){
         if ($request->ajax()) {
-            return response()->json(['cargos' => Cargo::where('area_id',$_GET['id'])->get()]);
+            return response()->json(['cargos' => Cargo::with('cargos.cargos_permisos')->where('area_id',$_GET['id'])->get()]);
+        } else {
+            abort(404);
+        }
+    }
+    public function getCambioCargo(Request $request){
+        if ($request->ajax()) {
+            $cargos = new Cargo();
+            if ($request['estado'] == 0) {
+                $cargo = Cargo::findOrFail($request['cargo_id']);
+                $permiso = Permission::findorFail($request['permiso_id']);
+                foreach ($cargo->empleados as $empleado) {
+                    if (!$empleado->usuario->hasPermissionTo($permiso)) {
+                        $empleado->usuario->givePermissionTo($permiso);
+                    }
+                }
+                $cargos->find($request['cargo_id'])->cargos_permisos()->where('permission_id',$request['permiso_id'])->update(['estado'=>1]);
+                return response()->json(['mensaje' => 'ok','respuesta' => 'El permiso se asigno correctamente','tipo'=> 'success']);
+            } else {
+                $cargo = Cargo::findOrFail($request['cargo_id']);
+                $permiso = Permission::findorFail($request['permiso_id']);
+                foreach ($cargo->empleados as $empleado) {
+                    if ($empleado->usuario->hasPermissionTo($permiso)) {
+                        $empleado->usuario->revokePermissionTo($permiso);
+                    }
+                }
+                $cargos->find($request['cargo_id'])->cargos_permisos()->where('permission_id',$request['permiso_id'])->update(['estado'=>0]);
+                return response()->json(['mensaje' => 'ng','respuesta' => 'El permiso se elimino correctamente','tipo'=> 'warning']);
+            }
         } else {
             abort(404);
         }

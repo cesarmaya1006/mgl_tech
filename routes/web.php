@@ -158,6 +158,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('', 'index')->name('permisoscargos.index');
             Route::get('getAreas', 'getAreas')->name('permisoscargos.getAreas');
             Route::get('getCargos', 'getCargos')->name('permisoscargos.getCargos');
+            Route::get('getCambioCargo', 'getCambioCargo')->name('permisoscargos.getCambioCargo');
+
 
 
         });
@@ -230,7 +232,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getproyectosLider', 'getproyectosLider')->name('empleados.getproyectosLider');
             Route::get('getTareas', 'getTareas')->name('empleados.getTareas');
             Route::get('getTareasVencidas', 'getTareasVencidas')->name('empleados.getTareasVencidas');
-
+            Route::get('calendar_empleado', 'calendar_empleado')->name('empleados.calendar_empleado');
+            Route::get('calendar_empleado_proy', 'calendar_empleado_proy')->name('empleados.calendar_empleado_proy');
+            Route::get('getProyectosGraficosLider', 'getProyectosGraficosLider')->name('empleados.getProyectosGraficosLider');
         });
         // ----------------------------------------------------------------------------------------
     });

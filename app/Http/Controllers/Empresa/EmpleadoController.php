@@ -13,6 +13,7 @@ use App\Models\Empresa\Empresa;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Proyectos\Tarea;
 use App\Models\User;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Intervention\Image\Laravel\Facades\Image;
@@ -29,7 +30,7 @@ class EmpleadoController extends Controller
         $grupos = EmpGrupo::get();
         $user = User::findOrFail(session('id_usuario'));
         //dd($user->hasPermissionTo('empleados.index'));
-        return view('intranet.empresa.empleado.index', compact('grupos','user'));
+        return view('intranet.empresa.empleado.index', compact('grupos', 'user'));
     }
 
     /**
@@ -47,7 +48,7 @@ class EmpleadoController extends Controller
                 $transversal = true;
             }
         }
-        return view('intranet.empresa.empleado.crear', compact('grupos', 'usuario', 'transversal', 'tiposdocu','roles'));
+        return view('intranet.empresa.empleado.crear', compact('grupos', 'usuario', 'transversal', 'tiposdocu', 'roles'));
     }
 
     /**
@@ -76,14 +77,14 @@ class EmpleadoController extends Controller
         // - - - - - - - - - - - - - - - - - - - - - - - -
         $lider = 0;
         if (isset($request['lider'])) {
-            if ($request['lider']== '1') {
+            if ($request['lider'] == '1') {
                 $lider = 1;
             }
         }
         // - - - - - - - - - - - - - - - - - - - - - - - -
         $mgl = 0;
         if (isset($request['mgl'])) {
-            if ($request['mgl']== '1') {
+            if ($request['mgl'] == '1') {
                 $mgl = 1;
             }
         }
@@ -103,7 +104,7 @@ class EmpleadoController extends Controller
         ]);
 
         if ($lider) {
-            $usuario_new->syncPermissions(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
+            $usuario_new->syncPermissions(['proyectos.create', 'proyectos.edit', 'proyectos.detalle', 'proyectos.gestion']);
         }
 
         if (isset($request['empresa_id'])) {
@@ -138,7 +139,7 @@ class EmpleadoController extends Controller
             }
         }
 
-        return view('intranet.empresa.empleado.editar', compact('grupos', 'usuario', 'transversal', 'tiposdocu','roles','empleado_edit'));
+        return view('intranet.empresa.empleado.editar', compact('grupos', 'usuario', 'transversal', 'tiposdocu', 'roles', 'empleado_edit'));
     }
 
     /**
@@ -147,8 +148,8 @@ class EmpleadoController extends Controller
     public function update(ValidaUsuario $request, string $id)
     {
         //dd($request->all());
-        $nombres_array = explode(' ',ucwords(strtolower($request['nombres'])));
-        $apellidos_array = explode(' ',ucwords(strtolower($request['apellidos'])));
+        $nombres_array = explode(' ', ucwords(strtolower($request['nombres'])));
+        $apellidos_array = explode(' ', ucwords(strtolower($request['apellidos'])));
         // - - - - - - - - - - - - - - - - - - - - - - - -
         $usuario_editar = User::findOrFail($id);
         $usuario_editar->update([
@@ -161,7 +162,7 @@ class EmpleadoController extends Controller
         if ($request->hasFile('foto')) {
             $ruta = Config::get('constantes.folder_img_usuarios');
             $ruta = trim($ruta);
-            if ($usuario_editar->empleado->foto !='usuario-inicial.jpg') {
+            if ($usuario_editar->empleado->foto != 'usuario-inicial.jpg') {
                 unlink($ruta . $usuario_editar->empleado->foto);
             }
             $foto = $request->foto;
@@ -173,14 +174,14 @@ class EmpleadoController extends Controller
         // - - - - - - - - - - - - - - - - - - - - - - - -
         $lider = 0;
         if (isset($request['lider'])) {
-            if ($request['lider']== '1') {
+            if ($request['lider'] == '1') {
                 $lider = 1;
             }
         }
         // - - - - - - - - - - - - - - - - - - - - - - - -
         $mgl = 0;
         if (isset($request['mgl'])) {
-            if ($request['mgl']== '1') {
+            if ($request['mgl'] == '1') {
                 $mgl = 1;
             }
         }
@@ -199,12 +200,12 @@ class EmpleadoController extends Controller
         ]);
 
         if ($lider) {
-            $usuario_editar->revokePermissionTo(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
-            $usuario_editar->givePermissionTo(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
+            $usuario_editar->revokePermissionTo(['proyectos.create', 'proyectos.edit', 'proyectos.detalle', 'proyectos.gestion']);
+            $usuario_editar->givePermissionTo(['proyectos.create', 'proyectos.edit', 'proyectos.detalle', 'proyectos.gestion']);
         }
 
         if (isset($request['empresa_id'])) {
-            $usuario_editar->givePermissionTo(['proyectos.create','proyectos.edit','proyectos.detalle','proyectos.gestion']);
+            $usuario_editar->givePermissionTo(['proyectos.create', 'proyectos.edit', 'proyectos.detalle', 'proyectos.gestion']);
         }
 
         return redirect('dashboard/configuracion/empleados')->with('mensaje', 'Empleado actualizado con éxito');
@@ -223,12 +224,12 @@ class EmpleadoController extends Controller
     {
         if ($request->ajax()) {
             return response()->json(['empresas' => Empresa::with('areas')
-                                                                ->with('areas.cargos')
-                                                                ->with('areas.cargos.empleados')
-                                                                ->with('areas.cargos.empleados.tipo_docu')
-                                                                ->with('areas.cargos.empleados.empresas_tranv')
-                                                                ->with('areas.cargos.empleados.usuario')
-                                                                ->where('emp_grupo_id', $_GET['id'])->get()]);
+                ->with('areas.cargos')
+                ->with('areas.cargos.empleados')
+                ->with('areas.cargos.empleados.tipo_docu')
+                ->with('areas.cargos.empleados.empresas_tranv')
+                ->with('areas.cargos.empleados.usuario')
+                ->where('emp_grupo_id', $_GET['id'])->get()]);
         } else {
             abort(404);
         }
@@ -238,11 +239,11 @@ class EmpleadoController extends Controller
     {
         if ($request->ajax()) {
             return response()->json(['areas' => Area::with('cargos')
-                                                                ->with('cargos.empleados')
-                                                                ->with('cargos.empleados.tipo_docu')
-                                                                ->with('cargos.empleados.empresas_tranv')
-                                                                ->with('cargos.empleados.usuario')
-                                                                ->where('empresa_id', $_GET['id'])->get()]);
+                ->with('cargos.empleados')
+                ->with('cargos.empleados.tipo_docu')
+                ->with('cargos.empleados.empresas_tranv')
+                ->with('cargos.empleados.usuario')
+                ->where('empresa_id', $_GET['id'])->get()]);
         } else {
             abort(404);
         }
@@ -252,10 +253,10 @@ class EmpleadoController extends Controller
     {
         if ($request->ajax()) {
             return response()->json(['cargos' => Cargo::with('empleados')
-                                                                ->with('empleados.tipo_docu')
-                                                                ->with('empleados.empresas_tranv')
-                                                                ->with('empleados.usuario')
-                                                                ->where('area_id', $_GET['id'])->get()]);
+                ->with('empleados.tipo_docu')
+                ->with('empleados.empresas_tranv')
+                ->with('empleados.usuario')
+                ->where('area_id', $_GET['id'])->get()]);
         } else {
             abort(404);
         }
@@ -265,9 +266,9 @@ class EmpleadoController extends Controller
     {
         if ($request->ajax()) {
             return response()->json(['empleados' => Empleado::with('tipo_docu')
-                                                                ->with('empresas_tranv')
-                                                                ->with('usuario')
-                                                                ->where('cargo_id', $_GET['id'])->get()]);
+                ->with('empresas_tranv')
+                ->with('usuario')
+                ->where('cargo_id', $_GET['id'])->get()]);
         } else {
             abort(404);
         }
@@ -276,7 +277,9 @@ class EmpleadoController extends Controller
     public function getproyectos(Request $request)
     {
         if ($request->ajax()) {
-            return response()->json(['proyectos' => Proyecto::where('estado', 'Activo')->with('miembros_proyecto')->with('lider')->whereHas('miembros_proyecto', function ($q) use ($request) {$q->where('empleado_id', $request['empleado_id']);})->get()]);
+            return response()->json(['proyectos' => Proyecto::where('estado', 'Activo')->with('miembros_proyecto')->with('lider')->whereHas('miembros_proyecto', function ($q) use ($request) {
+                $q->where('empleado_id', $request['empleado_id']);
+            })->get()]);
         } else {
             abort(404);
         }
@@ -303,10 +306,115 @@ class EmpleadoController extends Controller
     public function getTareasVencidas(Request $request)
     {
         if ($request->ajax()) {
-            return response()->json(['tareas' => Tarea::where('estado', 'Activa')->where('empleado_id', $request['empleado_id'])->where('fec_limite','<',date('Y-m-d'))->get()]);
+            return response()->json(['tareas' => Tarea::where('estado', 'Activa')->where('empleado_id', $request['empleado_id'])->where('fec_limite', '<', date('Y-m-d'))->get()]);
         } else {
             abort(404);
         }
     }
 
+    public function getProyectosGraficosLider(Request $request)
+    {
+        if ($request->ajax()) {
+            return response()->json(['proyectos' => Proyecto::with('componentes')->with('componentes.tareas')->where('estado', 'Activo')->where('empleado_id', $request['id_usuario'])->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function calendar_empleado(Request $request)
+    {
+        if ($request->ajax()) {
+            $empleado = Empleado::findOrFail(session('id_usuario'));
+            $array_events_calendario = [];
+            foreach ($empleado->tareas->where('estado', 'Activa')->where('progreso', '<', 100) as $tarea) {
+                //-------------------------------------------------
+                $date1 = new DateTime($tarea->fec_creacion);
+                $date2 = new DateTime($tarea->fec_limite);
+                $diff = date_diff($date1, $date2);
+                $differenceFormat = '%a';
+                $diasTotalTarea = $diff->format($differenceFormat);
+                if ($diasTotalTarea == 0) {
+                    $diasTotalTarea = 1;
+                }
+                //-------------------------------------------------
+                $date1 = new DateTime($tarea->fec_creacion);
+                $date2 = new DateTime(date('Y-m-d'));
+                $diff = date_diff($date1, $date2);
+                $differenceFormat = '%a';
+                $diasGestionTarea = $diff->format($differenceFormat);
+                //---------------------------------------------------
+                $porcVenc = ($diasGestionTarea * 100) / $diasTotalTarea;
+                if ($tarea->fec_limite < date('Y-m-d')) {
+                    $backgroundColor = 'rgba(255, 0, 0, 0.8)';
+                } else {
+                    if ($porcVenc > 80 || $diasTotalTarea - $diasGestionTarea < 3) {
+                        $backgroundColor = 'rgba(255, 180, 0, 0.8)';
+                    } else {
+                        $backgroundColor = 'rgba(0, 200, 250, 0.8)';
+                    }
+                }
+                $array_events_calendario[] = [
+                    'title' => utf8_encode($tarea->titulo),
+                    'start' => $tarea->fec_creacion,
+                    'end' => $tarea->fec_limite,
+                    'url' => route('tareas.gestion', ['id' => $tarea->id]),
+                    'backgroundColor' =>  $backgroundColor,
+                    'borderColor' => 'rgb(0,0,0)',
+                ];
+            }
+
+            return response()->json(['array_events_calendario' => $array_events_calendario]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function calendar_empleado_proy(Request $request)
+    {
+        if ($request->ajax()) {
+            $proyecto = Proyecto::findOrFail($request['id']);
+            $array_events_calendario = [];
+            foreach ($proyecto->componentes as $componente) {
+                foreach ($componente->tareas->where('estado', 'Activa')->where('progreso', '<', 100) as $tarea) {
+                    //-------------------------------------------------
+                    $date1 = new DateTime($tarea->fec_creacion);
+                    $date2 = new DateTime($tarea->fec_limite);
+                    $diff = date_diff($date1, $date2);
+                    $differenceFormat = '%a';
+                    $diasTotalTarea = $diff->format($differenceFormat);
+                    if ($diasTotalTarea == 0) {
+                        $diasTotalTarea = 1;
+                    }
+                    //-------------------------------------------------
+                    $date1 = new DateTime($tarea->fec_creacion);
+                    $date2 = new DateTime(date('Y-m-d'));
+                    $diff = date_diff($date1, $date2);
+                    $differenceFormat = '%a';
+                    $diasGestionTarea = $diff->format($differenceFormat);
+                    //---------------------------------------------------
+                    $porcVenc = ($diasGestionTarea * 100) / $diasTotalTarea;
+                    if ($tarea->fec_limite < date('Y-m-d')) {
+                        $backgroundColor = 'rgba(255, 0, 0, 0.8)';
+                    } else {
+                        if ($porcVenc > 80 || $diasTotalTarea - $diasGestionTarea < 3) {
+                            $backgroundColor = 'rgba(255, 180, 0, 0.8)';
+                        } else {
+                            $backgroundColor = 'rgba(0, 200, 250, 0.8)';
+                        }
+                    }
+                    $array_events_calendario[] = [
+                        'title' => utf8_encode($tarea->titulo),
+                        'start' => $tarea->fec_creacion,
+                        'end' => $tarea->fec_limite,
+                        'url' => route('tareas.gestion', ['id' => $tarea->id]),
+                        'backgroundColor' =>  $backgroundColor,
+                        'borderColor' => 'rgb(0,0,0)',
+                    ];
+                }
+            }
+            return response()->json(['array_events_calendario' => $array_events_calendario]);
+        } else {
+            abort(404);
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Models\Empresa;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Models\Permission;
 
 class Cargo extends Model
 {
@@ -25,4 +26,10 @@ class Cargo extends Model
     }
     //----------------------------------------------------------------------------------
     //==================================================================================
+    //---------------------------------------------------------------
+    public function cargos_permisos ()
+    {
+        return $this->belongsToMany(Permission::class,'cargo_has_permissions','cargo_id','permission_id')->withPivot('estado');
+    }
+    //---------------------------------------------------------------
 }

@@ -32,8 +32,7 @@ class ProyectoController extends Controller
             return view('intranet.proyectos.proyecto.index.admin.index', compact('proyectos', 'grupos'));
         } else {
             $empleado = Empleado::findOrFail(session('id_usuario'));
-
-            return view('intranet.proyectos.proyecto.index.empleado.index',compact('empleado'));
+            return view('intranet.proyectos.proyecto.index.empleado.index', compact('empleado',));
         }
     }
 
@@ -421,4 +420,6 @@ class ProyectoController extends Controller
         }
         return $color;
     }
+
+
 }
