@@ -144,8 +144,9 @@ class ComponenteController extends Controller
 
     public function reasignacionComponente(Request $request){
         if ($request->ajax()) {
-            $componente = Componente::findOrFail($request['id'])->update(['empleado_id'=>$request['empleado_id']]);
+            Componente::findOrFail($request['id'])->update(['empleado_id'=>$request['empleado_id']]);
             //-----------------------------------------------------------------------------------
+            $componente = Componente::findOrfail($request['id']);
             $dia_hora = date('Y-m-d H:i:s');
             $notificacion['usuario_id'] =  $request['empleado_id'];
             $notificacion['fec_creacion'] =  $dia_hora;
