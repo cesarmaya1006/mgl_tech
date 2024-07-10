@@ -27,7 +27,7 @@
 
 @section('cuerpo')
     <div class="row d-flex justify-content-center">
-        <form class="col-12 form-horizontal" action="{{ route('});.update', ['id' => $grupo_edit->id]) }}" method="POST"
+        <form class="col-12 form-horizontal" action="{{ route('grupo_empresas.update', ['id' => $grupo_edit->id]) }}" method="POST"
             autocomplete="off" enctype="multipart/form-data">
             @csrf
             @method('put')

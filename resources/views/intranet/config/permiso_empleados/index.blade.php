@@ -1,6 +1,7 @@
 @extends('intranet.layout.app')
 
 @section('css_pagina')
+
 @endsection
 
 @section('titulo_pagina')
@@ -75,106 +76,14 @@
     </div>
     <hr>
     <div class="row">
-        <div class="col-12">
-            <table class="table table-striped table-hover table-bordered border-primary table-sm" id="tabla_permisos_cargos">
+        <div class="col-12 table-responsive">
+            <table class="table table-striped table-hover table-bordered border-dark table-sm nowrap" style="width:100%" id="tabla_permisos_cargos">
                 <thead id="thead_permisos">
                     <tr>
                         <th scope="col"><h5><strong>Permisos / Cargos</strong></h5></th>
-                        @foreach ($grupos as $grupo)
-                            @foreach ($grupo->empresas->where('id',$empleadoPrueba->cargo->area->empresa_id) as $empresa)
-                                @foreach ($empresa->areas as $area)
-                                    @foreach ($area->cargos as $cargo)
-                                        <th scope="col" class="text-center">{{$cargo->cargo}}</th>
-                                    @endforeach
-                                @endforeach
-                            @endforeach
-                        @endforeach
                     </tr>
                 </thead>
                 <tbody id="tbody_permisos">
-                    <tr>
-                        @php
-                            $cantCargos =0;
-                        @endphp
-                        @foreach ($grupos as $grupo)
-                            @foreach ($grupo->empresas->where('id',$empleadoPrueba->cargo->area->empresa_id) as $empresa)
-                                @foreach ($empresa->areas as $area)
-                                    @php
-                                        $cantCargos += $area->cargos->count();
-                                    @endphp
-                                @endforeach
-                            @endforeach
-                        @endforeach
-                        <th colspan="{{$cantCargos + 1}}" scope="row" class="text-center table-secondary"><h6><strong>Módulo Proyectos</strong></h6></th>
-                    </tr>
-                    <tr>
-                        <th scope="row">Vista Principal</th>
-                        @foreach ($grupos as $grupo)
-                            @foreach ($grupo->empresas->where('id',$empleadoPrueba->cargo->area->empresa_id) as $empresa)
-                                @foreach ($empresa->areas as $area)
-                                    @foreach ($area->cargos as $cargo)
-                                        <td class="text-center">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                                <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
-                                            </div>
-                                        </td>
-                                    @endforeach
-                                @endforeach
-                            @endforeach
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th scope="row">Detalle Proyecto</th>
-                        @foreach ($grupos as $grupo)
-                            @foreach ($grupo->empresas->where('id',$empleadoPrueba->cargo->area->empresa_id) as $empresa)
-                                @foreach ($empresa->areas as $area)
-                                    @foreach ($area->cargos as $cargo)
-                                        <td class="text-center">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                                <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
-                                            </div>
-                                        </td>
-                                    @endforeach
-                                @endforeach
-                            @endforeach
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th scope="row">Botón  gestion de proyectos</th>
-                        @foreach ($grupos as $grupo)
-                            @foreach ($grupo->empresas->where('id',$empleadoPrueba->cargo->area->empresa_id) as $empresa)
-                                @foreach ($empresa->areas as $area)
-                                    @foreach ($area->cargos as $cargo)
-                                        <td class="text-center">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                                <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
-                                            </div>
-                                        </td>
-                                    @endforeach
-                                @endforeach
-                            @endforeach
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <th scope="row">Gestión de proyectos</th>
-                        @foreach ($grupos as $grupo)
-                            @foreach ($grupo->empresas->where('id',$empleadoPrueba->cargo->area->empresa_id) as $empresa)
-                                @foreach ($empresa->areas as $area)
-                                    @foreach ($area->cargos as $cargo)
-                                        <td class="text-center">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
-                                                <label class="form-check-label" for="flexSwitchCheckDefault">No</label>
-                                            </div>
-                                        </td>
-                                    @endforeach
-                                @endforeach
-                            @endforeach
-                        @endforeach
-                    </tr>
                 </tbody>
             </table>
         </div>
@@ -199,8 +108,46 @@
 @endsection
 
 @section('modales')
+<input type="hidden" id="getEmpleadosCargos" data_url="{{route('permisoscargos.getEmpleadosCargos')}}">
+<input type="hidden" id="setCambiopermisoEmpleado" data_url="{{route('permisoscargos.setCambiopermisoEmpleado')}}">
+<!-- Modal -->
+<div class="modal fade" id="excepcionesModal" tabindex="-1" aria-labelledby="excepcionesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="excepcionesModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body table-responsive">
+                <table class="table table-striped table-hover table-bordered border-dark table-sm nowrap" style="width:100%" id="tabla_permisos_empleados">
+                    <thead>
+                        <tr>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">Permiso</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla_permisos_empleados_tbody">
+                        <tr>
+                            <th scope="row"></th>
+                            <td>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                    <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts_pagina')
+@include('intranet.layout.data_table')
 <script src="{{asset('js/intranet/configuracion/permiso_empleados/index.js')}}"></script>
 @endsection

@@ -2,11 +2,10 @@
 @section('php_funciones')
 @endsection
 @section('css_pagina')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.bootstrap5.css">
 <!-- ninja -->
 <link rel="stylesheet" href="{{asset('css/intranet/general/ninja/jquery-ui.min.css')}}">
+<link rel="stylesheet" href="{{asset('css/intranet/proyectos/gestionar.css')}}">
+
 @endsection
 
 @section('titulo_pagina')
@@ -24,14 +23,10 @@
 @endsection
 
 @section('botones_card')
-    @if (session('rol_principal_id') == 1 || $proyecto->empleado_id == session('id_usuario') || auth()->user()->hasPermissionTo('proyectos.create'))
-        @can('proyectos.create')
-                <a href="{{ route('proyectos.index') }}" type="button"
-                    class="btn btn-primary btn-xs btn-sombra pl-5 pr-5 float-md-end">
-                    <i class="fas fa-reply mr-2 ml-3"></i><span class="pr-4">Volver</span>
-                </a>
-        @endcan
-    @endif
+    <a href="{{ route('proyectos.index') }}" type="button"
+        class="btn btn-primary btn-xs btn-sombra pl-5 pr-5 float-md-end">
+        <i class="fas fa-reply mr-2 ml-3"></i><span class="pr-4">Volver</span>
+    </a>
 @endsection
 
 @section('cuerpo')
@@ -133,30 +128,29 @@
                                 <div class="col-12 col-md-4">
                                     @if ($proyecto->adiciones->count() > 0)
                                         <div class="row">
-                                            <div class="col-7 col-md-8 text-right"><strong>Presupuesto total del proyecto:</strong>
-                                            </div>
+                                            <div class="col-7 col-md-8 text-right"><strong>Presupuesto total del proyecto:</strong></div>
                                             <div class="col-5 col-md-4 text-right text-md-left">
                                                 {{ '$ ' . number_format($proyecto->presupuesto + $proyecto->adiciones->sum('adicion'), 2, ',', '.') }}
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-7 col-md-8 text-right"><strong>Presupuesto inicial del proyecto:</strong>
-                                            </div>
+                                            <div class="col-7 col-md-8 text-right"><strong>Presupuesto inicial del proyecto:</strong></div>
                                             <div class="col-5 col-md-4 text-right text-md-left">
-                                                {{ '$ ' . number_format($proyecto->presupuesto, 2, ',', '.') }}</div>
+                                                {{ '$ ' . number_format($proyecto->presupuesto, 2, ',', '.') }}
+                                            </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-7 col-md-8 text-right"><strong>Adiciones al presupuesto del
-                                                    proyecto:</strong></div>
+                                            <div class="col-7 col-md-8 text-right"><strong>Adiciones al presupuesto del proyecto:</strong></div>
                                             <div class="col-5 col-md-4 text-right text-md-left">
-                                                {{ '$ ' . number_format($proyecto->adiciones->sum('adicion'), 2, ',', '.') }}</div>
+                                                {{ '$ ' . number_format($proyecto->adiciones->sum('adicion'), 2, ',', '.') }}
+                                            </div>
                                         </div>
                                     @else
                                         <div class="row">
-                                            <div class="col-7 col-md-8 text-right"><strong>Presupuesto total del proyecto:</strong>
-                                            </div>
+                                            <div class="col-7 col-md-8 text-right"><strong>Presupuesto total del proyecto:</strong></div>
                                             <div class="col-5 col-md-4 text-right text-md-left">
-                                                {{ '$ ' . number_format($proyecto->presupuesto, 2, ',', '.') }}</div>
+                                                {{ '$ ' . number_format($proyecto->presupuesto, 2, ',', '.') }}
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
@@ -265,13 +259,13 @@
                                 <table class="table table-striped table-hover table-sm" id="tabla_tareas_vencidas">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Responsable</th>
-                                            <th scope="col">Componente</th>
-                                            <th scope="col">Nombre De La Tarea</th>
-                                            <th scope="col">Fecha Límite</th>
-                                            <th scope="col">Progreso</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Gestionar</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Responsable</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Componente</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Nombre De La Tarea</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Fecha Límite</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Progreso</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Estado</th>
+                                            <th scope="col" class="text-nowrap pl-2 pr-3">Gestionar</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -286,30 +280,20 @@
                                                 @endphp
                                             @endif
                                             @foreach ($tareas as $tarea)
-                                                @if ($tarea->fec_creacion > date('Y-m-d'))
+                                                @if ($tarea->fec_limite < date('Y-m-d'))
                                                     <tr>
-                                                        <th scope="row">
+                                                        <th scope="row" class="text-nowrap">
                                                             {{ $tarea->empleado->nombres . ' ' . $tarea->empleado->apellidos }}</th>
-                                                        <td>{{ $componente->componente }}</td>
+                                                        <td class=".w-td-350 text-wrap">{{ $componente->titulo }}</td>
                                                         <td>{{ $tarea->titulo }}</td>
                                                         <td>{{ $tarea->fec_limite }}</td>
-                                                        <td>
-                                                            <svg class="[&amp;_[path-color]]:text-default-200 [&amp;_[bar-color]]:text-destructive [&amp;_[text-color]]:fill-primary h-20 w-20"
-                                                                viewBox="0 0 100 100">
-                                                                <circle path-color="" class="stroke-current" stroke-width="10"
-                                                                    cx="50" cy="50" r="40" fill="transparent"></circle>
-                                                                <circle bar-color="" class=" stroke-current" stroke-width="10"
-                                                                    stroke-linecap="round" cx="50" cy="50" r="40"
-                                                                    fill="transparent"
-                                                                    stroke-dasharray="{{ ($tarea->progreso * 360) / 100 }}, {{ ($tarea->progreso * 360) / 100 }}"
-                                                                    stroke-dashoffset="50"
-                                                                    style="transition: stroke-dashoffset 0.35s ease 0s; transform: rotate(-90deg); transform-origin: 50% 50%;">
-                                                                </circle><text x="50" y="50" font-size="16" text-anchor="middle"
-                                                                    alignment-baseline="middle" text-color="">75 %</text>
-                                                            </svg>
+                                                        <td class="w-td-250">
+                                                            <div class="progress">
+                                                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{ ($tarea->progreso * 360) / 100 }}%" aria-valuenow="{{ ($tarea->progreso * 360) / 100 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                            </div>
                                                         </td>
                                                         <td class="text-danger">{{ $tarea->estado }}</td>
-                                                        <td>
+                                                        <td style=" white-space: nowrap;">
                                                             <a href="#" type="button"
                                                                 class="btn btn-primary btn-xs btn-sombra pl-5 pr-5 float-md-end">
                                                                 <i class="fas fa-edit mr-2 ml-3"></i><span

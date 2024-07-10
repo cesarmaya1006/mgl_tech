@@ -1,4 +1,5 @@
 <!-- dat Table -->
+
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
 <script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.js"></script>
@@ -9,6 +10,8 @@
 <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.4.1/js/responsive.bootstrap5.min.js"></script>
 
 
 <script>
@@ -57,7 +60,9 @@
         }
         $(tabla).DataTable({
             scrollX: true,
+            bSort: true,
             lengthMenu: [5, 10, 15, 25, 50, 75, 100],
+            pageLength: paginacion,
             layout: {layout_var},
             language: {
                 sProcessing: "Procesando...",

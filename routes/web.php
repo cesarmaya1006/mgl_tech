@@ -158,7 +158,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('', 'index')->name('permisoscargos.index');
             Route::get('getAreas', 'getAreas')->name('permisoscargos.getAreas');
             Route::get('getCargos', 'getCargos')->name('permisoscargos.getCargos');
+            Route::get('getEmpleadosCargos', 'getEmpleadosCargos')->name('permisoscargos.getEmpleadosCargos');
             Route::get('getCambioCargo', 'getCambioCargo')->name('permisoscargos.getCambioCargo');
+            Route::get('setCambiopermisoEmpleado', 'setCambiopermisoEmpleado')->name('permisoscargos.setCambiopermisoEmpleado');
 
 
 
@@ -172,8 +174,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         Route::controller(ProyectoController::class)->prefix('proyectos')->group(function () {
             Route::middleware(SuperAdmin::class)->group(function () {
                 Route::get('proyecto_empresas', 'proyecto_empresas')->name('proyectos.proyecto_empresas');
-                Route::get('getproyectos/{estado}/{config_empresa_id}', 'getproyectos')->name('proyectos.getproyectos');
             });
+
             Route::get('', 'index')->name('proyectos.index');
             Route::get('crear', 'create')->name('proyectos.create');
             Route::get('editar/{id}', 'edit')->name('proyectos.edit');
@@ -187,6 +189,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Route::get('getEmpresas', 'getEmpresas')->name('proyectos.getEmpresas');
             Route::get('getEmpleados', 'getEmpleados')->name('proyectos.getEmpleados');
+
+            Route::get('getproyectos/{estado}/{config_empresa_id}', 'getproyectos')->name('proyectos.getproyectos');
         });
         // ------------------------------------------------------------------------------------
         Route::controller(ComponenteController::class)->prefix('componentes')->group(function () {
@@ -194,6 +198,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::post('guardar/{proyecto_id}', 'store')->name('componentes.store');
             Route::get('editar/{id}', 'edit')->name('componentes.edit');
             Route::put('actualizar/{id}', 'update')->name('componentes.update');
+            Route::get('reasignacionComponente', 'reasignacionComponente')->name('componentes.reasignacionComponente');
+
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });
         // ------------------------------------------------------------------------------------

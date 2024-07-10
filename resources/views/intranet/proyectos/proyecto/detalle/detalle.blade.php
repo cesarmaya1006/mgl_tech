@@ -66,12 +66,10 @@ foreach ($proyecto->componentes as $componente) {
 @endsection
 
 @section('botones_card')
-    @can('proyectos.create')
-        <a href="{{ route('proyectos.index') }}" type="button"
-            class="btn btn-primary btn-xs btn-sombra pl-5 pr-5 float-md-end">
-            <i class="fas fa-reply mr-2 ml-3"></i><span class="pr-4">Volver</span>
-        </a>
-    @endcan
+    <a href="{{ route('proyectos.index') }}" type="button"
+        class="btn btn-primary btn-xs btn-sombra pl-5 pr-5 float-md-end">
+        <i class="fas fa-reply mr-2 ml-3"></i><span class="pr-4">Volver</span>
+    </a>
 @endsection
 
 @section('cuerpo')
@@ -101,7 +99,7 @@ foreach ($proyecto->componentes as $componente) {
                         </p>
                     </div>
                 </div>
-                @if ($proyecto->presupuesto>0)
+                @if ($proyecto->presupuesto>0 && auth()->user()->hasPermissionTo('caja_presupuestos'))
                     <div class="row d-flex justify-content-around">
                         <div class="col-4 col-md-3">
                             <p class="text-sm">Presupuesto del Proyecto

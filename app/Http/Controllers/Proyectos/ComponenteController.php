@@ -141,4 +141,25 @@ class ComponenteController extends Controller
     {
         //
     }
+
+    public function reasignacionComponente(Request $request){
+        if ($request->ajax()) {
+            $componente = Componente::findOrFail($request['id'])->update(['empleado_id'=>$request['empleado_id']]);
+            //-----------------------------------------------------------------------------------
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Te fue asignado un componente';
+            $notificacion['mensaje'] =  'Se realizo una asignacion de componente -- Proyecto ' .$componente->proyecto->titulo. ' y te fue asignado   Componente-> ' .ucfirst($componente->titulo);
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $componente->proyecto_id]);
+            $notificacion['id_link'] =  $componente->proyecto_id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            //------------------------------------------------------------------------------------------
+            return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+        } else {
+            abort(404);
+        }
+    }
 }

@@ -370,7 +370,7 @@
                                                                 <td class="align-middle pl-2 pr-2 d-grid gap-2 {{ $empleado->cargo->area->empresa->proyectos->where('estado', 'Activo')->count() > 0 ? 'ver_modal_proyectos':''}}"
                                                                     style="cursor: pointer;"
                                                                     data_id = "{{$empleado->cargo->area->empresa->id}}"
-                                                                    data_url = "{{route('proyectos.getproyectos', ['estado' => 'todos', 'config_empresa_id' => $empleado->cargo->area->empresa->id] )}}">
+                                                                    data_url = "{{route('proyectos.getproyectos', ['estado' => 'Activo', 'config_empresa_id' => $empleado->cargo->area->empresa->id] )}}">
                                                                     @if ($empleado->cargo->area->empresa->proyectos->where('estado', 'Activo')->count() > 0)
                                                                         <button class="btn btn-outline-primary btn-xs"> Activos:<span class="float-end badge bg-primary mt-1 ml-1">{{$empleado->cargo->area->empresa->proyectos->where('estado', 'Activo')->count()}}</span></button>
                                                                     @else

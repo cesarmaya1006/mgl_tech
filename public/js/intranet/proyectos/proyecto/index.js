@@ -14,7 +14,6 @@ $(document).ready(function () {
             data: data,
             success: function (respuesta) {
                 var respuesta_html = "";
-
                 $.each(respuesta.proyectos, function (index, proyecto) {
                     respuesta_html += '<tr>';
                     respuesta_html +='<td class="project-actions text-right">';

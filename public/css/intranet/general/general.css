@@ -59,9 +59,7 @@ label.requerido:after {
     box-shadow: 5px 5px 2px 0px rgba(0, 0, 0, 0.50);
 }
 
-tr {
-    white-space: nowrap;
-}
+
 
 .card-outline {
     border-image: linear-gradient(45deg, rgb(0, 95, 131), rgb(0, 188, 181)) 1;
@@ -143,4 +141,25 @@ tr {
     .tarea_gestpresup_proy, .tarea_gestpresup_proy-sm, .tarea_gestpresup_proy-md, .tarea_gestpresup_proy-lg, .tarea_gestpresup_proy-xl {
         font-size: 0.9em;
     }
+}
+
+.w-td-250{
+    min-width: 250px;
+    text-align: justify;
+}
+.w-td-350{
+    min-width: 350px;
+    text-align: justify;
+}
+.w-td-400{
+    min-width: 400px;
+    text-align: justify;
+}
+.w-td-450{
+    min-width: 450px;
+    text-align: justify;
+}
+.w-td-500{
+    min-width: 500px;
+    text-align: justify;
 }

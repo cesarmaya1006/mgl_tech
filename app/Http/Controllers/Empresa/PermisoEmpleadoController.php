@@ -81,7 +81,18 @@ class PermisoEmpleadoController extends Controller
     }
     public function getCargos(Request $request){
         if ($request->ajax()) {
-            return response()->json(['cargos' => Cargo::with('cargos.cargos_permisos')->where('area_id',$_GET['id'])->get()]);
+
+            return response()->json(['areas' => Area::where('id',$_GET['id'])->with('cargos')->with('cargos.cargos_permisos')->get()]);
+        } else {
+            abort(404);
+        }
+    }
+    public function getEmpleadosCargos(Request $request){
+        if ($request->ajax()) {
+            return response()->json(['empleados' => Empleado::where('cargo_id',$_GET['cargo_id'])
+                                                                    ->with('usuario.permissions')
+                                                                    ->with('cargo')->get(),
+                                            'permiso' => Permission::findOrFail($_GET['permiso_id'])]);
         } else {
             abort(404);
         }
@@ -108,6 +119,22 @@ class PermisoEmpleadoController extends Controller
                     }
                 }
                 $cargos->find($request['cargo_id'])->cargos_permisos()->where('permission_id',$request['permiso_id'])->update(['estado'=>0]);
+                return response()->json(['mensaje' => 'ng','respuesta' => 'El permiso se elimino correctamente','tipo'=> 'warning']);
+            }
+        } else {
+            abort(404);
+        }
+    }
+
+    public function setCambiopermisoEmpleado(Request $request){
+        if ($request->ajax()) {
+            $permiso = Permission::findorFail($request['id_permission']);
+            $usuario = User::findOrFail($request['id_empleado']);
+            if (!$usuario->hasPermissionTo($permiso)) {
+                $usuario->givePermissionTo($permiso);
+                return response()->json(['mensaje' => 'ok','respuesta' => 'El permiso se asigno correctamente','tipo'=> 'success']);
+            }else{
+                $usuario->revokePermissionTo($permiso);
                 return response()->json(['mensaje' => 'ng','respuesta' => 'El permiso se elimino correctamente','tipo'=> 'warning']);
             }
         } else {

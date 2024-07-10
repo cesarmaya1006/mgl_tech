@@ -160,7 +160,89 @@ class ProyectoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $proyecto = Proyecto::findOrFail($id);
+        $grupos = EmpGrupo::get();
+        $usuario = User::findOrFail(session('id_usuario'));
+        $transversal = false;
+        $lideres = Empleado::where('estado', 1)->where('lider', 1)->get();
+        if (session('rol_principal_id') == 1) {
+            $lideres = Empleado::where('estado', 1)->where('lider', 1)->get();
+        } else {
+            $empleado = Empleado::findOrFail(session('id_usuario'));
+            if ($empleado->empresas_tranv->count() > 1) {
+                $lideres = Empleado::where('estado', 1)->where('lider', 1)->get();
+            } else {
+                $lideres1 = Empleado::with('cargo.area.empresa')
+                    ->where('estado', 1)
+                    ->where('lider', 1)
+                    ->whereHas('cargo', function ($p) use ($empleado) {
+                        $p->whereHas('area', function ($q) use ($empleado) {
+                            $q->where('empresa_id', $empleado->cargo->area->empresa_id);
+                        });
+                    })->get();
+
+                $lideres2 = Empleado::with('cargo.area.empresa')
+                    ->where('estado', 1)
+                    ->where('lider', 1)
+                    ->whereHas('cargo', function ($p) use ($empleado) {
+                        $p->whereHas('area', function ($q) use ($empleado) {
+                            $q->where('empresa_id', '!=', $empleado->cargo->area->empresa_id);
+                        });
+                    })->whereHas('empresas_tranv', function ($p) use ($empleado) {
+                        $p->where('empresa_id', $empleado->cargo->area->empresa_id);
+                    })->get();
+                $lideres = $lideres1->concat($lideres2);
+            }
+        }
+
+        $empresa_id = $proyecto->empresa_id;
+            if (session('rol_principal_id') == 1) {
+                $empleados1 = Empleado::with('cargo.area.empresa')
+                    ->where('estado', 1)
+                    ->whereHas('cargo', function ($p) use ($empresa_id) {
+                        $p->whereHas('area', function ($q) use ($empresa_id) {
+                            $q->where('empresa_id', $empresa_id);
+                        });
+                    })->get();
+                $empleados2 = Empleado::with('cargo.area.empresa')
+                    ->where('estado', 1)
+                    ->whereHas('cargo', function ($p) use ($empresa_id) {
+                        $p->whereHas('area', function ($q) use ($empresa_id) {
+                            $q->where('empresa_id', '!=', $empresa_id);
+                        });
+                    })
+                    ->whereHas('empresas_tranv', function ($p) use ($empresa_id) {
+                        $p->where('empresa_id', $empresa_id);
+                    })->get();
+                $empleados = $empleados1->concat($empleados2);
+            } else {
+                $empleado = Empleado::findOrFail(session('id_usuario'));
+                $empleados1 = Empleado::with('cargo.area.empresa')
+                    ->where('estado', 1)
+                    ->whereHas('cargo', function ($p) use ($empresa_id) {
+                        $p->whereHas('area', function ($q) use ($empresa_id) {
+                            $q->where('empresa_id', $empresa_id);
+                        });
+                    })->get();
+
+                if ($empleado->empresas_tranv->count() > 1) {
+                    $empleados2 = Empleado::with('cargo.area.empresa')
+                        ->where('estado', 1)
+                        ->whereHas('cargo', function ($p) use ($empresa_id) {
+                            $p->whereHas('area', function ($q) use ($empresa_id) {
+                                $q->where('empresa_id', '!=', $empresa_id);
+                            });
+                        })->whereHas('empresas_tranv', function ($p) use ($empresa_id) {
+                            $p->where('empresa_id', $empresa_id);
+                        })->get();
+
+                    $empleados = $empleados1->concat($empleados2);
+                } else {
+                    $empleados = $empleados1->sortBy('cargo.cargo');
+                }
+            }
+        return view('intranet.proyectos.proyecto.editar.editar', compact('proyecto','grupos', 'usuario', 'transversal', 'lideres','empleados'));
+
     }
 
     /**
