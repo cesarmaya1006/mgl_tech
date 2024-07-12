@@ -199,7 +199,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('editar/{id}', 'edit')->name('componentes.edit');
             Route::put('actualizar/{id}', 'update')->name('componentes.update');
             Route::get('reasignacionComponente', 'reasignacionComponente')->name('componentes.reasignacionComponente');
-
+            Route::get('reasignacionComponenteMasivo', 'reasignacionComponenteMasivo')->name('componentes.reasignacionComponenteMasivo');
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         });
         // ------------------------------------------------------------------------------------
@@ -212,6 +212,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             Route::get('getapitareas/{componente_id}/{estado}', 'getapitareas')->name('tareas.getapitareas');
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+            Route::get('reasignacionTarea', 'reasignacionTarea')->name('tareas.reasignacionTarea');
         });
         // ------------------------------------------------------------------------------------
         Route::controller(HistorialController::class)->prefix('historiales')->group(function () {

@@ -24,20 +24,23 @@
 @endsection
 
 @section('cuerpo')
-    <div class="row d-flex justify-content-center">
-        <form class="col-12 form-horizontal" action="{{ route('proyectos.store') }}" method="POST" autocomplete="off"
-            enctype="multipart/form-data">
-            @csrf
-            @method('post')
-            @include('intranet.proyectos.proyecto.crear.form')
-            <div class="row mt-5">
-                <div class="col-12 col-md-6 mb-4 mb-md-0 d-grid gap-2 d-md-block ">
-                    <button type="submit" class="btn btn-primary btn-sm btn-sombra pl-sm-5 pr-sm-5"
-                        style="font-size: 0.8em;">Guardar</button>
-                </div>
+@can('proyectos.create')
+
+<div class="row d-flex justify-content-center">
+    <form class="col-12 form-horizontal" action="{{ route('proyectos.store') }}" method="POST" autocomplete="off"
+        enctype="multipart/form-data">
+        @csrf
+        @method('post')
+        @include('intranet.proyectos.proyecto.crear.form')
+        <div class="row mt-5">
+            <div class="col-12 col-md-6 mb-4 mb-md-0 d-grid gap-2 d-md-block ">
+                <button type="submit" class="btn btn-primary btn-sm btn-sombra pl-sm-5 pr-sm-5"
+                    style="font-size: 0.8em;">Guardar</button>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
+</div>
+@endcan
 @endsection
 
 @section('footer_card')

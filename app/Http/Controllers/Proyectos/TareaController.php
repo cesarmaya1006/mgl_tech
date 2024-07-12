@@ -297,4 +297,26 @@ class TareaController extends Controller
         }
         Proyecto::findOrFail($tareaFind->componente->proyecto_id)->update($ProyectoUpdate);
     }
+
+    public function reasignacionTarea(Request $request){
+        if ($request->ajax()) {
+            Tarea::findOrFail($request['id'])->update(['empleado_id'=>$request['empleado_id']]);
+            //-----------------------------------------------------------------------------------
+            $tarea = Tarea::findOrfail($request['id']);
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Te fue asignado una tarea';
+            $notificacion['mensaje'] =  'Se realizo una asignacion de tarea -- Proyecto ' .$tarea->componente->proyecto->titulo. ' y te fue asignado   Tarea-> ' .ucfirst($tarea->titulo);
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $tarea->componente->proyecto_id]);
+            $notificacion['id_link'] =  $tarea->componente->proyecto_id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            //------------------------------------------------------------------------------------------
+            return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+        } else {
+            abort(404);
+        }
+    }
 }

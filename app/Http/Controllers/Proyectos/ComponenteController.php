@@ -7,6 +7,7 @@ use App\Models\Empresa\Empleado;
 use App\Models\Proyectos\Componente;
 use App\Models\Proyectos\ComponenteCambio;
 use App\Models\Proyectos\Proyecto;
+use App\Models\Proyectos\Tarea;
 use App\Models\Sistema\Notificacion;
 use Illuminate\Http\Request;
 
@@ -159,6 +160,44 @@ class ComponenteController extends Controller
             Notificacion::create($notificacion);
             //------------------------------------------------------------------------------------------
             return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function reasignacionComponenteMasivo(Request $request){
+        if ($request->ajax()) {
+            $componente = Componente::with('tareas')->findOrfail($request['id']);
+            Componente::findOrFail($request['id'])->update(['empleado_id'=>$request['empleado_id']]);
+            //-----------------------------------------------------------------------------------
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Te fue asignado un componente';
+            $notificacion['mensaje'] =  'Se realizo una asignacion de componente -- Proyecto ' .$componente->proyecto->titulo. ' y te fue asignado   Componente-> ' .ucfirst($componente->titulo);
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $componente->proyecto_id]);
+            $notificacion['id_link'] =  $componente->proyecto_id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            //------------------------------------------------------------------------------------------
+            foreach ($componente->tareas as $tarea) {
+            Tarea::findOrFail($tarea->id)->update(['empleado_id'=>$request['empleado_id']]);
+            //-----------------------------------------------------------------------------------
+            $tarea = Tarea::findOrfail($tarea->id);
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Te fue asignado una tarea';
+            $notificacion['mensaje'] =  'Se realizo una asignacion de tarea -- Proyecto ' .$tarea->componente->proyecto->titulo. ' y te fue asignado   Tarea-> ' .ucfirst($tarea->titulo);
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $tarea->componente->proyecto_id]);
+            $notificacion['id_link'] =  $tarea->componente->proyecto_id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            }
+            //------------------------------------------------------------------------------------------
+            return response()->json(['componente' => $componente,'mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
         } else {
             abort(404);
         }

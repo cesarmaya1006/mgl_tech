@@ -98,12 +98,28 @@
             <div class="col-12 p-1">
                 <div class="card card-light mini_sombra">
                     <div class="card-header">
-                        <h3 class="card-title">
-                            Componente: <strong>{{$componente->titulo}}</strong>
-                        </h3>
+                        <div class="card-title" style="width: 95%">
+                            <div class="row">
+                                <div class="col-12 col-md-7">
+                                    <h6 class="card-title">Componente: <strong>{{$componente->titulo}}</strong></h6>
+                                </div>
+                                <div class="col-12 col-md-5 form-group">
+                                    <label class="requerido" for="empleado_id">Asignación Masiva (Componente y Tareas)</label>
+                                    <select id="reasignacion_comp_{{$componente->id}}"
+                                        name="empleado_id"
+                                        class="form-control form-control-sm reasignacion_componente_masivo"
+                                        data_url="{{route('componentes.reasignacionComponenteMasivo')}}"
+                                        data_componente="{{$componente->id}}">
+                                        <option value="">Elija un Empleado</option>
+                                        @foreach ($empleados as $empleado)
+                                            <option value="{{$empleado->id}}">{{$empleado->nombres.' '. $empleado->apellidos.'   --   cargo : '.$empleado->cargo->cargo}} {{$componente->empresa_id != $empleado->cargo->area_empresa_id?' - *'. $empleado->cargo->area->empresa->empresa:''}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
-                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
                     <div class="card-body">
@@ -156,7 +172,9 @@
                                                         <div class="form-group">
                                                             <select id="reasignacion_tarea_{{$tarea->id}}"
                                                                     name="empleado_id"
-                                                                    class="form-control form-control-sm reasignacio_tarea">
+                                                                    class="form-control form-control-sm reasignacio_tarea"
+                                                                    data_url="{{route('tareas.reasignacionTarea')}}"
+                                                                    data_tarea="{{$tarea->id}}">
                                                                 <option value="">Elija un Empleado</option>
                                                                 @foreach ($empleados as $empleado)
                                                                     <option value="{{$empleado->id}}">{{$empleado->nombres.' '. $empleado->apellidos.'   --   cargo : '.$empleado->cargo->cargo}} {{$componente->empresa_id != $empleado->cargo->area_empresa_id?' - *'. $empleado->cargo->area->empresa->empresa:''}}</option>
