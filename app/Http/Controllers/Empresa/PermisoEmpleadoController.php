@@ -20,7 +20,13 @@ class PermisoEmpleadoController extends Controller
     {
         $grupos = EmpGrupo::get();
         $usuario = User::findOrFail(session('id_usuario'));
-        $empleadoPrueba = Empleado::findOrFail(4);
+        if (session('rol_principal_id')>2) {
+            $empleadoPrueba = Empleado::findOrFail(session('id_usuario'));
+        }else{
+            $empleadosPrueba = Empleado::get();
+        $empleadoPrueba = $empleadosPrueba->first();
+        }
+
 
         return view('intranet.config.permiso_empleados.index',compact('grupos','usuario','empleadoPrueba'));
     }
