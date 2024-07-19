@@ -402,12 +402,16 @@
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="col-12">
-                                                                            @can('componentes.edit')
-                                                                                <a href="{{ route('componentes.edit', ['id' => $proyecto->id]) }}"
-                                                                                    class="btn btn-warning btn-xs btn-sombra pl-md-3 pr-md-5 mb-3 mb-md-0 mr-md-3 float-md-end">
-                                                                                    <i class="fas fa-edit mr-3 ml-md-2" aria-hidden="true"></i><span class="mr-md-3">Editar Componente</span>
-                                                                                </a>
-                                                                            @endcan
+                                                                            @if ( (session('rol_principal_id') == 1 ||
+                                                                                   $proyecto->empleado_id == session('id_usuario') ||
+                                                                                   $componente->empleado_id == session('id_usuario'))
+                                                                                   && auth()->user()->hasPermissionTo('componentes.edit')
+                                                                            )
+                                                                            <a href="{{ route('componentes.edit', ['id' => $componente->id]) }}"
+                                                                                class="btn btn-warning btn-xs btn-sombra pl-md-3 pr-md-5 mb-3 mb-md-0 mr-md-3 float-md-end">
+                                                                                <i class="fas fa-edit mr-3 ml-md-2" aria-hidden="true"></i><span class="mr-md-3">Editar Componente</span>
+                                                                            </a>
+                                                                            @endif
                                                                         </div>
                                                                     </div>
                                                                 </div>

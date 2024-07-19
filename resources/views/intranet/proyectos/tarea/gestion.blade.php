@@ -246,7 +246,7 @@
                             @endif
                         </div>
                         <div class="col-12 table-responsive">
-                            <table class="table table-striped table-hover table-sm w-100 nowrap" style="width:100%" id="tablas_gestion_historiales">
+                            <table class="table table-striped table-hover table-sm w-100 nowrap tabla_data_table_inicial" style="width:100%" id="tablas_gestion_historiales">
                                 <thead class="thead-light w-100">
                                     <tr style="width: 100%">
                                         <td>id</td>
@@ -309,49 +309,43 @@
                                 </a>
                             @endif
                         </div>
-                        <div class="col-12">
-                            <table class="table table-striped table-hover table-sm w-100 display nowrap" style="width:100%" id="tablas_gestion_sub_tarea">
-                                <thead class="thead-light w-100">
-                                    <tr style="width: 100%">
+                        <div class="col-12 table-responsive">
+                            <table class="table table-striped table-hover table-sm tabla_data_table_inicial" style="width: 100%;">
+                                <thead class="thead-light">
+                                    <tr>
                                         <td></td>
-                                        <td>Título</td>
-                                        <td>Fecha Inicial</td>
-                                        <td>Fecha Límite</td>
-                                        <td>Estado</td>
-                                        <td>Usuario sub-tarea</td>
-                                        <td>Usuario Asignado</td>
-                                        <td>Objetivo</td>
-                                        <td></td>
-                                        <td>Documentos</td>
+                                        <td style="white-space:nowrap;">Título</td>
+                                        <td style="white-space:nowrap;">Fecha Inicial</td>
+                                        <td style="white-space:nowrap;">Fecha Límite</td>
+                                        <td style="white-space:nowrap;">Estado</td>
+                                        <td style="white-space:nowrap;">Usuario Asignado</td>
+                                        <td style="white-space:nowrap;">Objetivo</td>
+                                        <td style="white-space:nowrap;">Historiales</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($tarea->subtareas as $subtarea)
-                                        <tr class="{{$subtarea->progreso < 100?'table-info':'table-success'}}"">
+                                        <tr class="{{$subtarea->progreso < 100?'table-info':'table-success'}}">
                                             <td>
-                                                <a href="{{route('subtareas.gestion',['id' => $subtarea->id])}}" class="btn btn-outline-primary btn-xs pl-3 pr-3">Gestionar la sub-tarea</a>
+                                                <a href="{{route('subtareas.gestion',['id' => $subtarea->id])}}" class="btn btn-outline-primary btn-xs pl-3 pr-3" style="white-space:nowrap;">Gestionar la sub-tarea</a>
                                             </td>
-                                            <td class="text-left">{{ $subtarea->titulo }}</td>
-                                            <td>{{ $subtarea->fec_creacion }}</td>
-                                            <td>{{ $subtarea->fec_limite }}</td>
-                                            <td>{{ $subtarea->progreso < 100?$subtarea->estado:'Completada' }}</td>
-                                            <td class="text-left">{{ $subtarea->responsable->nombres . ' ' . $subtarea->responsable->apellidos }}</td>
-                                            <td class="text-left">{{ $subtarea->asignado!=null? $subtarea->asignado->nombres . ' ' . $subtarea->asignado->apellidos : ''}}</td>
-                                            <td width="25%" class="text-left text-wrap">{{ $subtarea->objetivo }}</td>
+                                            <td class="text-left" style="white-space:nowrap;">{{ $subtarea->titulo }}</td>
+                                            <td style="white-space:nowrap;">{{ $subtarea->fec_creacion }}</td>
+                                            <td style="white-space:nowrap;">{{ $subtarea->fec_limite }}</td>
+                                            <td style="white-space:nowrap;">{{ $subtarea->progreso < 100?$subtarea->estado:'Completada' }}</td>
+                                            <td class="text-left" style="white-space:nowrap;">{{ $subtarea->empleado->nombres . ' ' . $subtarea->empleado->apellidos }}</td>
+                                            <td width="25%" class="text-left text-wrap" style="min-width: 250px; max-width: 350px;;">{{ $subtarea->objetivo }}</td>
                                             <td>
-                                                <a href="#"class="btn btn-accion-tabla btn-xs text-success btn_new_doc_hist"
-                                                data-toggle="modal" data-target="#docHistorialNew"
-                                                data_id = "{{ $subtarea->historial->id }}"
-                                                data_cajaid="caja_doc_hist_{{ $subtarea->historial->id }}">
-                                                 <i class="fas fa-file-upload" aria-hidden="true"></i>
-                                             </a>
-                                            </td>
-                                            <td class="d-flex flex-column" id="caja_doc_hist_sub_{{ $subtarea->id }}">
-                                                @foreach ($subtarea->historiales as $historial)
-                                                    @foreach ($historial->documentos as $documento)
-                                                        <span><a href="{{ asset('documentos/folder_doc_historial/' . $documento->url) }}"target="_blank">{{ $documento->titulo }}</a></span>
-                                                    @endforeach
-                                                @endforeach
+                                                @if ($subtarea->historiales->count()>0)
+                                                    <button type="button" style="white-space:nowrap;"
+                                                        class="btn btn-primary btn-xs verHistSubTareas"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#historialSubTareasNew"
+                                                        data_url="{{route('subtareas.getHistSubTarea')}}"
+                                                        data_id="{{$subtarea->id}}">
+                                                            Ver Historiales
+                                                    </button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -399,6 +393,53 @@
         </div>
     </div>
 </div>
+<!-- Modal histroriales subtareas -->
+<div class="modal fade" id="historialSubTareasNew" tabindex="-1" role="dialog" aria-labelledby="historialSubTareasNewLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="historialSubTareasNewLabel">Historial Sub - Tarea</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 table-responsive">
+                        <table class="table table-striped table-hover table-sm" id="tablas_gestion_historiales_subTarea">
+                            <thead class="thead-light">
+                                <tr>
+                                    <td style="white-space:nowrap;">id</td>
+                                    <td style="white-space:nowrap;min-width: 200px;">Titulo</td>
+                                    <td style="min-width: 150px;">Fecha</td>
+                                    <td style="white-space:nowrap;">Usuario historial</td>
+                                    <td style="white-space:nowrap;">Usuario asignado</td>
+                                    <td style="white-space:nowrap;">Avance Progresivo</td>
+                                    <td style="white-space:nowrap;min-width: 500px;">Resumen</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tbodyHistSubTareas">
+                                <tr>
+                                    <td>id</td>
+                                    <td style="white-space:nowrap;">Titulo</td>
+                                    <td style="min-width: 250px;">Fecha</td>
+                                    <td>Usuario historial</td>
+                                    <td>Usuario asignado</td>
+                                    <td>Avance Progresivo</td>
+                                    <td style="min-width: 500px;">Resumen</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts_pagina')

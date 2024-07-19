@@ -130,6 +130,249 @@ $(document).ready(function () {
             $("#label_checkbox" + valor).html("No");
         }
     });
+    //--------------------------------------------------------------------------
+    $('.setCambioLiderProyecto').on("change", function () {
+        const data_url = $(this).attr("data_url");
+        const proyecto_id = $(this).attr("data_id");
+        const id = $(this).val();
+        const input_act = $(this);
+        var data = {
+            empleado_id: id,
+            proyecto_id: proyecto_id,
+        };
+        $.ajax({
+            async: false,
+            url: data_url,
+            type: "GET",
+            data: data,
+            success: function (respuesta) {
+                console.log(respuesta);
+                if (respuesta.mensaje =='ok') {
+                    input_act.parents("tr:first").remove();
+                    var reponsabilidades_activas = parseInt($('#reponsabilidades_activas').val());
+                    console.log(reponsabilidades_activas);
+                    reponsabilidades_activas = reponsabilidades_activas - 1;
+                    $('#reponsabilidades_activas').val(reponsabilidades_activas);
+                    console.log(reponsabilidades_activas);
+                    if (reponsabilidades_activas == 0) {
+                        console.log('true');
+                        $('#botonDesactivar').prop("disabled", false);
+                    }else{
+                        console.log('false');
+                        $('#botonDesactivar').prop("disabled", true);
+                    }
+                    Sistema.notificaciones(respuesta.respuesta, 'Sistema', respuesta.tipo);
+                }else{
+                    Sistema.notificaciones('no se pudo realizar el cambio de líder', 'Sistema', 'erros');
+                }
+            },
+            error: function () {},
+        });
+    });
+    //--------------------------------------------------------------------------
+    $('.setCambioRespComponente').on("change", function () {
+        const data_url = $(this).attr("data_url");
+        const componente_id = $(this).attr("data_id");
+        const id = $(this).val();
+        const input_act = $(this);
+        if (id != '') {
+            var data = {
+                empleado_id: id,
+                componente_id: componente_id,
+            };
+            $.ajax({
+                async: false,
+                url: data_url,
+                type: "GET",
+                data: data,
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if (respuesta.mensaje =='ok') {
+                        input_act.parents("tr:first").remove();
+                        var reponsabilidades_activas = parseInt($('#reponsabilidades_activas').val());
+                        console.log(reponsabilidades_activas);
+                        reponsabilidades_activas = reponsabilidades_activas - 1;
+                        $('#reponsabilidades_activas').val(reponsabilidades_activas);
+                        console.log(reponsabilidades_activas);
+                        if (reponsabilidades_activas == 0) {
+                            console.log('true');
+                            $('#botonDesactivar').prop("disabled", false);
+                        }else{
+                            console.log('false');
+                            $('#botonDesactivar').prop("disabled", true);
+                        }
+                        Sistema.notificaciones(respuesta.respuesta, 'Sistema', respuesta.tipo);
+                    }else{
+                        Sistema.notificaciones('no se pudo realizar el cambio de responsabilidad', 'Sistema', 'erros');
+                    }
+                },
+                error: function () {},
+            });
+        } else {
+            Sistema.notificaciones('Debe elegir un empleado', 'Sistema', 'erros');
+        }
+    });
+    //--------------------------------------------------------------------------
+    $('.setCambioRespTarea').on("change", function () {
+        const data_url = $(this).attr("data_url");
+        const tarea_id = $(this).attr("data_id");
+        const id = $(this).val();
+        const input_act = $(this);
+        if (id != '') {
+            var data = {
+                empleado_id: id,
+                tarea_id: tarea_id,
+            };
+            $.ajax({
+                async: false,
+                url: data_url,
+                type: "GET",
+                data: data,
+                success: function (respuesta) {
+                    console.log(respuesta);
+                    if (respuesta.mensaje =='ok') {
+                        input_act.parents("tr:first").remove();
+                        var reponsabilidades_activas = parseInt($('#reponsabilidades_activas').val());
+                        console.log(reponsabilidades_activas);
+                        reponsabilidades_activas = reponsabilidades_activas - 1;
+                        $('#reponsabilidades_activas').val(reponsabilidades_activas);
+                        console.log(reponsabilidades_activas);
+                        if (reponsabilidades_activas == 0) {
+                            console.log('true');
+                            $('#botonDesactivar').prop("disabled", false);
+                        }else{
+                            console.log('false');
+                            $('#botonDesactivar').prop("disabled", true);
+                        }
+                        Sistema.notificaciones(respuesta.respuesta, 'Sistema', respuesta.tipo);
+                    }else{
+                        Sistema.notificaciones('no se pudo realizar el cambio de responsabilidad', 'Sistema', 'erros');
+                    }
+                },
+                error: function () {},
+            });
+        } else {
+            Sistema.notificaciones('Debe elegir un empleado', 'Sistema', 'erros');
+        }
+    });
+    //--------------------------------------------------------------------------
+    const modalTCP_Empleado = new bootstrap.Modal(document.getElementById('modalTCP_Empleado'));
+    $('#boton_desactivar').on("click", function () {
+        const reponsabilidades_activas = parseInt($('#reponsabilidades_activas').val());
+        console.log(reponsabilidades_activas);
+        const data_estado_sweet = parseInt($(this).attr('data_estado'));
+        var titulo = "Esta seguro de desactivar al Empleado?";
+        var texto = "Esto deshabilitara al empleado para ingreso a cualquier parte del sistema";
+        var botonTexto = "Si desactivar!";
+        if (data_estado_sweet == 0) {
+            var titulo = "Esta seguro de activar al Empleado?";
+            var texto = "Esto habilitara al empleado para ingreso al sistema";
+            var botonTexto = "Si activar!";
+        }
+
+        if (reponsabilidades_activas > 0) {
+            modalTCP_Empleado.show();
+        } else {
+            Swal.fire({
+                title: titulo,
+                text: texto,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: botonTexto,
+                cancelButtonText: "No , Cancelar"
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    const getResponsabilidadesTotal = $(this).attr('data_url_des');
+                    const empleado_id = $(this).attr('data_id');
+                    const data_estado = parseInt($(this).attr('data_estado'));
+                    var estado_fin = 0;
+                    if (data_estado == 0) {
+                        estado_fin = 1;
+                    }
+                    var data = {
+                        empleado_id: empleado_id,
+                        data_estado: estado_fin,
+                    };
+                    $.ajax({
+                        async: false,
+                        url: getResponsabilidadesTotal,
+                        type: "GET",
+                        data: data,
+                        success: function (respuesta) {
+                            if (respuesta.mensaje =='wa') {
+                                $('#boton_desactivar').html('Activar');
+                                $('#boton_desactivar').attr('data_estado',0);
+                                $('#boton_desactivar').removeClass('btn-warning');
+                                $('#boton_desactivar').addClass('btn-secondary');
+                            }else{
+                                $('#boton_desactivar').html('Desactivar');
+                                $('#boton_desactivar').attr('data_estado',1);
+                                $('#boton_desactivar').removeClass('btn-secondary');
+                                $('#boton_desactivar').addClass('btn-warning');
+                            }
+                            $('#reponsabilidades_activas').val(0);
+                            Sistema.notificaciones(respuesta.respuesta, 'Sistema', respuesta.tipo);
+                        },
+                        error: function () {},
+                    });
+                }
+            });
+        }
+    });
+    //---------------------------------------------------------------------------------------------------
+    $('#botonDesactivar').on("click", function () {
+        Swal.fire({
+            title: "Esta seguro de desactivar al Empleado?",
+            text: "Esto deshabilitara al empleado para ingreso a cualquier parte del sistema",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si desactivar!",
+            cancelButtonText: "No , Cancelar"
+            }).then((result) => {
+            if (result.isConfirmed) {
+                const getResponsabilidadesTotal = $(this).attr('data_url_des');
+                const empleado_id = $(this).attr('data_id');
+                const data_estado = parseInt($(this).attr('data_estado'));
+                var estado_fin = 0;
+                if (data_estado == 0) {
+                    estado_fin = 1;
+                }
+                var data = {
+                    empleado_id: empleado_id,
+                    data_estado: estado_fin,
+                };
+                $.ajax({
+                    async: false,
+                    url: getResponsabilidadesTotal,
+                    type: "GET",
+                    data: data,
+                    success: function (respuesta) {
+                        if (respuesta.mensaje =='wa') {
+                            $('#boton_desactivar').html('Activar');
+                            $('#boton_desactivar').attr('data_estado',0);
+                            $('#boton_desactivar').removeClass('btn-warning');
+                            $('#boton_desactivar').addClass('btn-secondary');
+                        }else{
+                            $('#boton_desactivar').html('Desactivar');
+                            $('#boton_desactivar').attr('data_estado',1);
+                            $('#boton_desactivar').removeClass('btn-secondary');
+                            $('#boton_desactivar').addClass('btn-warning');
+                        }
+                        $('#reponsabilidades_activas').val(0);
+                        modalTCP_Empleado.hide();
+                        Sistema.notificaciones(respuesta.respuesta, 'Sistema', respuesta.tipo);
+                    },
+                    error: function () {},
+                });
+            }
+        });
+    });
+
+    //---------------------------------------------------------------------------------------------------
 });
 
 function mostrar() {

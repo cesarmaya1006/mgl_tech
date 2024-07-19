@@ -25,10 +25,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('auth.login');
 });
+Route::post('logout', [PageController::class, 'logout'])->name('logout');
 
 Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_session'),])->group(function () {
     Route::get('', [PageController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [PageController::class, 'profile'])->name('profile');
+
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     //Middleware Super admin
     Route::prefix('configuracion_sis')->middleware(SuperAdmin::class)->group(function () {
@@ -150,6 +152,15 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getAreas', 'getAreas')->name('empleados.getAreas');
             Route::get('getCargos', 'getCargos')->name('empleados.getCargos');
             Route::get('getEmpleados', 'getEmpleados')->name('empleados.getEmpleados');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+            Route::get('setCambioLiderProyecto', 'setCambioLiderProyecto')->name('empleados.setCambioLiderProyecto');
+            Route::get('setCambioGeneralResponsabilidades', 'setCambioGeneralResponsabilidades')->name('empleados.setCambioGeneralResponsabilidades');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+            Route::get('setCambioRespComponente', 'setCambioRespComponente')->name('empleados.setCambioRespComponente');
+            Route::get('setCambioRespTarea', 'setCambioRespTarea')->name('empleados.setCambioRespTarea');
+            // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
+            Route::get('setDeshabilitarEmpleado', 'setDeshabilitarEmpleado')->name('empleados.setDeshabilitarEmpleado');
+
 
         });
         // ----------------------------------------------------------------------------------------
@@ -218,6 +229,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         Route::controller(HistorialController::class)->prefix('historiales')->group(function () {
             Route::get('crear/{id}', 'create')->name('historiales.create');
             Route::post('guardar', 'store')->name('historiales.store');
+            Route::post('guardar', 'store_subtarea')->name('historiales.store_subtarea');
             Route::get('gestion/{id}', 'gestion')->name('historiales.gestion');
             Route::post('guardar_doc_hist', 'guardar_doc_hist')->name('historiales.guardar_doc_hist');
 
@@ -227,8 +239,9 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         // ------------------------------------------------------------------------------------
         Route::controller(TareaController::class)->prefix('subtareas')->group(function () {
             Route::get('crear/{id}', 'subtareas_create')->name('subtareas.create');
-            Route::post('guardar', 'subtareas_store')->name('subtareas.store');
+            Route::post('guardar/{id}', 'subtareas_store')->name('subtareas.store');
             Route::get('gestion/{id}/{notificacion_id?}', 'subtareas_gestion')->name('subtareas.gestion');
+            Route::get('getHistSubTarea', 'getHistSubTarea')->name('subtareas.getHistSubTarea');
         });
         // ----------------------------------------------------------------------------------------
         // ----------------------------------------------------------------------------------------
@@ -242,6 +255,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('calendar_empleado', 'calendar_empleado')->name('empleados.calendar_empleado');
             Route::get('calendar_empleado_proy', 'calendar_empleado_proy')->name('empleados.calendar_empleado_proy');
             Route::get('getProyectosGraficosLider', 'getProyectosGraficosLider')->name('empleados.getProyectosGraficosLider');
+            Route::get('getResponsabilidadesTotal', 'getResponsabilidadesTotal')->name('empleados.getResponsabilidadesTotal');
         });
         // ----------------------------------------------------------------------------------------
     });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Proyectos;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa\Empleado;
 use App\Models\Proyectos\Componente;
+use App\Models\Proyectos\Historial;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Proyectos\Tarea;
 use App\Models\Sistema\Notificacion;
@@ -205,17 +206,27 @@ class TareaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function subtareas_create(string $id)
     {
-        //
+        $tarea = Tarea::findOrFail($id);
+        $empleados = $this->getEmpleados($tarea->componente->proyecto_id);
+        return view('intranet.proyectos.tarea.subTareaCrear', compact('tarea', 'empleados'));
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function subtareas_store(Request $request,string $id)
     {
-        //
+        Tarea::create($request->all());
+        return redirect('dashboard/tareas/gestion/' . $id)->with('mensaje', 'Sub-tarea creada con éxito');
+    }
+
+    public function subtareas_gestion(string $id){
+        $tarea = Tarea::findOrFail($id);
+        $empleados = $this->getEmpleados($tarea->tarea->componente->proyecto_id);
+        return view('intranet.proyectos.historial.crear_subtarea', compact('tarea', 'empleados'));
     }
 
     /**
@@ -315,6 +326,99 @@ class TareaController extends Controller
             Notificacion::create($notificacion);
             //------------------------------------------------------------------------------------------
             return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function ajustePresupuestos($id){
+        $tareaFind = Componente::findOrfail($id);
+        $proyecto = $tareaFind->componente->proyecto;
+        $sumEjecutadoProyecto = 0;
+        foreach ($proyecto->componentes as $componente) {
+            $sumEjecutadoComponente = 0;
+            foreach ($componente->tareas as $tarea) {
+                $sumEjecutadoComponente += $tarea->costo;
+            }
+            $presupuestoTotalComp = $componente->presupuesto + $componente->adiciones->sum('adicion');
+            $componenteUpdate['ejecucion'] = $sumEjecutadoComponente;
+            $componenteUpdate['porc_ejecucion'] = $sumEjecutadoComponente*100/$presupuestoTotalComp;
+            $componente->update($componenteUpdate);
+            $sumEjecutadoProyecto += $sumEjecutadoComponente;
+        }
+        $presupuestoTotalProyecto = $proyecto->presupuesto + $proyecto->adiciones()->sum('adicion');
+        $proyectoUpdate['ejecucion'] = $sumEjecutadoProyecto;
+        $proyectoUpdate['porc_ejecucion'] = $sumEjecutadoProyecto*100/$presupuestoTotalProyecto;
+        $proyecto->update($proyectoUpdate);
+    }
+
+    public function actualizarprogresos($id){
+        $tareaFind = Componente::findOrfail($id);
+        $proyecto = $tareaFind->componente->proyecto;
+        $progresoProyecto = 0;
+        foreach ($proyecto->componentes as $componente) {
+            $progresoComponente =0;
+            foreach ($componente->tareas as $tarea) {
+                $progresoComponente+=($tarea->impacto_num/$componente->tareas->sum('impacto_num'))*$tarea->progreso;
+            }
+            $componente->update(['progreso'=>$progresoComponente]);
+            $progresoProyecto+=($componente->impacto_num/$proyecto->componentes->sum('impacto_num'))*$componente->progreso;
+        }
+        $proyecto->update(['progreso'=>$progresoProyecto]);
+
+    }
+
+    public function ajusteMiembrosProyecto($id){
+        $tareaFind = Tarea::findOrfail($id);
+        $idMiembros = [];
+        $idMiembros[] = $tareaFind->componente->proyecto->empleado_id;
+        foreach ($tareaFind->componente->proyecto->componentes as $componente) {
+            $idMiembros[] = $componente->empleado_id;
+            foreach ($componente->tareas as $tarea) {
+                $idMiembros[] = $tarea->empleado_id;
+            }
+        }
+        $idMiembros = array_unique($idMiembros);
+        $tareaFind->componente->proyecto->miembros_proyecto()->sync($idMiembros);
+    }
+    public function getEmpleados($proyecto_id){
+        $proyecto = Proyecto::findOrFail($proyecto_id);
+        $lider = $proyecto->lider;
+        $ids_empresas = [];
+
+        if ($lider->empresas_tranv->count() > 0) {
+            foreach ($lider->empresas_tranv as $empresa) {
+                $ids_empresas[] = $empresa->id;
+            }
+            $empleados1 = Empleado::where('estado', 1)
+                    ->whereHas('cargo', function ($p) use ($ids_empresas) {
+                        $p->whereHas('area', function ($q) use ($ids_empresas) {
+                            $q->whereIn('empresa_id', $ids_empresas);
+                        });
+                    })->get();
+            $empleados2 = Empleado::where('estado', 1)
+                    ->whereHas('cargo', function ($p) use ($ids_empresas) {
+                        $p->whereHas('area', function ($q) use ($ids_empresas) {
+                            $q->whereNotIn('empresa_id', $ids_empresas);
+                        });
+                    })->whereHas('empresas_tranv', function ($p) use ($proyecto) {
+                        $p->where('empresa_id', $proyecto->empresa_id);
+                    })->get();
+            $empleados = $empleados1->concat($empleados2);
+        } else {
+            $empleados = Empleado::where('estado', 1)
+                    ->whereHas('cargo', function ($p) use ($proyecto) {
+                        $p->whereHas('area', function ($q) use ($proyecto) {
+                            $q->where('empresa_id', $proyecto->empresa_id);
+                        });
+                    })->get();
+                }
+        return $empleados;
+    }
+
+    public function getHistSubTarea(Request $request){
+        if ($request->ajax()) {
+            return response()->json(['historiales' => Historial::with('empleado')->with('asignado')->where('tarea_id',$request['id'])->get()]);
         } else {
             abort(404);
         }

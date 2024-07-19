@@ -10,8 +10,10 @@ use App\Models\Empresa\Cargo;
 use App\Models\Empresa\EmpGrupo;
 use App\Models\Empresa\Empleado;
 use App\Models\Empresa\Empresa;
+use App\Models\Proyectos\Componente;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Proyectos\Tarea;
+use App\Models\Sistema\Notificacion;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -138,8 +140,9 @@ class EmpleadoController extends Controller
                 $transversal = true;
             }
         }
-
-        return view('intranet.empresa.empleado.editar', compact('grupos', 'usuario', 'transversal', 'tiposdocu', 'roles', 'empleado_edit'));
+        $empleados = $this->getEmpleadosByempleado($empleado_edit->id);
+        $lideres =  $this->getLideresByempleado($empleado_edit->id);
+        return view('intranet.empresa.empleado.editar', compact('grupos', 'usuario', 'transversal', 'tiposdocu', 'roles', 'empleado_edit','empleados','lideres'));
     }
 
     /**
@@ -219,6 +222,162 @@ class EmpleadoController extends Controller
         //
     }
 
+    public function setCambioLiderProyecto(Request $request)
+    {
+        if ($request->ajax()) {
+            $proyecto = Proyecto::findOrFail($request['proyecto_id']);
+            $proyecto->update(['empleado_id' => $request['empleado_id']]);
+            //-----------------------------------------------------------------------------------
+            $proyecto = Proyecto::findOrfail($request['proyecto_id']);
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Se te asigno un proyecto';
+            $notificacion['mensaje'] =  'El Proyecto: ' .$proyecto->titulo. ' te fue asignado';
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $proyecto->id]);
+            $notificacion['id_link'] =  $proyecto->id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            //------------------------------------------------------------------------------------------
+            //------------------------------------------------------------------------------------------
+            return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+            //------------------------------------------------------------------------------------------
+        } else {
+            abort(404);
+        }
+    }
+
+    public function setCambioRespComponente(Request $request)
+    {
+        if ($request->ajax()) {
+            $componente = Componente::findOrFail($request['componente_id']);
+            $componente->update(['empleado_id' => $request['empleado_id']]);
+            //------------------------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------------
+            $componente = Proyecto::findOrfail($request['componente_id']);
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Se te asigno un componente';
+            $notificacion['mensaje'] =  'El Componente: ' .$componente->titulo. ' te fue asignado';
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $componente->proyecto_id]);
+            $notificacion['id_link'] =  $componente->proyecto_id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            //------------------------------------------------------------------------------------------
+            return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+            //------------------------------------------------------------------------------------------
+        } else {
+            abort(404);
+        }
+    }
+
+    public function setCambioRespTarea(Request $request)
+    {
+        if ($request->ajax()) {
+            $tarea = Tarea::findOrFail($request['tarea_id']);
+            $tarea->update(['empleado_id' => $request['empleado_id']]);
+            //------------------------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------------
+            $tarea = Proyecto::findOrfail($request['tarea_id']);
+            $dia_hora = date('Y-m-d H:i:s');
+            $notificacion['usuario_id'] =  $request['empleado_id'];
+            $notificacion['fec_creacion'] =  $dia_hora;
+            $notificacion['titulo'] =  'Se te asigno una tarea';
+            $notificacion['mensaje'] =  'La tarea: ' .$tarea->titulo. ' te fue asignada';
+            $notificacion['link'] =  route('proyectos.gestion', ['id' => $tarea->componente->proyecto_id]);
+            $notificacion['id_link'] =  $tarea->componente->proyecto_id;
+            $notificacion['tipo'] =  'componente';
+            $notificacion['accion'] =  'creacion';
+            Notificacion::create($notificacion);
+            //------------------------------------------------------------------------------------------
+            return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+            //------------------------------------------------------------------------------------------
+        } else {
+            abort(404);
+        }
+    }
+
+    public function setDeshabilitarEmpleado(Request $request)
+    {
+        if ($request->ajax()) {
+            $empleadoFind = Empleado::findOrFail($request['empleado_id']);
+            $empleadoFind->update(['estado' => $request['data_estado']]);
+            if ($request['data_estado']== 0) {
+                return response()->json(['mensaje' => 'wa','respuesta' => 'Usuario deshabilitado','tipo'=> 'warning']);
+            } else {
+                return response()->json(['mensaje' => 'su','respuesta' => 'Usuario habilitado','tipo'=> 'success']);
+            }
+        } else {
+            abort(404);
+        }
+    }
+
+    public function setCambioGeneralResponsabilidades(Request $request)
+    {
+        if ($request->ajax()) {
+            $empleado_find = Empleado::findOrFail($request['empleado_old_id']);
+            if ($empleado_find->proyectos->count() > 0) {
+                foreach ($empleado_find->proyectos as $proyecto) {
+                    $proyecto->update(['empleado_id' => $request['empleado_new_id']]);
+                    //-----------------------------------------------------------------------------------
+                    $dia_hora = date('Y-m-d H:i:s');
+                    $notificacion['usuario_id'] =  $request['empleado_new_id'];
+                    $notificacion['fec_creacion'] =  $dia_hora;
+                    $notificacion['titulo'] =  'Se te asigno un proyecto';
+                    $notificacion['mensaje'] =  'El Proyecto: ' .$proyecto->titulo. ' te fue asignado';
+                    $notificacion['link'] =  route('proyectos.gestion', ['id' => $proyecto->id]);
+                    $notificacion['id_link'] =  $proyecto->id;
+                    $notificacion['tipo'] =  'componente';
+                    $notificacion['accion'] =  'creacion';
+                    Notificacion::create($notificacion);
+                    //------------------------------------------------------------------------------------------
+                }
+            }
+            if ($empleado_find->componentes->count() > 0) {
+                foreach ($empleado_find->componentes as $componente) {
+                    $componente->update(['empleado_id' => $request['empleado_new_id']]);
+                    //-----------------------------------------------------------------------------------
+                    $dia_hora = date('Y-m-d H:i:s');
+                    $notificacion['usuario_id'] =  $request['empleado_new_id'];
+                    $notificacion['fec_creacion'] =  $dia_hora;
+                    $notificacion['titulo'] =  'Se te asigno un componente';
+                    $notificacion['mensaje'] =  'El Componente: ' .$componente->titulo. ' te fue asignado';
+                    $notificacion['link'] =  route('proyectos.gestion', ['id' => $componente->proyecto_id]);
+                    $notificacion['id_link'] =  $componente->proyecto_id;
+                    $notificacion['tipo'] =  'componente';
+                    $notificacion['accion'] =  'creacion';
+                    Notificacion::create($notificacion);
+                    //------------------------------------------------------------------------------------------
+                }
+            }
+            if ($empleado_find->tareas->count() > 0) {
+                foreach ($empleado_find->tareas as $tarea) {
+                    $tarea->update(['empleado_id' => $request['empleado_new_id']]);
+                    //-----------------------------------------------------------------------------------
+                    $dia_hora = date('Y-m-d H:i:s');
+                    $notificacion['usuario_id'] =  $request['empleado_new_id'];
+                    $notificacion['fec_creacion'] =  $dia_hora;
+                    $notificacion['titulo'] =  'Se te asigno una tarea';
+                    $notificacion['mensaje'] =  'La tarea: ' .$tarea->titulo. ' te fue asignada';
+                    $notificacion['link'] =  route('proyectos.gestion', ['id' => $tarea->componente->proyecto_id]);
+                    $notificacion['id_link'] =  $tarea->componente->proyecto_id;
+                    $notificacion['tipo'] =  'componente';
+                    $notificacion['accion'] =  'creacion';
+                    Notificacion::create($notificacion);
+                    //------------------------------------------------------------------------------------------
+                }
+            }
+            //------------------------------------------------------------------------------------------
+            return response()->json(['mensaje' => 'ok','respuesta' => 'Asignación correcta','tipo'=> 'success']);
+            //------------------------------------------------------------------------------------------
+
+        } else {
+            abort(404);
+        }
+    }
 
     public function getEmpresas(Request $request)
     {
@@ -416,5 +575,63 @@ class EmpleadoController extends Controller
         } else {
             abort(404);
         }
+    }
+
+    public function getEmpleadosByempleado($empleado_id){
+        $empleadoFind = Empleado::findOrFail($empleado_id);
+        $ids_empresas = $empleadoFind->cargo->area->empresa->grupo->empresas->pluck('id');
+        $empleados1 = Empleado::where('estado', 1)
+                        ->whereHas('cargo', function ($p) use ($ids_empresas) {
+                            $p->whereHas('area', function ($q) use ($ids_empresas) {
+                                $q->whereIn('empresa_id', $ids_empresas);
+                            });
+                        })->get();
+        $empleados2 = Empleado::where('estado', 1)
+                        ->whereHas('cargo', function ($p) use ($ids_empresas) {
+                            $p->whereHas('area', function ($q) use ($ids_empresas) {
+                                $q->whereNotIn('empresa_id', $ids_empresas);
+                            });
+                        })->whereHas('empresas_tranv', function ($p) use ($empleadoFind) {
+                            $p->where('empresa_id', $empleadoFind->cargo->area->empresa_id);
+                        })->get();
+        $empleados = $empleados1->concat($empleados2);
+
+        return $empleados;
+    }
+
+    public function getLideresByempleado($empleado_id){
+        $empleadoFind = Empleado::findOrFail($empleado_id);
+        $ids_empresas = $empleadoFind->cargo->area->empresa->grupo->empresas->pluck('id');
+        $lideres1 = Empleado::where('estado', 1)->where('lider',1)
+                        ->whereHas('cargo', function ($p) use ($ids_empresas) {
+                            $p->whereHas('area', function ($q) use ($ids_empresas) {
+                                $q->whereIn('empresa_id', $ids_empresas);
+                            });
+                        })->get();
+        $lideres2 = Empleado::where('estado', 1)->where('lider',1)
+                        ->whereHas('cargo', function ($p) use ($ids_empresas) {
+                            $p->whereHas('area', function ($q) use ($ids_empresas) {
+                                $q->whereNotIn('empresa_id', $ids_empresas);
+                            });
+                        })->whereHas('empresas_tranv', function ($p) use ($empleadoFind) {
+                            $p->where('empresa_id', $empleadoFind->cargo->area->empresa_id);
+                        })->get();
+        $lideres = $lideres1->concat($lideres2);
+
+        return $lideres;
+    }
+
+    public function ajusteMiembrosProyecto($id){
+        $tareaFind = Tarea::findOrfail($id);
+        $idMiembros = [];
+        $idMiembros[] = $tareaFind->componente->proyecto->empleado_id;
+        foreach ($tareaFind->componente->proyecto->componentes as $componente) {
+            $idMiembros[] = $componente->empleado_id;
+            foreach ($componente->tareas as $tarea) {
+                $idMiembros[] = $tarea->empleado_id;
+            }
+        }
+        $idMiembros = array_unique($idMiembros);
+        $tareaFind->componente->proyecto->miembros_proyecto()->sync($idMiembros);
     }
 }

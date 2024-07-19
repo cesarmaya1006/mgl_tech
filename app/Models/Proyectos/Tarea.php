@@ -16,7 +16,7 @@ class Tarea extends Model
     //----------------------------------------------------------------------------------
     public function tarea()
     {
-        return $this->belongsTo(Tarea::class, 'tareas_id', 'id');
+        return $this->belongsTo(Tarea::class, 'tarea_id', 'id');
     }
     //----------------------------------------------------------------------------------
     public function componente()

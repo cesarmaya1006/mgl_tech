@@ -15,6 +15,40 @@
 
 
 <script>
+    $(document).ready(function () {
+        $(".tabla_data_table_inicial").DataTable({
+            pageLength: 5,
+            layout: {
+                topStart: {
+                    pageLength: {
+                        menu: [ 5, 10, 25, 50, 100 ]
+                    }
+                },
+                topEnd: {
+                    search: {
+                        placeholder: 'Buscar'
+                    }
+                }
+            },
+            language: {
+                sProcessing: "Procesando...",
+                sLengthMenu: "Mostrar _MENU_ resultados",
+                sZeroRecords: "No se encontraron resultados",
+                sEmptyTable: "Ningún dato disponible en esta tabla",
+                sInfo: "Mostrando resultados _START_-_END_ de  _TOTAL_",
+                sInfoEmpty: "Mostrando resultados del 0 al 0 de un total de 0 registros",
+                sInfoFiltered: "(filtrado de un total de _MAX_ registros)",
+                sSearch: "Buscar:",
+                sLoadingRecords: "Cargando...",
+                oPaginate: {
+                    sFirst: "Primero",
+                    sLast: "Último",
+                    sNext: "Siguiente",
+                    sPrevious: "Anterior",
+                },
+            },
+        });
+    });
     function asignarDataTableEmpl(tabla_id, paginacion, orientation, pageSize) {
         $("#" + tabla_id).DataTable({
             scrollX: true,
@@ -50,7 +84,6 @@
     }
 
     function asignarDataTable_ajax(tabla, paginacion, orientation, pageSize,titulo, buttons) {
-
         var buttons_t = '';
         if (buttons) {
             buttons_t = [{extend: 'excel',title:titulo},{extend: 'pdf',title: titulo}];

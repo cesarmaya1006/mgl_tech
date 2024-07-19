@@ -111,6 +111,12 @@ class HistorialController extends Controller
         $this->modificarprogresos($tareaP->componente->proyecto);
         return redirect('dashboard/tareas/gestion/' . $request['tarea_id'])->with('mensaje', 'historial creado con éxito');
     }
+    public function store_subtarea(Request $request)
+    {
+        $subTarea = Tarea::findOrfail($request['tarea_id']);
+        $historial = Historial::create($request->all());
+        return redirect('dashboard/tareas/gestion/' . $subTarea->tarea_id)->with('mensaje', 'historial sub-tarea creado con éxito');
+    }
     public function gestion(){
 
 

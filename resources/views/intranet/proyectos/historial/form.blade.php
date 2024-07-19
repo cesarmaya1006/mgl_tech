@@ -51,7 +51,7 @@
                 <small id="helpId" class="form-text text-muted">Progreso de la tarea</small>
             </div>
             <div class="col-12 col-md-9 mt-md-3">
-                @if (floatval($tarea->componente->presupuesto) > 0)
+                @if ($tarea->tarea_id == null && floatval($tarea->componente->presupuesto) > 0 )
                     <input type="hidden" id="disponible_componente" value="{{($tarea->componente->presupuesto+$tarea->componente->adiciones->sum('adicion')) - $tarea->componente->ejecucion}}">
                     <label class="requerido" for="costo">Costo - max({{'$ ' . number_format(($tarea->componente->presupuesto+$tarea->componente->adiciones->sum('adicion')) - $tarea->componente->ejecucion)}})</label>
                     <input type="number" step="0.01" min="0" max="{{($tarea->componente->presupuesto+$tarea->componente->adiciones->sum('adicion')) - $tarea->componente->ejecucion}}" value="0.00" class="form-control form-control-sm text-right" name="costo" id="costo" required>

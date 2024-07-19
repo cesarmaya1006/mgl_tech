@@ -12,11 +12,11 @@
     <li class="breadcrumb-item"><a href="{{ route('proyectos.index') }}">Proyectos</a></li>
     <li class="breadcrumb-item"><a href="{{ route('proyectos.gestion', ['id' => $tarea->componente->proyecto->id]) }}">Gestión Proyecto</a></li>
     <li class="breadcrumb-item"><a href="{{ route('tareas.gestion', ['id' => $tarea->id]) }}">Gestionar Tarea</a></li>
-    <li class="breadcrumb-item active">Crear Historial</li>
+    <li class="breadcrumb-item active">Crear Sub-Tarea</li>
 @endsection
 
 @section('titulo_card')
-    <i class="fa fa-plus-square mr-3" aria-hidden="true"></i> Nuevo historial
+    <i class="fa fa-plus-square mr-3" aria-hidden="true"></i> Nueva Sub-Tarea
 @endsection
 
 @section('botones_card')
@@ -27,15 +27,15 @@
 
 @section('cuerpo')
     <div class="row d-flex justify-content-center">
-        <form class="col-12 form-horizontal" action="{{route('historiales.store')}}" method="POST" autocomplete="off"
+        <form class="col-12 form-horizontal" action="{{route('subtareas.store',['id' => $tarea->id])}}" method="POST" autocomplete="off"
             enctype="multipart/form-data">
             @csrf
             @method('post')
-            @include('intranet.proyectos.historial.form')
+            @include('intranet.proyectos.tarea.formSubTarea')
             <div class="row mt-3">
                 <div class="col-12 col-md-6 mb-4 mb-md-0 d-grid gap-2 d-md-block ">
                     <button type="submit" class="btn btn-primary btn-xs btn-sombra"
-                        style="font-size: 0.8em;"><span class="pr-5 pl-5">Crear Historial</span></button>
+                        style="font-size: 0.8em;"><span class="pr-5 pl-5">Crear Sub - Tarea</span></button>
                 </div>
             </div>
         </form>

@@ -33,6 +33,10 @@
                         </div>
                         <div class="col-12 col-md-6">
                             <div class="row text-white d-flex justify-content-center pt-5">
+                                <div class="col-12">
+                                    @include('includes.error-form')
+                                    @include('includes.mensaje')
+                                </div>
                                 <div class="col-12 text-center mt-md-5">
                                     <h1 style="-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: black;"><strong>ACCESO DE USUARIOS</strong></h1>
                                 </div>

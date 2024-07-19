@@ -99,7 +99,7 @@
                     @if ($empleado->id != $proyecto->config_usuario_id)
                         <tr>
                             <td><span>{{ $empleado->nombres . ' ' . $empleado->apellidos }}</span></td>
-                            <td><span>{{ $empleado->empleado->cargo->cargo }}</span></td>
+                            <td><span>{{ $empleado->cargo->cargo }}</span></td>
                         </tr>
                     @endif
                 @endforeach
@@ -251,7 +251,7 @@
                         </tr>
                         <tr>
                             <td><span>Cargo:</span></td>
-                            <td><span>{{ $componente->responsable->empleado->cargo->cargo }}</span></td>
+                            <td><span>{{ $componente->responsable->cargo->cargo }}</span></td>
                         </tr>
                         <tr>
                             <td><span>Fecha de creación:</span></td>
@@ -320,7 +320,7 @@
                                     <table>
                                         <tr>
                                             <td><span>Responsable:</span></td>
-                                            <td><span>{{ ucfirst(strtolower($tarea->responsable->nombres)) . ' ' . ucfirst(strtolower($tarea->responsable->apellidos)) }}</span>
+                                            <td><span>{{ ucfirst(strtolower($tarea->empleado->nombres)) . ' ' . ucfirst(strtolower($tarea->empleado->apellidos)) }}</span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -354,7 +354,7 @@
                                                     <table style="margin-top: 5px;">
                                                         <tr>
                                                             <td><span>Usuario registro:</span></td>
-                                                            <td><span>{{ ucfirst(strtolower($tarea->responsable->nombres)) . ' ' . ucfirst(strtolower($tarea->responsable->apellidos)) }}</span>
+                                                            <td><span>{{ ucfirst(strtolower($tarea->empleado->nombres)) . ' ' . ucfirst(strtolower($tarea->empleado->apellidos)) }}</span>
                                                             </td>
                                                         </tr>
                                                         <tr>

@@ -98,6 +98,7 @@ class TablaRolesSeeder extends Seeder
         //---------------------------------------------------------------------------------------------
         Permission::create(['name' => 'gestion_ver_componentes_info'])->syncRoles([$rol1]);
         Permission::create(['name' => 'ver_presupuesto_componentes'])->syncRoles([$rol1]);
+        Permission::create(['name' => 'ver_presupuesto_proyecto'])->syncRoles([$rol1]);
         Permission::create(['name' => 'ver_tareas_componentes'])->syncRoles([$rol1]);
         // - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - *  - * -
 
