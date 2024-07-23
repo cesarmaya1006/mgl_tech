@@ -5,6 +5,9 @@
 .mini_sombra {
     box-shadow: 5px 5px 3px 0px rgba(0, 0, 0, 0.75);
 }
+.mini_sombra_ligh {
+    box-shadow: 5px 5px 3px 0px rgba(255, 255, 255, 0.75);
+}
 
 .btn-sombra {
     box-shadow: 5px 5px 3px 0px rgba(0, 0, 0, 0.75);
@@ -163,3 +166,32 @@ label.requerido:after {
     min-width: 500px;
     text-align: justify;
 }
+
+.navbar-badge {
+    position: absolute;
+    top: 9px;
+    right: 5px;
+    padding: 2px 4px;
+    font-size: 0.6rem;
+    font-weight: 400;
+  }
+
+  /* Chat  */
+  /* ================================================================================ */
+  #listaUsuarios{
+    background-color: rgba(243, 243, 243, 0.76);
+  }
+  #cajaChat{
+
+  }
+  .itemUsuario:hover{
+    background-color: rgba(0, 0, 0, 0.50);
+    color: white;
+  }
+.itemActivo{
+    background-color: rgba(157, 179, 182, 0.432);
+    color: black;
+}
+
+
+/* ================================================================================ */

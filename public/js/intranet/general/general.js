@@ -82,9 +82,61 @@ $(document).ready(function () {
     //setInterval(getmensajes_dest_rem_ult, 5000);
     //setInterval(get_all_nuevos_mensajes, 5000);
     //get_all_nuevos_mensajes();
+    setInterval(getMensajesNuevosDestinatarioChat,2000);
+    setInterval(getMensajesNuevosEmpleadosChat,2000);
+    // * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - *
+    $('#abrirModalChat').on("click", function () {
 
 
+    });
 
+    // * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - *
+    //------------------------------------------------------
+    $('#botonChat').click(function(e) {
+        if ($("#listaUsuarios").hasClass("colapsado")) {
+            $('#flechaChat').removeClass('fa fa-arrow-right').addClass('fa fa-arrow-left');
+            $('.media-body').removeClass().addClass('media-body');
+            $('#listaUsuarios').removeClass().addClass('col-11 col-sm-3 ');
+            $('#cajaChat').removeClass().addClass('col-1 col-sm-9');
+
+        }else{
+            $('#flechaChat').removeClass('fa fa-arrow-left').addClass('fa fa-arrow-right');
+            $('.media-body').removeClass().addClass('media-body d-none');
+            $('#listaUsuarios').removeClass().addClass('col-2 col-sm-1 colapsado');
+            $('#cajaChat').removeClass().addClass('col-10 col-sm-11');
+        }
+    });
+    $('.itemUsuario').click(function(e) {
+
+    });
+    //-------------------------------------------------------
+    $("#formNuevoMensaje").on("submit", function (e) {
+        e.preventDefault();
+        const form = $(this);
+        $.ajax({
+            async: false,
+            url: form.attr("action"),
+            type: "POST",
+            data: form.serialize(),
+            success: function (respuesta) {
+                var html_respuesta = '';
+                if (respuesta.respuesta == "ok") {
+                    html_respuesta += '<div class="row d-flex justify-content-end mt-1 mb-1 mr-1" id="mensaje_N_'+respuesta.mensaje.id +'">';
+                    html_respuesta += '<div class="col-10 cajaRemitente border border-success rounded p-2">';
+                    html_respuesta += '<p style="text-align: justify">'+respuesta.mensaje.mensaje+'</p>';
+                    html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+respuesta.mensaje.fec_creacion+'</span>';
+                    html_respuesta += '</div>';
+                    html_respuesta += '</div>';
+                }
+                $( "#cajonChatsFinal" ).append( html_respuesta );
+                $("#cajonChatsFinal").animate({ scrollTop: $("#cajonChatsFinal").prop("scrollHeight")}, 1000);
+                $('#mensaje').val('');
+            },
+            error: function () {},
+        });
+    });
+    // * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - *
+    //-------------------------------------------------------
     $(".tabla-borrando").on("submit", ".form-eliminar", function () {
         event.preventDefault();
         const form = $(this);
@@ -128,8 +180,6 @@ $(document).ready(function () {
             error: function () {},
         });
     }
-
-
     //--------------------------------------------------------------------------------------------
     $("#id_body_dark_mode").change(function () {
         var valor_dark = "";
@@ -326,6 +376,9 @@ $(document).ready(function () {
         } else {
             $(".no-result").hide();
         }
+    });
+    $("#chatModal").on("hidden.bs.modal", function (event) {
+        $('#getMensajesChatUsuario').attr('data_estado',0);
     });
 });
 
@@ -900,3 +953,198 @@ function get_all_nuevos_mensajes(){
     });
 }
 */
+
+
+function getEmpleadosChatGeneral(){
+    const data_url = $('#getEmpleadosChat').attr('data_url');
+    $.ajax({
+        async: false,
+        url: data_url,
+        type: "GET",
+        success: function (respuesta) {
+            console.log(respuesta);
+        },
+        error: function () {},
+    });
+}
+function getMensajesNuevosEmpleadosChat(){
+    const data_url = $('#getEmpleadosChat').attr('data_url_MN');
+    var ruta_fotos_temp = $('#getEmpleadosChat').attr('ruta_fotos');
+    const ruta_fotos = ruta_fotos_temp.trim();
+    $.ajax({
+        async: false,
+        url: data_url,
+        type: "GET",
+        success: function (respuesta) {
+            var html_Chat = '';
+            var cantidadMensajesNuevos = parseInt(respuesta.cantidadMensajesNuevos);
+            if (cantidadMensajesNuevos < 4) {
+                $('#badge_mesajes_usu').removeClass().addClass('badge badge-primary navbar-badge').html(cantidadMensajesNuevos);
+            } else if(cantidadMensajesNuevos < 8){
+                $('#badge_mesajes_usu').removeClass().addClass('badge badge-success navbar-badge').html(cantidadMensajesNuevos);
+            }else if(cantidadMensajesNuevos < 10){
+                $('#badge_mesajes_usu').removeClass().addClass('badge badge-warning navbar-badge').html(cantidadMensajesNuevos);
+            }else{
+                $('#badge_mesajes_usu').removeClass().addClass('badge badge-danger navbar-badge').html(cantidadMensajesNuevos);
+            }
+
+            if (cantidadMensajesNuevos > 0) {
+                var i = 0
+                $.each(respuesta.mensajesDestinatario, function (index, mensaje) {
+                    html_Chat+='<li>';
+                    html_Chat+='<a class="dropdown-item" href="#" onclick="abrirChatEspecifico(\'liItemUsuario_'+mensaje.remitente.id+'\','+mensaje.remitente.id+')">';
+                    html_Chat+='<div class="media">';
+                    html_Chat +='<img src="'+ruta_fotos+mensaje.remitente.fotoChat+'" alt="'+mensaje.remitente.nombre_chat+'" title="'+mensaje.remitente.nombre_chat+'" class="img-size-50 mr-3 img-circle" style="max-width: 70px;">';
+                    html_Chat+='<div class="media-body">';
+                    html_Chat+='<h3 class="dropdown-item-title">';
+                    html_Chat+= mensaje.remitente.nombre_chat;
+                    html_Chat+='<span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>';
+                    html_Chat+='</h3>';
+                    html_Chat+='<p class="text-sm" style="min-width: 550px; font-size: 0.65em; text-align: justify">'+mensaje.mensaje.substring(0,25)+'...</p>';
+                    html_Chat+='<p class="text-muted" style="min-width: 550px; font-size: 0.75em;"><i class="far fa-clock mr-1"></i>Hace  '+mensaje.diff_creacion+'</p>';
+                    html_Chat+='</div>';
+                    html_Chat+='</div>';
+                    html_Chat+='</a>';
+                    html_Chat+='</li>';
+                    html_Chat+='<li><hr class="dropdown-divider"></li>';
+                    i++;
+                    if(i === 4) {
+                        return false; // breaks
+                    }
+                });
+                html_Chat += '<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#chatModal" id="abrirModalChat" onclick="abrirModalChat()">Abrir Chat</a></li>               ';
+            }else{
+                html_Chat += '<li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#chatModal" id="abrirModalChat" onclick="abrirModalChat()">Abrir Chat</a></li>';
+            }
+            $('#ul_mensajes').html(html_Chat);
+
+        },
+        error: function () {},
+    });
+}
+
+function activoFunction(li,destinatario_id){
+    const li_item = $('#'+li);
+    li_item.parent().children('li').removeClass('itemActivo');
+    li_item.addClass('itemActivo');
+    $('#destinatario_id').val(destinatario_id);
+    $('#formNuevoMensaje').removeClass('d-none');
+    const data_url = $('#getMensajesChatUsuario').attr('data_url');
+    var data = {
+        id_usuario: destinatario_id
+    };
+    $.ajax({
+        async: false,
+        data: data,
+        url: data_url,
+        type: "GET",
+        success: function (respuesta) {
+            var html_respuesta = '';
+            $.each(respuesta.mensajes, function (index, mensaje) {
+                if (mensaje.destinatario_id != destinatario_id) {
+                    html_respuesta += '<div class="row d-flex justify-content-start mt-1 mb-1 ml-1" id="mensaje_N_'+mensaje.id +'">';
+                    html_respuesta += '<div class="col-10 cajaDestinatario border border-primary rounded p-2">';
+                    html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
+                    html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
+                    html_respuesta += '</div>';
+                    html_respuesta += '</div>';
+                } else {
+                    html_respuesta += '<div class="row d-flex justify-content-end mt-1 mb-1 mr-1" id="mensaje_N_'+mensaje.id +'">';
+                    html_respuesta += '<div class="col-10 cajaRemitente border border-success rounded p-2">';
+                    html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
+                    html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
+                    html_respuesta += '</div>';
+                    html_respuesta += '</div>';
+                }
+            });
+            $('#cajonChatsFinal').html(html_respuesta);
+            $("#cajonChatsFinal").animate({ scrollTop: $("#cajonChatsFinal").prop("scrollHeight")}, 1000);
+            $('#getMensajesChatUsuario').attr('data_estado',1);
+        },
+        error: function () {},
+    });
+}
+
+function getMensajesNuevosDestinatarioChat(){
+    const data_estado = $('#getMensajesChatUsuario').attr('data_estado');
+    if (data_estado == 1) {
+        const data_url = $('#getMensajesNuevosDestinatarioChat').attr('data_url');
+        const destinatario_id = $('#destinatario_id').val();
+        var data = {
+            id_usuario: destinatario_id
+        };
+        $.ajax({
+            async: false,
+            data: data,
+            url: data_url,
+            type: "GET",
+            success: function (respuesta) {
+                var html_respuesta = '';
+                $.each(respuesta.mensajes, function (index, mensaje) {
+                    html_respuesta += '<div class="row d-flex justify-content-start mt-1 mb-1 ml-1" id="mensaje_N_'+mensaje.id +'">';
+                    html_respuesta += '<div class="col-10 cajaDestinatario border border-primary rounded p-2">';
+                    html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
+                    html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
+                    html_respuesta += '</div>';
+                    html_respuesta += '</div>';
+                });
+                $( "#cajonChatsFinal" ).append( html_respuesta );
+                $("#cajonChatsFinal").animate({ scrollTop: $("#cajonChatsFinal").prop("scrollHeight")}, 1000);
+            },
+            error: function () {},
+        });
+    }
+}
+
+function abrirModalChat(){
+    const data_url = $('#getEmpleadosChat').attr('data_url');
+        const dataMyId = $('#getEmpleadosChat').attr('dataMyId');
+        var ruta_fotos_temp = $('#getEmpleadosChat').attr('ruta_fotos');
+        const ruta_fotos = ruta_fotos_temp.trim();
+        $.ajax({
+            async: false,
+            url: data_url,
+            type: "GET",
+            success: function (respuesta) {
+                var htmlUsuarios = '';
+                var htmlUsuariosTable = '';
+                $.each(respuesta.superAdminstradores, function (index, usuario) {
+                    htmlUsuarios +='<li class="itemUsuario mt-1 mb-1 pt-1 pb-1" id="liItemUsuario_'+usuario.id+'" onclick="activoFunction(\'liItemUsuario_'+usuario.id+'\','+usuario.id+')" style="list-style-type: none;">';
+                    htmlUsuarios +='<div class="media d-flex align-items-center" style="cursor: pointer;">';
+                    htmlUsuarios +='<img src="'+ruta_fotos+usuario.foto_chat+'" alt="'+usuario.nombre_chat+'" title="'+usuario.nombre_chat+'" class="img-size-50 mr-3 img-circle" style="max-width: 60px;">';
+                    htmlUsuarios +='<div class="media-body">';
+                    htmlUsuarios +='<h3 class="dropdown-item-title">'+usuario.nombre_chat+'<span class="float-right badge badge-info" style="font-size: 0.65em">'+usuario.cant_sin_leer+'</span></h3>';
+                    htmlUsuarios +='<span style="font-size: 0.75em;">Administrador del sistema</span>';
+                    htmlUsuarios +='</div>';
+                    htmlUsuarios +='</div>';
+                    htmlUsuarios +='</li>';
+                    //-----------------------------
+
+                });
+                $.each(respuesta.empleados, function (index, usuario) {
+                    htmlUsuarios +='<li class="itemUsuario mt-1 mb-1 pt-1 pb-1" id="liItemUsuario_'+usuario.id+'" onclick="activoFunction(\'liItemUsuario_'+usuario.id+'\','+usuario.id+')" style="list-style-type: none;">';
+                    htmlUsuarios +='<div class="media d-flex align-items-center" style="cursor: pointer;">';
+                    htmlUsuarios +='<img src="'+ruta_fotos+usuario.foto_chat+'" alt="'+usuario.nombre_chat+'" title="'+usuario.nombre_chat+'" class="img-size-50 mr-3 img-circle" style="max-width: 60px;">';
+                    htmlUsuarios +='<div class="media-body">';
+                    htmlUsuarios +='<h3 class="dropdown-item-title">'+usuario.nombre_chat+'<span class="float-right badge badge-info" style="font-size: 0.65em">'+usuario.cant_sin_leer+'</span></h3>';
+                    htmlUsuarios +='<span style="font-size: 0.75em;">Empleado</span>';
+                    htmlUsuarios +='</div>';
+                    htmlUsuarios +='</div>';
+                    htmlUsuarios +='</li>';
+                    //-----------------------------
+                });
+                //$('#menuChatUsuarios').html(htmlUsuarios);
+
+                $('#ul_listaUsuarios').html(htmlUsuarios);
+            },
+            error: function () {},
+        });
+}
+
+function abrirChatEspecifico (li,destinatario_id){
+    abrirModalChat();
+    const myModal = new bootstrap.Modal(document.getElementById('chatModal'));
+    myModal.show();
+    activoFunction(li,destinatario_id);
+}
+

@@ -73,6 +73,54 @@
     </div>
     <!-- Modales  -->
     @yield('modales')
+    <!-- Modal -->
+    <input type="hidden" id="getMensajesChatUsuario" data_url="{{route('getMensajesChatUsuario')}}" data_estado="0">
+    <input type="hidden" id="getMensajesNuevosDestinatarioChat" data_url="{{route('getMensajesNuevosDestinatarioChat')}}" destinatario_id="0">
+    <div class="modal fade" id="chatModal" tabindex="-1" aria-labelledby="chatModalLabel" aria-hidden="true" >
+        <div class="modal-dialog modal-xl sombra" style="border-top: 3px solid rgba(22, 150, 255, 0.8); border-radius: 5px; max-height: 500px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="chatModalLabel"><span class="btn btn-primary btn-xs mini_sombra mr-5" id="botonChat"><i class="fa fa-arrow-left" id="flechaChat" aria-hidden="true"></i></span>Chat Intrared</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-11 col-sm-3" id="listaUsuarios">
+                            <ul class="overflow-auto p-0" id="ul_listaUsuarios" style="max-height: 480px;">
+
+                            </ul>
+                        </div>
+                        <div class="col-1 col-sm-9 bg-dark bg-gradient pt-1 pb-1" id="cajaChat">
+                            <div class="row pl-2 pr-2">
+                                <div class="col-12 bg-light bg-gradient overflow-auto" id="cajonChatsFinal" data-bs-target="#cajonChatsFinal" data-bs-spy="scroll" style="height: 430px; border: 1px solid black ;position: relative;">
+
+                                </div>
+                                <div class="col-12 mb-1" style="position: absolute;bottom: -15px; left: 0;">
+                                    <form class="form-horizontal d-none" id="formNuevoMensaje" action="{{ route('setNuevoMensaje') }}" method="POST" autocomplete="off">
+                                        @csrf
+                                        @method('post')
+                                        <input type="hidden" name="remitente_id" id="remitente_id" value="{{session('id_usuario')}}">
+                                        <input type="hidden" name="destinatario_id" id="destinatario_id">
+                                        <div class="row">
+                                            <div class="col-11 form-group">
+                                                <textarea class="form-control form-control-sm" id="mensaje" name="mensaje" style="resize: none;" rows="2" placeholder="Ingrese el mensaje" required></textarea>
+                                            </div>
+                                            <div class="col-1 d-flex align-items-center justify-content-center">
+                                                <button type="submit" class="btn btn-outline-primary btn-sm pl-3 pr-3"><i class="fa fa-angle-double-right" aria-hidden="true"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary btn-xs bg-gradient" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Fin Modales  -->
     @include('intranet.layout.scripts')
     @yield('scripts_pagina')

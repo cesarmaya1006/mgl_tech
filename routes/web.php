@@ -259,4 +259,13 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
         });
         // ----------------------------------------------------------------------------------------
     });
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+    Route::get('/getEmpleadosChat',[PageController::class, 'getEmpleadosChat'])->name('getEmpleadosChat');
+    Route::get('/getMensajesNuevosEmpleadosChat',[PageController::class, 'getMensajesNuevosEmpleadosChat'])->name('getMensajesNuevosEmpleadosChat');
+    Route::post('/setNuevoMensaje',[PageController::class, 'setNuevoMensaje'])->name('setNuevoMensaje');
+    Route::get('/getMensajesChatUsuario',[PageController::class, 'getMensajesChatUsuario'])->name('getMensajesChatUsuario');
+    Route::get('/getMensajesNuevosDestinatarioChat',[PageController::class, 'getMensajesNuevosDestinatarioChat'])->name('getMensajesNuevosDestinatarioChat');
+
 });

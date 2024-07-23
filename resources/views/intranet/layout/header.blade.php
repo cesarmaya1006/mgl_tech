@@ -5,45 +5,41 @@
         </li>
     </ul>
     <ul class="navbar-nav ml-auto">
+        <!-- Get Empleados -->
+        <input type="hidden"
+               id="getEmpleadosChat"
+               data_url="{{route('getEmpleadosChat')}}"
+               data_url_MN="{{route('getMensajesNuevosEmpleadosChat')}}"
+               ruta_fotos = "{{asset('imagenes/usuarios/ ')}}"
+               dataMyId ="{{session('id_usuario')}}"
+               >
+        <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-comments"></i>
-                <span class="badge badge-danger navbar-badge">3</span>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <i class="far fa-comments" style="font-size: 1.5em;"></i>
+                <span class="badge badge-primary navbar-badge" style="font-size: 0.75em;position: absolute;" id="badge_mesajes_usu"></span>
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <a href="#" class="dropdown-item">
-                    <div class="media">
-                        <img src="{{asset('imagenes/usuarios/usuario-inicial.jpg')}}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                        <div class="media-body">
-                            <h3 class="dropdown-item-title">
-                                Brad Diesel
-                                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
-                            </h3>
-                            <p class="text-sm">Call me whenever you can...</p>
-                            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
-                        </div>
-                    </div>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
-            </div>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="ul_mensajes" style="left: inherit; right: 0px;">
+                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#chatModal" id="abrirModalChat" onclick="abrirModalChat()">Abrir Chat</a></li>
+            </ul>
         </li>
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
-            <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="far fa-bell"></i>
-                <span class="badge badge-warning navbar-badge">15</span>
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+                <i class="far fa-bell" style="font-size: 1.5em;"></i>
+                <span class="badge badge-warning navbar-badge" style="font-size: 0.78em;position: absolute;">3</span>
             </a>
-            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                <span class="dropdown-item dropdown-header">15 Notifications</span>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-envelope mr-2"></i> 4 new messages
-                    <span class="float-right text-muted text-sm">3 mins</span>
-                </a>
-                <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
-            </div>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right" id="menu_badge_cant_notificaciones_2" style="left: inherit; right: 0px;font-size: 0.75em;">
+                <li><span class="dropdown-item">0 Notificaciones</span></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item d-flex flex-row" href="#">
+                        <i class="fas fa-envelope mr-3"></i> 4 new messages<span class="float-right text-muted text-sm ml-5">3 mins</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Ver Todas las Notificaciones</a></li>
+            </ul>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
@@ -56,15 +52,15 @@
                 <button class="nav-link text-danger" type="submit">
                     <i class="fas fa-power-off"></i>
                 </button>
-              </form>
+            </form>
         </li>
         @can('layout.header.control-sidebar')
-        <li class="nav-item">
-            <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
-                role="button">
-                <i class="fas fa-th-large"></i>
-            </a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#"
+                    role="button">
+                    <i class="fas fa-th-large"></i>
+                </a>
+            </li>
         @endcan
     </ul>
 </nav>

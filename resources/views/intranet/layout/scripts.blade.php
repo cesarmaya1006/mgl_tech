@@ -18,6 +18,8 @@
 <script src="{{asset('lte/dist/js/demo.js')}}"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
 <!-- **************************************************************************************************************** -->
 <script src="{{asset('js/intranet/general/general.js')}}"></script>
 
