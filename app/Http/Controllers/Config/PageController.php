@@ -90,7 +90,7 @@ class PageController extends Controller
     {
         if ($request->ajax()) {
             $id_usuario = session('id_usuario');
-            $mensajesNuevos = Mensaje::where('estado',0)->where('destinatario_id',$id_usuario)->with('remitente')->with('remitente.empleado')->get();
+            $mensajesNuevos = Mensaje::where('estado',0)->where('destinatario_id',$id_usuario)->with('remitente')->with('remitente.empleado')->with('remitente.mensajes_remitente')->get();
             foreach ($mensajesNuevos as $mensaje) {
                 if ($mensaje->remitente->empleado) {
                     $mensaje->remitente['fotoChat'] = $mensaje->remitente->empleado->foto;
@@ -103,6 +103,7 @@ class PageController extends Controller
                 $date2 = new DateTime("now");
                 $diff = $date1->diff($date2);
                 $mensaje['diff_creacion'] = $this->get_format($diff);
+                $mensaje->remitente['cant_sin_leer'] = $mensaje->remitente->mensajes_remitente()->where('estado',0)->where('destinatario_id' , session('id_usuario'))->count();
             }
             return response()->json(['mensajesDestinatario'=> $mensajesNuevos, 'cantidadMensajesNuevos' => $mensajesNuevos->count() ]);
         } else {

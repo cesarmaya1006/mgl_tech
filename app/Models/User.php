@@ -82,17 +82,17 @@ class User extends Authenticatable implements MustVerifyEmail
     //----------------------------------------------------------------------------------
     public function notificaciones()
     {
-        return $this->belongsTo(Notificacion::class, 'usuario_id', 'id');
+        return $this->hasMany(Notificacion::class, 'usuario_id', 'id');
     }
     //----------------------------------------------------------------------------------
     public function mensajes_remitente()
     {
-        return $this->belongsTo(Mensaje::class, 'remitente_id', 'id');
+        return $this->hasMany(Mensaje::class, 'remitente_id', 'id');
     }
     //----------------------------------------------------------------------------------
     public function mensajes_destinatario()
     {
-        return $this->belongsTo(Mensaje::class, 'destinatario_id', 'id');
+        return $this->hasMany(Mensaje::class, 'destinatario_id', 'id');
     }
     //----------------------------------------------------------------------------------
     //==================================================================================

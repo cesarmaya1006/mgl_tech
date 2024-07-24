@@ -90,11 +90,21 @@
 
                             </ul>
                         </div>
-                        <div class="col-1 col-sm-9 bg-dark bg-gradient pt-1 pb-1" id="cajaChat">
+                        <div class="col-1 col-sm-9 bg-secondary bg-gradient pt-1 pb-1" id="cajaChat">
                             <div class="row pl-2 pr-2">
                                 <div class="col-12 bg-light bg-gradient overflow-auto" id="cajonChatsFinal" data-bs-target="#cajonChatsFinal" data-bs-spy="scroll" style="height: 430px; border: 1px solid black ;position: relative;">
-
+                                    <div class="row d-flex justify-content-center center align-items-center" style="min-height: 100%;">
+                                        <div class="col-12 text-center" >
+                                            <div class="row d-flex justify-content-center center align-items-center">
+                                                <div class="col-12 col-md-5"><img src="{{asset('imagenes/sistema/mgl_tech_logo.png')}}" class="img-fluid"></div>
+                                                <div class="col-12 col-md-8 mt-3">
+                                                    <h5>Envia y recibe mensajes a través de nuestra plataforma, y mantente en contacto con los miembros de tu organización.</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                                <input type="hidden" id="imagenMglTech" value="{{asset('imagenes/sistema/mgl_tech_logo.png')}}">
                                 <div class="col-12 mb-1" style="position: absolute;bottom: -15px; left: 0;">
                                     <form class="form-horizontal d-none" id="formNuevoMensaje" action="{{ route('setNuevoMensaje') }}" method="POST" autocomplete="off">
                                         @csrf

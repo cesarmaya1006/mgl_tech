@@ -324,22 +324,6 @@ $(document).ready(function () {
             error: function () {},
         });
     });
-    /*
-    notificacionesUsuairo();
-    sidebar_collapse();
-    sidebar_mini_md_checkbox_input();
-    sidebar_mini_xs_checkbox_input();
-    flat_sidebar_checkbox_input();
-    color_fondo_hijos($("#fondo_barra_lat_input").val());
-    $("#fondo_barra_sup").removeClass().addClass("custom-select mb-3 text-light border-0 " + $("#fondo_barra_sup_input").val().toLowerCase().replace("navbar", "bg"));
-    $("#fondo_barra_sup").find("." +$("#fondo_barra_sup_input").val().toLowerCase().replace("navbar", "bg")).prop("selected", true);
-    $("#fondo_barra_lat").removeClass().addClass("custom-select mb-3 text-light border-0 " +$("#fondo_barra_lat_input").val().toLowerCase());
-    $("#fondo_barra_lat").find("." + $("#fondo_barra_lat_input").val().toLowerCase()).prop("selected", true);
-    $(".tr_modal").click(function () {
-        window.location = $(this).attr("href");
-        return false;
-    });
-*/
     //-------------------------------------------
     $(".search").keyup(function () {
         var searchTerm = $(".search").val();
@@ -412,549 +396,6 @@ function flat_sidebar_checkbox_input() {
         $(".nav-sidebar").removeClass("nav-flat");
     }
 }
-/*
-
-function notificacionesUsuairo() {
-    const data_url = $("#input_notificaiones").attr("data_url");
-    const data_cantidad = parseInt(
-        $("#badge_cant_notificaciones").attr("data_cantidad")
-    );
-    const URLactual = window.location;
-    $.ajax({
-        url: data_url,
-        type: "GET",
-        success: function (respuesta) {
-            var respuesta_html = "";
-            $("#badge_cant_notificaciones").html(respuesta.cant_notificaciones);
-            $("#badge_cant_notificaciones").attr(
-                "data_cantidad",
-                respuesta.cant_notificaciones
-            );
-            $("#badge_cant_notificaciones").removeClass();
-            if (respuesta.cant_notificaciones < 3) {
-                $("#badge_cant_notificaciones").addClass(
-                    "badge badge-primary navbar-badge"
-                );
-            } else if (respuesta.cant_notificaciones < 5) {
-                $("#badge_cant_notificaciones").addClass(
-                    "badge badge-success navbar-badge"
-                );
-            } else {
-                $("#badge_cant_notificaciones").addClass(
-                    "badge badge-danger navbar-badge"
-                );
-            }
-            var cant_notificaciones = parseInt(respuesta.cant_notificaciones);
-            if (cant_notificaciones > 0) {
-                respuesta_html +=
-                    '<span class="dropdown-item dropdown-header" id="badge_cant_notificaciones_2">' +
-                    cant_notificaciones +
-                    " Notificaciones</span>";
-                respuesta_html +=
-                    '<div class="dropdown-divider" id="id_division_primera"></div>';
-                var cant_control = 0;
-                $.each(respuesta.notificaciones, function (index, item) {
-                    cant_control++;
-
-                    var fechaInicio = new Date(item.fec_creacion).getTime();
-                    var fechaFin = new Date().getTime();
-                    var diff = fechaFin - fechaInicio;
-
-                    var diferencia_minutos = parseInt(
-                        Math.round(diff / (1000 * 60))
-                    );
-                    var diferencia_horas = parseInt(
-                        Math.round(diff / (1000 * 60 * 60))
-                    );
-                    var diferencia_dias = parseInt(
-                        Math.round(diff / (1000 * 60 * 60 * 24))
-                    );
-
-                    if (diferencia_minutos < 60) {
-                        var diferencia_final = diferencia_minutos + " Minutos";
-                    } else if (diferencia_horas < 24) {
-                        var diferencia_final = diferencia_horas + " Horas";
-                    } else {
-                        var diferencia_final = diferencia_dias + " Dias";
-                    }
-                    if (item.accion == "creacion") {
-                        var icono = "fas fa-upload";
-                    } else {
-                        var icono = "far fa-thumbs-up";
-                    }
-                    if (cant_control < 4) {
-                        var index_dashboard_bd = item.link.indexOf("dashboard");
-                        var sub_cadena_original = item.link.substring(
-                            0,
-                            index_dashboard_bd
-                        );
-
-                        respuesta_html +=
-                            '<a href="' +
-                            item.link.replace(
-                                sub_cadena_original,
-                                URLactual.origin + "/"
-                            ) +
-                            "/" +
-                            item.id +
-                            '" class="dropdown-item item_notificacion_link" data_id="' +
-                            item.id +
-                            '">';
-                        respuesta_html +=
-                            '    <i class="' +
-                            icono +
-                            ' mr-1"></i> <span class="text-wrap"> ' +
-                            item.titulo +
-                            "</span>";
-                        respuesta_html +=
-                            '    <span class="float-right text-muted" style="float: right;font-size: 0.9em;">' +
-                            diferencia_final +
-                            "</span>";
-                        respuesta_html += "</a>";
-                    }
-                });
-                respuesta_html +=
-                    '<div class="dropdown-divider" id="id_division_segunda"></div>';
-                respuesta_html +=
-                    '<a href="#" class="dropdown-item dropdown-footer ver_todas_notif" onclick="ver_todas_notif_modal()">Ver Todas las notificaciones</a>';
-            } else {
-                respuesta_html +=
-                    '<span class="dropdown-item dropdown-header" id="badge_cant_notificaciones_2">Sin  Notificaciones</span>';
-            }
-            $("#menu_badge_cant_notificaciones_2").html(respuesta_html);
-        },
-        error: function () {},
-    });
-}
-
-const notificacionesMenuSupModal = new bootstrap.Modal(
-    document.getElementById("notificacionesMenuSupModal")
-);
-function ver_todas_notif_modal() {
-    const data_url = $("#input_notificaiones").attr("data_url");
-    const URLactual = window.location;
-    $.ajax({
-        url: data_url,
-        type: "GET",
-        success: function (respuesta) {
-            var respuesta_html = "";
-            var cant_notificaciones = parseInt(respuesta.cant_notificaciones);
-            $.each(respuesta.notificaciones, function (index, item) {
-                var fechaInicio = new Date(item.fec_creacion).getTime();
-                var fechaFin = new Date().getTime();
-                var diff = fechaFin - fechaInicio;
-
-                var diferencia_minutos = parseInt(
-                    Math.round(diff / (1000 * 60))
-                );
-                var diferencia_horas = parseInt(
-                    Math.round(diff / (1000 * 60 * 60))
-                );
-                var diferencia_dias = parseInt(
-                    Math.round(diff / (1000 * 60 * 60 * 24))
-                );
-
-                if (diferencia_minutos < 60) {
-                    var diferencia_final = diferencia_minutos + " Minutos";
-                } else if (diferencia_horas < 24) {
-                    var diferencia_final = diferencia_horas + " Horas";
-                } else {
-                    var diferencia_final = diferencia_dias + " Dias";
-                }
-                if (item.accion == "creacion") {
-                    var icono = "fas fa-upload";
-                } else {
-                    var icono = "far fa-thumbs-up";
-                }
-                var index_dashboard_bd = item.link.indexOf("dashboard");
-                var sub_cadena_original = item.link.substring(
-                    0,
-                    index_dashboard_bd
-                );
-
-                respuesta_html +=
-                    "<tr onClick=\"tr_modalFunction('" +
-                    item.link.replace(
-                        sub_cadena_original,
-                        URLactual.origin + "/"
-                    ) +
-                    "/" +
-                    item.id +
-                    '\')" style="cursor:pointer;">';
-                respuesta_html += "    <th>" + item.fec_creacion + "</th>";
-                respuesta_html +=
-                    '    <td width="40%"><p class="text-wrap">' +
-                    item.titulo +
-                    "</p></td>";
-                respuesta_html +=
-                    '    <td width="40%"><p class="text-wrap">' +
-                    item.mensaje +
-                    "</p></td>";
-                respuesta_html += "</tr>";
-            });
-            $("#tbody_notificacionesMenuSupModal").html(respuesta_html);
-        },
-        error: function () {},
-    });
-    notificacionesMenuSupModal.show();
-}
-
-$(".boton_cerrar_modal_notif").on("click", function () {
-    notificacionesMenuSupModal.toggle();
-});
-
-function tr_modalFunction(url_modal) {
-    window.location = url_modal;
-    return false;
-}
-
-const mensajesMenuSupModal = new bootstrap.Modal(
-    document.getElementById("mensajesMenuSupModal")
-);
-function abrir_chat_mensajes() {
-    const data_url = $("#ruta_get_usuarios").attr("data_url");
-    const URLactual = window.location;
-    const remitente_id_msj = $('#remitente_id_msj').val();
-    const folder_imagenes_usuario = $("#folder_imagenes_usuarios").val();
-    $.ajax({
-        url: data_url,
-        type: "GET",
-        success: function (respuesta) {
-            var respuesta_html = "";
-            var cant_usuarios = parseInt(respuesta.usuarios);
-            $.each(respuesta.usuarios, function (index, item) {
-                if (remitente_id_msj != item.id) {
-                    respuesta_html += "<tr>";
-                    respuesta_html +='<td class="d-flex flex-row align-items-center" id="usuario_'+item.id+'" style="cursor: pointer;" onClick="chat_seleccion(\'persona\',\'' + item.id + '\',\'0\',\'usuario_'+item.id+'\')"';
-                    respuesta_html +='data_destinatario_id_msj="' + item.id + '"';
-                    respuesta_html +='data_proyectos_id_msj="0"';
-                    respuesta_html +='data_tipo_msj="persona"';
-                    respuesta_html +='>';
-                    respuesta_html +='<img style="border-radius: 50%;display: inline;width: 2.5rem;" alt="Avatar" class="table-avatar" title="' + item.nombres + " " + item.apellidos + '" src="' + folder_imagenes_usuario + "/" + item.foto + '">';
-                    respuesta_html +='<h6 style="margin-left:10px;" id="h6_usuario_' + item.id + '">' + item.nombres + ' ' + item.apellidos;
-                    if (item.cant_sin_leer>0) {
-                        respuesta_html+= '<span class="badge bg-info ml-3">' + item.cant_sin_leer  + '</span>';
-                    }
-                    respuesta_html +='</h6>';
-                    respuesta_html += "</td>";
-                    respuesta_html += "</tr>";
-                }
-            });
-            $("#body_table_usuarios_chat").html(respuesta_html);
-            if (respuesta.proyectos.length>0) {
-                respuesta_html = "";
-                $.each(respuesta.proyectos, function (index, proyecto) {
-                    respuesta_html += "<tr>";
-                    respuesta_html +='<td class="d-flex flex-row align-items-center" id="proyecto_'+proyecto.id+'" style="cursor: pointer;" onClick="chat_seleccion(\'proyecto\',\'0\',\'' + proyecto.id + '\',\'proyecto_'+proyecto.id+'\')"';
-                    respuesta_html +='data_destinatario_id_msj="0"';
-                    respuesta_html +='data_proyectos_id_msj="' + proyecto.id + '"';
-                    respuesta_html +='data_tipo_msj="proyecto"';
-                    respuesta_html +='>';
-                    respuesta_html +='<h6 style="margin-left:10px;">' + proyecto.titulo +"</h6>";
-                    respuesta_html += "</td>";
-                    respuesta_html += "</tr>";
-                });
-                $("#body_table_usuarios_chat_p").html(respuesta_html);
-                $('#tabla_msj_proyectos').removeClass('d-none');
-            }else{
-                $('#tabla_msj_proyectos').addClass('d-none');
-            }
-
-        },
-        error: function () {},
-    });
-    mensajesMenuSupModal.show();
-}
-$(".boton_cerrar_modal_mjs").on("click", function () {
-    mensajesMenuSupModal.toggle();
-});
-
-function chat_seleccion(data_tipo_msj,data_destinatario_id_msj,data_proyectos_id_msj,data_id){
-    $('#destinatario_id_msj').val(data_destinatario_id_msj);
-    $('#proyectos_id_msj').val(data_proyectos_id_msj);
-    $('#tipo_msj').val(data_tipo_msj);
-    $('#mensaje_envio').prop('disabled', false);
-    $('#mensaje_envio').val('');
-    $('#body_table_usuarios_chat').children().removeClass('bg-info table-info');
-    $('#'+data_id).parent().addClass('bg-info table-info');
-    $('#'+data_id).find('span').remove();
-
-    getmensajes_dest_rem ();
-}
-
-$( "#form_mensajes" ).on( "submit", function( event ) {
-    event.preventDefault();
-    const form = $(this);
-    $.ajax({
-        url: form.attr("action"),
-        type: "POST",
-        data: form.serialize(),
-        success: function (respuesta) {
-            // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-            respuesta_html = $('#caja_conversaciones').html();
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            $('#ultimo_mensaje_subido_id').val(respuesta.mensaje.id);
-            if (respuesta.mensaje.remitente_id == $('#remitente_id_msj').val()) {
-                // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                respuesta_html+='';
-                respuesta_html+='<div class="row mt-2 mr-2 caja_remitente_base" id="caja_remitente_' + respuesta.mensaje.id + '">';
-                respuesta_html+='    <div class="col-2"></div>';
-                respuesta_html+='    <div class="col-10 p-2 remitente" style="border: 1px black solid; border-radius: 5px;background-color: rgba(0, 195, 255, 0.062);">';
-                respuesta_html+='        <div class="row">';
-                respuesta_html+='            <div class="col-12">';
-                respuesta_html+='                <span class="float-end">';
-                respuesta_html+='                    <h6><i class="fas fa-comment-alt mr-1" aria-hidden="true"></i><strong class="strong_remitente">' + respuesta.mensaje.remitente.nombres + ' ' + respuesta.mensaje.remitente.apellidos + '</strong></h6><span class="span_fecha" style="font-size: 0.7em;">[' + respuesta.mensaje.fec_creacion + ']</span>';
-                respuesta_html+='                </span>';
-                respuesta_html+='            </div>';
-                respuesta_html+='            <div class="col-12">';
-                respuesta_html+='                <p class="p_mensaje float-end" style="text-align: justify;">' + respuesta.mensaje.mensaje + '</p>';
-                respuesta_html+='            </div>';
-                respuesta_html+='        </div>';
-                respuesta_html+='    </div>';
-                respuesta_html+='</div>';
-
-                // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-            }
-                else {
-                // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                respuesta_html+='<div class="row mt-2 ml-2 caja_destinatario_base" id="caja_destinatario_' + respuesta.mensaje.id + '">';
-                respuesta_html+='    <div class="col-10 p-2 destinatario" style="border: 1px black solid; border-radius: 5px;background-color: rgba(0, 255, 0, 0.062);">';
-                respuesta_html+='        <div class="row">';
-                respuesta_html+='            <div class="col-12">';
-                respuesta_html+='                <span class="float-star">';
-                respuesta_html+='                    <h6><i class="fas fa-comment-alt mr-1" aria-hidden="true"></i><strong class="strong_remitente">' + respuesta.mensaje.remitente.nombres + ' ' + respuesta.mensaje.remitente.apellidos + '</strong></h6><span class="span_fecha" style="font-size: 0.7em;">[' + respuesta.mensaje.fec_creacion + ']]</span>';
-                respuesta_html+='                </span>';
-                respuesta_html+='            </div>';
-                respuesta_html+='            <div class="col-12">';
-                respuesta_html+='                <p class="p_mensaje" style="text-align: justify;">' + respuesta.mensaje.mensaje + '</p>';
-                respuesta_html+='            </div>';
-                respuesta_html+='        </div>';
-                respuesta_html+='    </div>';
-                respuesta_html+='    <div class="col-2"></div>';
-                respuesta_html+='</div>';
-                // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-            }
-            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-            respuesta_html+='<div class="row ultima_caja" id="ultima_caja">.</div>';
-            $('#caja_conversaciones').html(respuesta_html);
-            let container = $('#caja_conversaciones');
-            let scrollToMe = $('#ultima_caja');
-            container.animate({scrollTop: scrollToMe.offset().top - container.offset().top + container.scrollTop()},500);
-            // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-        },
-        error: function () {},
-    });
-
-  });
-function getmensajes_dest_rem (){
-    const data_url = $("#data_getmensajes_dest_rem").attr("data_url");
-    $('.chat_pantalla').remove();
-    var data = {
-        remitente_id: $('#remitente_id_msj').val(),
-        destinatario_id: $('#destinatario_id_msj').val()
-    };
-    $.ajax({
-        url: data_url,
-        type: "GET",
-        data: data,
-        success: function (respuesta) {
-            respuesta_html = '';
-            $.each(respuesta.mensajes, function (index, mensaje) {
-                $('#ultimo_mensaje_subido_id').val(mensaje.id);
-                if (mensaje.remitente_id == $('#remitente_id_msj').val()) {
-                    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                    respuesta_html+='';
-                    respuesta_html+='<div class="row mt-2 mr-2 caja_remitente_base" id="caja_remitente_' + mensaje.id + '">';
-                    respuesta_html+='    <div class="col-2"></div>';
-                    respuesta_html+='    <div class="col-10 p-2 remitente" style="border: 1px black solid; border-radius: 5px;background-color: rgba(0, 195, 255, 0.062);">';
-                    respuesta_html+='        <div class="row">';
-                    respuesta_html+='            <div class="col-12">';
-                    respuesta_html+='                <span class="float-end">';
-                    respuesta_html+='                    <h6><i class="fas fa-comment-alt mr-1" aria-hidden="true"></i><strong class="strong_remitente">' + mensaje.remitente.nombres + ' ' + mensaje.remitente.apellidos + '</strong></h6><span class="span_fecha" style="font-size: 0.7em;">[' + mensaje.fec_creacion + ']</span>';
-                    respuesta_html+='                </span>';
-                    respuesta_html+='            </div>';
-                    respuesta_html+='            <div class="col-12">';
-                    respuesta_html+='                <p class="p_mensaje float-end" style="text-align: justify;">' + mensaje.mensaje + '</p>';
-                    respuesta_html+='            </div>';
-                    respuesta_html+='        </div>';
-                    respuesta_html+='    </div>';
-                    respuesta_html+='</div>';
-
-                    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                }
-                 else {
-                    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                    respuesta_html+='<div class="row mt-2 ml-2 caja_destinatario_base" id="caja_destinatario_' + mensaje.id + '">';
-                    respuesta_html+='    <div class="col-10 p-2 destinatario" style="border: 1px black solid; border-radius: 5px;background-color: rgba(0, 255, 0, 0.062);">';
-                    respuesta_html+='        <div class="row">';
-                    respuesta_html+='            <div class="col-12">';
-                    respuesta_html+='                <span class="float-star">';
-                    respuesta_html+='                    <h6><i class="fas fa-comment-alt mr-1" aria-hidden="true"></i><strong class="strong_remitente">' + mensaje.remitente.nombres + ' ' + mensaje.remitente.apellidos + '</strong></h6><span class="span_fecha" style="font-size: 0.7em;">[' + mensaje.fec_creacion + ']]</span>';
-                    respuesta_html+='                </span>';
-                    respuesta_html+='            </div>';
-                    respuesta_html+='            <div class="col-12">';
-                    respuesta_html+='                <p class="p_mensaje" style="text-align: justify;">' + mensaje.mensaje + '</p>';
-                    respuesta_html+='            </div>';
-                    respuesta_html+='        </div>';
-                    respuesta_html+='    </div>';
-                    respuesta_html+='    <div class="col-2"></div>';
-                    respuesta_html+='</div>';
-                    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                }
-            });
-            respuesta_html+='<div class="row ultima_caja" id="ultima_caja">.</div>';
-            $('#caja_conversaciones').html(respuesta_html);
-            let container = $('#caja_conversaciones');
-            let scrollToMe = $('#ultima_caja');
-            container.animate({scrollTop: scrollToMe.offset().top - container.offset().top + container.scrollTop()},500);
-
-        },
-        error: function () {},
-    });
-}
-
-function getmensajes_dest_rem_ult(){
-    if ($('#destinatario_id_msj').val()!='0') {
-        const data_url = $("#data_getmensajes_dest_rem_ult").attr("data_url");
-        const ultimo_mensaje_subido_id = $('#ultimo_mensaje_subido_id').val();
-        var data = {
-            remitente_id: $('#remitente_id_msj').val(),
-            destinatario_id: $('#destinatario_id_msj').val()
-        };
-        $.ajax({
-            url: data_url,
-            type: "GET",
-            data: data,
-            success: function (respuesta) {
-                if (ultimo_mensaje_subido_id!=respuesta.mensaje.id) {
-                    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                    respuesta_html = $('#caja_conversaciones').html();
-                    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                    $('#ultimo_mensaje_subido_id').val(respuesta.mensaje.id);
-                    if (respuesta.mensaje.remitente_id == $('#remitente_id_msj').val()) {
-                        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                        respuesta_html+='';
-                        respuesta_html+='<div class="row mt-2 mr-2 caja_remitente_base" id="caja_remitente_' + respuesta.mensaje.id + '">';
-                        respuesta_html+='    <div class="col-2"></div>';
-                        respuesta_html+='    <div class="col-10 p-2 remitente" style="border: 1px black solid; border-radius: 5px;background-color: rgba(0, 195, 255, 0.062);">';
-                        respuesta_html+='        <div class="row">';
-                        respuesta_html+='            <div class="col-12">';
-                        respuesta_html+='                <span class="float-end">';
-                        respuesta_html+='                    <h6><i class="fas fa-comment-alt mr-1" aria-hidden="true"></i><strong class="strong_remitente">' + respuesta.mensaje.remitente.nombres + ' ' + respuesta.mensaje.remitente.apellidos + '</strong></h6><span class="span_fecha" style="font-size: 0.7em;">[' + respuesta.mensaje.fec_creacion + ']</span>';
-                        respuesta_html+='                </span>';
-                        respuesta_html+='            </div>';
-                        respuesta_html+='            <div class="col-12">';
-                        respuesta_html+='                <p class="p_mensaje float-end" style="text-align: justify;">' + respuesta.mensaje.mensaje + '</p>';
-                        respuesta_html+='            </div>';
-                        respuesta_html+='        </div>';
-                        respuesta_html+='    </div>';
-                        respuesta_html+='</div>';
-
-                        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                    }
-                        else {
-                        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                        respuesta_html+='<div class="row mt-2 ml-2 caja_destinatario_base" id="caja_destinatario_' + respuesta.mensaje.id + '">';
-                        respuesta_html+='    <div class="col-10 p-2 destinatario" style="border: 1px black solid; border-radius: 5px;background-color: rgba(0, 255, 0, 0.062);">';
-                        respuesta_html+='        <div class="row">';
-                        respuesta_html+='            <div class="col-12">';
-                        respuesta_html+='                <span class="float-star">';
-                        respuesta_html+='                    <h6><i class="fas fa-comment-alt mr-1" aria-hidden="true"></i><strong class="strong_remitente">' + respuesta.mensaje.remitente.nombres + ' ' + respuesta.mensaje.remitente.apellidos + '</strong></h6><span class="span_fecha" style="font-size: 0.7em;">[' + respuesta.mensaje.fec_creacion + ']]</span>';
-                        respuesta_html+='                </span>';
-                        respuesta_html+='            </div>';
-                        respuesta_html+='            <div class="col-12">';
-                        respuesta_html+='                <p class="p_mensaje" style="text-align: justify;">' + respuesta.mensaje.mensaje + '</p>';
-                        respuesta_html+='            </div>';
-                        respuesta_html+='        </div>';
-                        respuesta_html+='    </div>';
-                        respuesta_html+='    <div class="col-2"></div>';
-                        respuesta_html+='</div>';
-                        // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                    }
-                    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-                    respuesta_html+='<div class="row ultima_caja" id="ultima_caja">.</div>';
-                    $('#caja_conversaciones').html(respuesta_html);
-                    let container = $('#caja_conversaciones');
-                    let scrollToMe = $('#ultima_caja');
-                    container.animate({scrollTop: scrollToMe.offset().top - container.offset().top + container.scrollTop()},500);
-                    // = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-                }
-            },
-            error: function () {},
-        });
-    }
-}
-
-function get_all_nuevos_mensajes(){
-    const data_url = $("#data_get_all_nuevos_mensajes").attr("data_url");
-    const remitente_id_msj = $('#remitente_id_msj').val();
-    const folder_imagenes_usuario = $("#folder_imagenes_usuarios").val();
-    var data = {
-        remitente_id: remitente_id_msj
-    };
-    $.ajax({
-        url: data_url,
-        type: "GET",
-        data: data,
-        success: function (respuesta) {
-            $('#badge_mesajes_usu').html(respuesta.mensaje_sin_leer_cant);
-            if (respuesta.mensaje_sin_leer_cant > 0) {
-                respuesta_html = '';
-                var i = 1
-                $.each(respuesta.mensaje_sin_leer, function (index, mensaje) {
-                    if (i < 4) {
-                        var fechaInicio = new Date(mensaje.fec_creacion).getTime();
-                        var fechaFin = new Date().getTime();
-                        var diff = fechaFin - fechaInicio;
-
-                        var diferencia_minutos = parseInt(
-                            Math.round(diff / (1000 * 60))
-                        );
-                        var diferencia_horas = parseInt(
-                            Math.round(diff / (1000 * 60 * 60))
-                        );
-                        var diferencia_dias = parseInt(
-                            Math.round(diff / (1000 * 60 * 60 * 24))
-                        );
-
-                        if (diferencia_minutos < 60) {
-                            var diferencia_final = diferencia_minutos + " Minutos";
-                        } else if (diferencia_horas < 24) {
-                            var diferencia_final = diferencia_horas + " Horas";
-                        } else {
-                            var diferencia_final = diferencia_dias + " Dias";
-                        }
-                    //-------------------------------------------------------------------------------
-                        respuesta_html +='<a href="#" class="dropdown-item" onclick="abrir_chat_mensajes()">';
-                        respuesta_html +='    <!-- Message Start -->';
-                        respuesta_html +='    <div class="media">';
-                        respuesta_html +='        <img src="' + folder_imagenes_usuario + "/" + mensaje.remitente.foto + '" alt="" class="img-size-50 mr-3 img-circle">';
-                        respuesta_html +='        <div class="media-body">';
-                        respuesta_html +='            <h3 class="dropdown-item-title">';
-                        respuesta_html +='                ' + mensaje.remitente.nombres + ' ' + mensaje.remitente.apellidos;
-                        //respuesta_html +='                <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>';
-                        respuesta_html +='            </h3>';
-                        respuesta_html +='            <p class="text-sm">' + mensaje.mensaje.substring(0, 20) + '...</p>';
-                        respuesta_html +='            <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> ' + diferencia_final + '</p>';
-                        respuesta_html +='        </div>';
-                        respuesta_html +='    </div>';
-                        respuesta_html +='    <!-- Message End -->';
-                        respuesta_html +='</a>';
-                        respuesta_html +='<div class="dropdown-divider"></div>';
-
-                    }
-                    i++;
-                });
-                respuesta_html += '<a href="#" class="dropdown-item dropdown-footer ver_chats" id="ver_chats" onclick="abrir_chat_mensajes()">Abrir Chats</a>';
-                $('#cajonera_mensajes_sup').html(respuesta_html);
-            }
-        },
-        error: function () {},
-    });
-}
-*/
-
-
 function getEmpleadosChatGeneral(){
     const data_url = $('#getEmpleadosChat').attr('data_url');
     $.ajax({
@@ -976,6 +417,7 @@ function getMensajesNuevosEmpleadosChat(){
         url: data_url,
         type: "GET",
         success: function (respuesta) {
+            console.log(respuesta);
             var html_Chat = '';
             var cantidadMensajesNuevos = parseInt(respuesta.cantidadMensajesNuevos);
             if (cantidadMensajesNuevos < 4) {
@@ -1040,23 +482,37 @@ function activoFunction(li,destinatario_id){
         type: "GET",
         success: function (respuesta) {
             var html_respuesta = '';
-            $.each(respuesta.mensajes, function (index, mensaje) {
-                if (mensaje.destinatario_id != destinatario_id) {
-                    html_respuesta += '<div class="row d-flex justify-content-start mt-1 mb-1 ml-1" id="mensaje_N_'+mensaje.id +'">';
-                    html_respuesta += '<div class="col-10 cajaDestinatario border border-primary rounded p-2">';
-                    html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
-                    html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
-                    html_respuesta += '</div>';
-                    html_respuesta += '</div>';
-                } else {
-                    html_respuesta += '<div class="row d-flex justify-content-end mt-1 mb-1 mr-1" id="mensaje_N_'+mensaje.id +'">';
-                    html_respuesta += '<div class="col-10 cajaRemitente border border-success rounded p-2">';
-                    html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
-                    html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
-                    html_respuesta += '</div>';
-                    html_respuesta += '</div>';
-                }
-            });
+            if (respuesta.mensajes.length > 0) {
+                $.each(respuesta.mensajes, function (index, mensaje) {
+                    if (mensaje.destinatario_id != destinatario_id) {
+                        html_respuesta += '<div class="row d-flex justify-content-start mt-1 mb-1 ml-1" id="mensaje_N_'+mensaje.id +'">';
+                        html_respuesta += '<div class="col-10 cajaDestinatario border border-primary rounded p-2">';
+                        html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
+                        html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
+                        html_respuesta += '</div>';
+                        html_respuesta += '</div>';
+                    } else {
+                        html_respuesta += '<div class="row d-flex justify-content-end mt-1 mb-1 mr-1" id="mensaje_N_'+mensaje.id +'">';
+                        html_respuesta += '<div class="col-10 cajaRemitente border border-success rounded p-2">';
+                        html_respuesta += '<p style="text-align: justify">'+mensaje.mensaje+'</p>';
+                        html_respuesta += '<span class="float-end text-small" style="font-size: 0.7em;">'+mensaje.fec_creacion+'</span>';
+                        html_respuesta += '</div>';
+                        html_respuesta += '</div>';
+                    }
+                });
+            } else {
+                        html_respuesta +='<div class="row d-flex justify-content-center center align-items-center" id="chatSinMensajes" style="min-height: 100%;">';
+                        html_respuesta +='<div class="col-12 text-center" >';
+                        html_respuesta +='<div class="row d-flex justify-content-center center align-items-center">';
+                        html_respuesta +='<div class="col-12 col-md-5"><img src="'+$('#imagenMglTech').val()+'" class="img-fluid"></div>';
+                        html_respuesta +='<div class="col-12 col-md-8 mt-3">';
+                        html_respuesta +='<h5>Chat sin conversaciones.</h5>';
+                        html_respuesta +='</div>';
+                        html_respuesta +='</div>';
+                        html_respuesta +='</div>';
+                        html_respuesta +='</div>                ';
+            }
+
             $('#cajonChatsFinal').html(html_respuesta);
             $("#cajonChatsFinal").animate({ scrollTop: $("#cajonChatsFinal").prop("scrollHeight")}, 1000);
             $('#getMensajesChatUsuario').attr('data_estado',1);
@@ -1109,11 +565,15 @@ function abrirModalChat(){
                 var htmlUsuarios = '';
                 var htmlUsuariosTable = '';
                 $.each(respuesta.superAdminstradores, function (index, usuario) {
+                    var badgeCantinLeer ='';
                     htmlUsuarios +='<li class="itemUsuario mt-1 mb-1 pt-1 pb-1" id="liItemUsuario_'+usuario.id+'" onclick="activoFunction(\'liItemUsuario_'+usuario.id+'\','+usuario.id+')" style="list-style-type: none;">';
                     htmlUsuarios +='<div class="media d-flex align-items-center" style="cursor: pointer;">';
                     htmlUsuarios +='<img src="'+ruta_fotos+usuario.foto_chat+'" alt="'+usuario.nombre_chat+'" title="'+usuario.nombre_chat+'" class="img-size-50 mr-3 img-circle" style="max-width: 60px;">';
                     htmlUsuarios +='<div class="media-body">';
-                    htmlUsuarios +='<h3 class="dropdown-item-title">'+usuario.nombre_chat+'<span class="float-right badge badge-info" style="font-size: 0.65em">'+usuario.cant_sin_leer+'</span></h3>';
+                    if (parseInt(usuario.cant_sin_leer)>0) {
+                        badgeCantinLeer = '<span class="float-right badge badge-info" style="font-size: 0.65em">'+usuario.cant_sin_leer+'</span>';
+                    }
+                    htmlUsuarios +='<h3 class="dropdown-item-title">'+usuario.nombre_chat+ badgeCantinLeer+'</h3>';
                     htmlUsuarios +='<span style="font-size: 0.75em;">Administrador del sistema</span>';
                     htmlUsuarios +='</div>';
                     htmlUsuarios +='</div>';
@@ -1122,12 +582,15 @@ function abrirModalChat(){
 
                 });
                 $.each(respuesta.empleados, function (index, usuario) {
+                    var badgeCantinLeer ='';
                     htmlUsuarios +='<li class="itemUsuario mt-1 mb-1 pt-1 pb-1" id="liItemUsuario_'+usuario.id+'" onclick="activoFunction(\'liItemUsuario_'+usuario.id+'\','+usuario.id+')" style="list-style-type: none;">';
                     htmlUsuarios +='<div class="media d-flex align-items-center" style="cursor: pointer;">';
                     htmlUsuarios +='<img src="'+ruta_fotos+usuario.foto_chat+'" alt="'+usuario.nombre_chat+'" title="'+usuario.nombre_chat+'" class="img-size-50 mr-3 img-circle" style="max-width: 60px;">';
                     htmlUsuarios +='<div class="media-body">';
-                    htmlUsuarios +='<h3 class="dropdown-item-title">'+usuario.nombre_chat+'<span class="float-right badge badge-info" style="font-size: 0.65em">'+usuario.cant_sin_leer+'</span></h3>';
-                    htmlUsuarios +='<span style="font-size: 0.75em;">Empleado</span>';
+                    if (parseInt(usuario.cant_sin_leer)>0) {
+                        badgeCantinLeer = '<span class="float-right badge badge-info" style="font-size: 0.65em">'+usuario.cant_sin_leer+'</span>';
+                    }
+                    htmlUsuarios +='<h3 class="dropdown-item-title">'+usuario.nombre_chat+ badgeCantinLeer+'</h3>';htmlUsuarios +='<span style="font-size: 0.75em;">Empleado</span>';
                     htmlUsuarios +='</div>';
                     htmlUsuarios +='</div>';
                     htmlUsuarios +='</li>';
