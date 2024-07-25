@@ -84,6 +84,7 @@ $(document).ready(function () {
     //get_all_nuevos_mensajes();
     setInterval(getMensajesNuevosDestinatarioChat,2000);
     setInterval(getMensajesNuevosEmpleadosChat,2000);
+    getNotificacionesEmpleado();
     // * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - * - *
     $('#abrirModalChat').on("click", function () {
 
@@ -403,7 +404,7 @@ function getEmpleadosChatGeneral(){
         url: data_url,
         type: "GET",
         success: function (respuesta) {
-            console.log(respuesta);
+
         },
         error: function () {},
     });
@@ -417,7 +418,7 @@ function getMensajesNuevosEmpleadosChat(){
         url: data_url,
         type: "GET",
         success: function (respuesta) {
-            console.log(respuesta);
+
             var html_Chat = '';
             var cantidadMensajesNuevos = parseInt(respuesta.cantidadMensajesNuevos);
             if (cantidadMensajesNuevos < 4) {
@@ -611,3 +612,94 @@ function abrirChatEspecifico (li,destinatario_id){
     activoFunction(li,destinatario_id);
 }
 
+function getNotificacionesEmpleado(){
+    const data_url = $('#getNotificacionesEmpleado').attr('data_url');
+    $.ajax({
+        async: false,
+        url: data_url,
+        type: "GET",
+        success: function (respuesta) {
+            console.log(respuesta);
+            var li_html = '';
+            if (respuesta.notificaciones.length > 0) {
+                var badge_color = '';
+                if (respuesta.notificaciones.length < 4) {
+                    badge_color = 'primary';
+                } else if(respuesta.notificaciones.length < 8){
+                    badge_color = 'success';
+                }else if(respuesta.notificaciones.length < 10){
+                    badge_color = 'warning';
+                }else{
+                    badge_color = 'danger';
+                }
+
+                li_html += '<a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">';
+                li_html += '<i class="far fa-bell" style="font-size: 1.5em;"></i>';
+                li_html += '<span class="badge badge-'+badge_color+' navbar-badge" style="font-size: 0.78em;position: absolute;">'+respuesta.notificaciones.length+'</span>';
+                li_html += '</a>';
+                li_html += '<ul class="dropdown-menu dropdown-menu-right" id="menu_badge_cant_notificaciones_2" style="left: inherit; right: 0px;font-size: 0.75em;width: 350px;">';
+                li_html += '<li><span class="dropdown-item">'+respuesta.notificaciones.length+' Notificaciones</span></li>';
+                li_html += '<li><hr class="dropdown-divider"></li>';
+                var i = 0;
+                $.each(respuesta.notificaciones, function (index, notificacion) {
+                    i ++;
+                    var link = '';
+                    var ubicacion = notificacion.link.search("dashboard");
+                    link = location.href.substring(0,location.href.search(("dashboard")))+ notificacion.link.substring(ubicacion)+'/' + notificacion.id;
+                    li_html += '<li>';
+                    li_html += '<a class="dropdown-item d-flex flex-row" href="'+link+'">';
+                    li_html += '<div class="row">';
+                    li_html += '<div class="col-12"><span class="float-right text-sm ml-5"><strong style="font-size: 0.75em;">'+notificacion.diff_creacion+'</strong></span></div>';
+                    li_html += '<div class="col-12"><p class="text-wrap"><i class="fas fa-project-diagram mr-3"></i>' +notificacion.mensaje+ '</p></div>';
+                    li_html += '</div>';
+                    li_html += '</a>';
+                    li_html += '</li>';
+                    if(i === 3) {
+                        return false; // breaks
+                    }
+                });
+                li_html += '<li><hr class="dropdown-divider"></li>';
+                li_html += '<li><a class="dropdown-item" href="#" onclick="abrirNotificaciones()">Ver Todas las Notificaciones</a></li>';
+                li_html += '</ul>';
+                $('#li_notificaciones').html(li_html);
+            } else {
+                console.log('nopp');
+            }
+        },
+        error: function () {},
+    });
+}
+function abrirNotificaciones(){
+    const data_url = $('#getNotificacionesEmpleado').attr('data_url');
+    const  myModalNotificaciones = new bootstrap.Modal(document.getElementById('modalNotificaciones'))
+    $.ajax({
+        async: false,
+        url: data_url,
+        type: "GET",
+        success: function (respuesta) {
+            console.log(respuesta);
+            var tbody_html = '';
+            if (respuesta.notificaciones.length > 0) {
+                $.each(respuesta.notificaciones, function (index, notificacion) {
+                    var link = '';
+                    var ubicacion = notificacion.link.search("dashboard");
+                    link = location.href.substring(0,location.href.search(("dashboard")))+ notificacion.link.substring(ubicacion)+'/' + notificacion.id;
+                    tbody_html += '<tr onclick="verNotificacion(\''+link+'\')" style="cursor: pointer;">';
+                    tbody_html += '<th scope="row">'+notificacion.id+'</th>';
+                    tbody_html += '<td>'+notificacion.fec_creacion+'</td>';
+                    tbody_html += '<td>'+notificacion.mensaje+'</td>';
+                    tbody_html += '</tr>';
+
+                });
+                $('#tbody_notificaciones_general').html(tbody_html);
+                myModalNotificaciones.show();
+            } else {
+                console.log('nopp');
+            }
+        },
+        error: function () {},
+    });
+}
+ function verNotificacion(link){
+    window.location.href = link;
+ }

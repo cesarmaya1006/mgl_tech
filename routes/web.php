@@ -267,5 +267,7 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
     Route::post('/setNuevoMensaje',[PageController::class, 'setNuevoMensaje'])->name('setNuevoMensaje');
     Route::get('/getMensajesChatUsuario',[PageController::class, 'getMensajesChatUsuario'])->name('getMensajesChatUsuario');
     Route::get('/getMensajesNuevosDestinatarioChat',[PageController::class, 'getMensajesNuevosDestinatarioChat'])->name('getMensajesNuevosDestinatarioChat');
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+    Route::get('/getNotificacionesEmpleado',[PageController::class, 'getNotificacionesEmpleado'])->name('getNotificacionesEmpleado');
 
 });

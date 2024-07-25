@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Config;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa\Empleado;
 use App\Models\Sistema\Mensaje;
+use App\Models\Sistema\Notificacion;
 use App\Models\User;
 use DateTime;
 use Illuminate\Http\Request;
@@ -198,34 +199,23 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function getNotificacionesEmpleado(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $notificaciones = Notificacion::where('usuario_id',3)->where('estado',1)->get();
+            foreach ($notificaciones as $notificacion) {
+                $date1 = new DateTime($notificacion->fec_creacion);
+                $date2 = new DateTime("now");
+                $diff = $date1->diff($date2);
+                $notificacion['diff_creacion'] = $this->get_format($diff);
+            }
+            return response()->json(['notificaciones'=> $notificaciones]);
+        } else {
+            abort(404);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
     public function get_format($df) {
 
         $str = '';

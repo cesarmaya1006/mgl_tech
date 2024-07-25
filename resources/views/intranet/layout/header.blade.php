@@ -24,7 +24,7 @@
             </ul>
         </li>
         <!-- Notifications Dropdown Menu -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" id="li_notificaciones">
             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
                 <i class="far fa-bell" style="font-size: 1.5em;"></i>
                 <span class="badge badge-warning navbar-badge" style="font-size: 0.78em;position: absolute;">3</span>
@@ -34,7 +34,11 @@
                 <li><hr class="dropdown-divider"></li>
                 <li>
                     <a class="dropdown-item d-flex flex-row" href="#">
-                        <i class="fas fa-envelope mr-3"></i> 4 new messages<span class="float-right text-muted text-sm ml-5">3 mins</span>
+                        <div class="row">
+                            <div class="col-12"><i class="fas fa-envelope mr-3"></i> 4 new messages</div>
+                            <div class="col-12"><span class="float-right text-muted text-sm ml-5">3 mins</span></div>
+                        </div>
+
                     </a>
                 </li>
                 <li><hr class="dropdown-divider"></li>
