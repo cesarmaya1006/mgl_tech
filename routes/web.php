@@ -7,12 +7,30 @@ use App\Http\Controllers\Config\PageController;
 use App\Http\Controllers\Config\PermisoController;
 use App\Http\Controllers\Config\PermisoRolController;
 use App\Http\Controllers\Config\RolController;
+use App\Http\Controllers\Empresa\ArchivoController;
 use App\Http\Controllers\Empresa\AreaController;
+use App\Http\Controllers\Empresa\CapacitacionController;
 use App\Http\Controllers\Empresa\CargoController;
+use App\Http\Controllers\Empresa\ClienteController;
+use App\Http\Controllers\Empresa\DiagnosticosController;
+use App\Http\Controllers\Empresa\DocRetiroController;
+use App\Http\Controllers\Empresa\DocumentosContractualesController;
+use App\Http\Controllers\Empresa\DotacionesController;
 use App\Http\Controllers\Empresa\EmpGrupoController;
 use App\Http\Controllers\Empresa\EmpleadoController;
 use App\Http\Controllers\Empresa\EmpresaController;
+use App\Http\Controllers\Empresa\EvaluacionDesempController;
+use App\Http\Controllers\Empresa\HistClinicasOcupController;
+use App\Http\Controllers\Empresa\HojasDeVidaController;
+use App\Http\Controllers\Empresa\ManualesController;
 use App\Http\Controllers\Empresa\PermisoEmpleadoController;
+use App\Http\Controllers\Empresa\PermisosArchivoController;
+use App\Http\Controllers\Empresa\PoliticaController;
+use App\Http\Controllers\Empresa\ProcesoDiscipController;
+use App\Http\Controllers\Empresa\ProveedoresController;
+use App\Http\Controllers\Empresa\SitLabGenController;
+use App\Http\Controllers\Empresa\SoportesAfiliacionController;
+use App\Http\Controllers\Empresa\VacacionesController;
 use App\Http\Controllers\Proyectos\ComponenteController;
 use App\Http\Controllers\Proyectos\HistorialController;
 use App\Http\Controllers\Proyectos\ProyectoController;
@@ -160,21 +178,16 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('setCambioRespTarea', 'setCambioRespTarea')->name('empleados.setCambioRespTarea');
             // *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--* *--*
             Route::get('setDeshabilitarEmpleado', 'setDeshabilitarEmpleado')->name('empleados.setDeshabilitarEmpleado');
-
-
         });
         // ----------------------------------------------------------------------------------------
         // Ruta Permisos Empleados
-        Route::controller(PermisoEmpleadoController::class)->prefix('permisoscargos')->group(function(){
+        Route::controller(PermisoEmpleadoController::class)->prefix('permisoscargos')->group(function () {
             Route::get('', 'index')->name('permisoscargos.index');
             Route::get('getAreas', 'getAreas')->name('permisoscargos.getAreas');
             Route::get('getCargos', 'getCargos')->name('permisoscargos.getCargos');
             Route::get('getEmpleadosCargos', 'getEmpleadosCargos')->name('permisoscargos.getEmpleadosCargos');
             Route::get('getCambioCargo', 'getCambioCargo')->name('permisoscargos.getCambioCargo');
             Route::get('setCambiopermisoEmpleado', 'setCambiopermisoEmpleado')->name('permisoscargos.setCambiopermisoEmpleado');
-
-
-
         });
         // ----------------------------------------------------------------------------------------
     });
@@ -224,6 +237,8 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getapitareas/{componente_id}/{estado}', 'getapitareas')->name('tareas.getapitareas');
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Route::get('reasignacionTarea', 'reasignacionTarea')->name('tareas.reasignacionTarea');
+            Route::get('getTareasEmpleadoGrupos', 'getTareasEmpleadoGrupos')->name('tareas.getTareasEmpleadoGrupos');
+
         });
         // ------------------------------------------------------------------------------------
         Route::controller(HistorialController::class)->prefix('historiales')->group(function () {
@@ -232,7 +247,6 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::post('guardar', 'store_subtarea')->name('historiales.store_subtarea');
             Route::get('gestion/{id}', 'gestion')->name('historiales.gestion');
             Route::post('guardar_doc_hist', 'guardar_doc_hist')->name('historiales.guardar_doc_hist');
-
         });
         // ----------------------------------------------------------------------------------------
         // Ruta sub-tareas
@@ -258,16 +272,71 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             Route::get('getResponsabilidadesTotal', 'getResponsabilidadesTotal')->name('empleados.getResponsabilidadesTotal');
         });
         // ----------------------------------------------------------------------------------------
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        Route::controller(ArchivoController::class)->prefix('archivo-modulo')->group(function () {
+            Route::get('', 'index')->name('archivo-modulo.index');
+            Route::controller(HojasDeVidaController::class)->prefix('hojas_vida')->group(function () {
+                Route::get('', 'index')->name('hojas_vida.index');
+            });
+            Route::controller(ManualesController::class)->prefix('manuales')->group(function () {
+                Route::get('', 'index')->name('manuales.index');
+            });
+            Route::controller(SoportesAfiliacionController::class)->prefix('soportes_afiliacion')->group(function () {
+                Route::get('', 'index')->name('soportes_afiliacion.index');
+            });
+            Route::controller(DocumentosContractualesController::class)->prefix('documentos_contractuales')->group(function () {
+                Route::get('', 'index')->name('documentos_contractuales.index');
+            });
+            Route::controller(SitLabGenController::class)->prefix('sit_lab_gen')->group(function () {
+                Route::get('', 'index')->name('sit_lab_gen.index');
+            });
+            Route::controller(HistClinicasOcupController::class)->prefix('histclinicasocup')->group(function () {
+                Route::get('', 'index')->name('histclinicasocup.index');
+            });
+            Route::controller(DotacionesController::class)->prefix('dotaciones')->group(function () {
+                Route::get('', 'index')->name('dotaciones.index');
+            });
+            Route::controller(ProcesoDiscipController::class)->prefix('proceso_discip')->group(function () {
+                Route::get('', 'index')->name('proceso_discip.index');
+            });
+            Route::controller(EvaluacionDesempController::class)->prefix('evaluacion_desemp')->group(function () {
+                Route::get('', 'index')->name('evaluacion_desemp.index');
+            });
+            Route::controller(VacacionesController::class)->prefix('vacaciones')->group(function () {
+                Route::get('', 'index')->name('vacaciones.index');
+            });
+            Route::controller(DocRetiroController::class)->prefix('doc_retiro')->group(function () {
+                Route::get('', 'index')->name('doc_retiro.index');
+            });
+            Route::controller(CapacitacionController::class)->prefix('capacitacion')->group(function () {
+                Route::get('', 'index')->name('capacitacion.index');
+            });
+            Route::controller(PoliticaController::class)->prefix('politica')->group(function () {
+                Route::get('', 'index')->name('politica.index');
+            });
+            Route::controller(DiagnosticosController::class)->prefix('diagnosticos')->group(function () {
+                Route::get('', 'index')->name('diagnosticos.index');
+            });
+            Route::controller(ClienteController::class)->prefix('cliente')->group(function () {
+                Route::get('', 'index')->name('cliente.index');
+            });
+            Route::controller(ProveedoresController::class)->prefix('proveedores')->group(function () {
+                Route::get('', 'index')->name('proveedores.index');
+            });
+            Route::controller(PermisosArchivoController::class)->prefix('permisosarchivo')->group(function () {
+                Route::get('', 'index')->name('permisosarchivo.index');
+            });
+        });
+        // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
     });
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-    Route::get('/getEmpleadosChat',[PageController::class, 'getEmpleadosChat'])->name('getEmpleadosChat');
-    Route::get('/getMensajesNuevosEmpleadosChat',[PageController::class, 'getMensajesNuevosEmpleadosChat'])->name('getMensajesNuevosEmpleadosChat');
-    Route::post('/setNuevoMensaje',[PageController::class, 'setNuevoMensaje'])->name('setNuevoMensaje');
-    Route::get('/getMensajesChatUsuario',[PageController::class, 'getMensajesChatUsuario'])->name('getMensajesChatUsuario');
-    Route::get('/getMensajesNuevosDestinatarioChat',[PageController::class, 'getMensajesNuevosDestinatarioChat'])->name('getMensajesNuevosDestinatarioChat');
+    Route::get('/getEmpleadosChat', [PageController::class, 'getEmpleadosChat'])->name('getEmpleadosChat');
+    Route::get('/getMensajesNuevosEmpleadosChat', [PageController::class, 'getMensajesNuevosEmpleadosChat'])->name('getMensajesNuevosEmpleadosChat');
+    Route::post('/setNuevoMensaje', [PageController::class, 'setNuevoMensaje'])->name('setNuevoMensaje');
+    Route::get('/getMensajesChatUsuario', [PageController::class, 'getMensajesChatUsuario'])->name('getMensajesChatUsuario');
+    Route::get('/getMensajesNuevosDestinatarioChat', [PageController::class, 'getMensajesNuevosDestinatarioChat'])->name('getMensajesNuevosDestinatarioChat');
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-    Route::get('/getNotificacionesEmpleado',[PageController::class, 'getNotificacionesEmpleado'])->name('getNotificacionesEmpleado');
-
+    Route::get('/getNotificacionesEmpleado', [PageController::class, 'getNotificacionesEmpleado'])->name('getNotificacionesEmpleado');
 });

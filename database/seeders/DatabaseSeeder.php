@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             TablaProyectos::class,
             TablaComponentes::class,
             TablaTareas::class,
+            TablaOpcionArchivo::class,
 
         ]);
     }

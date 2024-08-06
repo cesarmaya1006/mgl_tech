@@ -132,7 +132,7 @@ class TablaMenusSeeder extends Seeder
                 ],
             ],
             // Modulo archivo
-            ['nombre' => 'Módulo Archivo', 'menu_id' => null, 'url' => 'dashboard/modulo-archivo', 'icono' => 'far fa-folder-open', 'Array_1' => []],
+            ['nombre' => 'Módulo Archivo', 'menu_id' => null, 'url' => 'dashboard/archivo-modulo', 'icono' => 'far fa-folder-open', 'Array_1' => []],
             // Modulo proyectos
             ['nombre' => 'Módulo proyectos', 'menu_id' => null, 'url' => 'dashboard/proyectos', 'icono' => 'fas fa-project-diagram', 'Array_1' => []],
             // Modulo archivo

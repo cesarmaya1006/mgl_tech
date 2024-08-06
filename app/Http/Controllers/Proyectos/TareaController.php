@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Proyectos;
 use App\Http\Controllers\Controller;
 use App\Models\Empresa\Empleado;
 use App\Models\Proyectos\Componente;
+use App\Models\Proyectos\GTareas;
 use App\Models\Proyectos\Historial;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Proyectos\Tarea;
@@ -419,6 +420,16 @@ class TareaController extends Controller
     public function getHistSubTarea(Request $request){
         if ($request->ajax()) {
             return response()->json(['historiales' => Historial::with('empleado')->with('asignado')->where('tarea_id',$request['id'])->get()]);
+        } else {
+            abort(404);
+        }
+    }
+
+    public function getTareasEmpleadoGrupos(Request $request)
+    {
+        if ($request->ajax()) {
+            $empleado_id = session('id_usuario');
+            return response()->json(['tareas' => Tarea::with('grupo')->where('empleado_id',$empleado_id)->get(),'grupos' => GTareas::with('empleado')->with('tareas')->where('empleado_id',$empleado_id)]);
         } else {
             abort(404);
         }

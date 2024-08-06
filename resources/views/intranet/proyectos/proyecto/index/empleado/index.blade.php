@@ -166,6 +166,18 @@
         </div>
         <hr>
         <div class="row d-flex justify-content-evenly">
+            <div class="col-12 d-flex flex-row justify-content-between">
+                <h6><strong>Grupos tareas</strong></h6>
+                <button type="button" class="btn btn-primary btn-xs mini_sombra" id="btngruposTareasModal" data-bs-toggle="modal" data-bs-target="#gruposTareasModal">
+                    Editar Grupos
+                  </button>
+            </div>
+            <div class="col-12">
+                {{$empleado->gtareas()->count()}}
+            </div>
+        </div>
+        <hr>
+        <div class="row d-flex justify-content-evenly">
             <div class="col-12">
                 <div class="accordion accordion-flush" id="accordionFlushProyectos">
                     @can('proyectos.ver_datos_empresa')
@@ -585,6 +597,26 @@
 <input type="hidden" id="id_usuario" value="{{session('id_usuario')}}" data_url_proyLider="{{route('empleados.getProyectosGraficosLider')}}">
 <input type="hidden" id="empleados_calendar_empleado" data_url="{{route('empleados.calendar_empleado')}}" >
 <!-- Fin Modal proyectos empresas  -->
+<!-- Modal crear grupos tareas  -->
+<input type="hidden" id="getTareasEmpleadoGrupos" data_url="{{route('tareas.getTareasEmpleadoGrupos')}}">
+<div class="modal fade" id="gruposTareasModal" tabindex="-1" aria-labelledby="gruposTareasModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gruposTareasModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="bodyTareasEmpleadoGrupos">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- Fin crear grupos tareas  -->
 @endsection
 
 @section('scripts_pagina')

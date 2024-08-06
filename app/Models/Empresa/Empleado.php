@@ -6,6 +6,7 @@ use App\Models\Config\TipoDocumento;
 use App\Models\Proyectos\Componente;
 use App\Models\Proyectos\ComponenteAdicion;
 use App\Models\Proyectos\ComponenteCambio;
+use App\Models\Proyectos\GTareas;
 use App\Models\Proyectos\Historial;
 use App\Models\Proyectos\Proyecto;
 use App\Models\Proyectos\ProyectoAdicion;
@@ -18,7 +19,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Empleado extends Model
 {
-    use HasFactory,Notifiable;
+    use HasFactory, Notifiable;
     protected $table = 'empleados';
     protected $guarded = [];
 
@@ -39,17 +40,17 @@ class Empleado extends Model
         return $this->belongsTo(Cargo::class, 'cargo_id', 'id');
     }
     //----------------------------------------------------------------------------------
-    public function empresas_tranv ()
+    public function empresas_tranv()
     {
-        return $this->belongsToMany(Empresa::class,'tranv_empresas','empleado_id','empresa_id');
+        return $this->belongsToMany(Empresa::class, 'tranv_empresas', 'empleado_id', 'empresa_id');
     }
     //----------------------------------------------------------------------------------
     //==================================================================================
     //==================================================================================
     //----------------------------------------------------------------------------------
-    public function miembro_proyectos ()
+    public function miembro_proyectos()
     {
-        return $this->belongsToMany(Proyecto::class,'proyecto_miembros','empleado_id','proyecto_id');
+        return $this->belongsToMany(Proyecto::class, 'proyecto_miembros', 'empleado_id', 'proyecto_id');
     }
     //----------------------------------------------------------------------------------
     //==================================================================================
@@ -101,5 +102,10 @@ class Empleado extends Model
         return $this->hasMany(Tarea::class, 'empleado_id', 'id');
     }
     //----------------------------------------------------------------------------------
-
+    //----------------------------------------------------------------------------------
+    public function gtareas()
+    {
+        return $this->hasMany(GTareas::class, 'empleado_id', 'id');
+    }
+    //----------------------------------------------------------------------------------
 }

@@ -131,6 +131,19 @@ $(document).ready(function () {
     $('#flush-collapseCalendario').addClass('collapse');
     //----------------------------------------------------------------------------------------------------
     //===================================================================================================
+    $('#btngruposTareasModal').on( "click", function(){
+        const data_url = $('#getTareasEmpleadoGrupos').attr("data_url");
+        $.ajax({
+            async: false,
+            url: data_url,
+            type: "GET",
+            success: function (respuesta) {
+                console.log(respuesta);
+            },
+            error: function () {},
+        });
+    });
+    //===================================================================================================
     $('input[type=radio][name=tareasTipo]').change(function() {
         if (this.value == 'mias') {
             var data = {

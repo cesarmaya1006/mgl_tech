@@ -75,14 +75,14 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'proyectos.create'])->syncRoles([$rol1]);
         Permission::create(['name' => 'proyectos.edit'])->syncRoles([$rol1]);
         Permission::create(['name' => 'proyectos.destroy'])->syncRoles([$rol1]);
-        Permission::create(['name' => 'proyectos.detalle'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name' => 'proyectos.detalle'])->syncRoles([$rol1, $rol3]);
         Permission::create(['name' => 'proyectos.gestion'])->syncRoles([$rol1]);
         Permission::create(['name' => 'proyectos.proyecto_empresas'])->syncRoles([$rol1]);
         //---------------------------------------------------------------------------------------------
         //vistas
-        Permission::create(['name' => 'proyectos.ver_datos_empresa'])->syncRoles([$rol1,$rol3]);
-        Permission::create(['name' => 'proyectos.ver_estadistica_tareas'])->syncRoles([$rol1,$rol3]);
-        Permission::create(['name' => 'proyectos.ver_calendario_tareas'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name' => 'proyectos.ver_datos_empresa'])->syncRoles([$rol1, $rol3]);
+        Permission::create(['name' => 'proyectos.ver_estadistica_tareas'])->syncRoles([$rol1, $rol3]);
+        Permission::create(['name' => 'proyectos.ver_calendario_tareas'])->syncRoles([$rol1, $rol3]);
         //---------------------------------------------------------------------------------------------
         Permission::create(['name' => 'caja_presupuestos'])->syncRoles([$rol1]);
         Permission::create(['name' => 'exportar_proyecto'])->syncRoles([$rol1]);
@@ -127,9 +127,64 @@ class TablaRolesSeeder extends Seeder
         Permission::create(['name' => 'subtareas.gestion'])->syncRoles([$rol1]);
         //---------------------------------------------------------------------------------------------
         // Permisos Premisos Empleados
-        Permission::create(['name' => 'permisoscargos.index'])->syncRoles([$rol1,$rol3]);
+        Permission::create(['name' => 'permisoscargos.index'])->syncRoles([$rol1, $rol3]);
         //---------------------------------------------------------------------------------------------
-
-
+        // ===================================================================================
+        //Permisos Archivo
+        Permission::create(['name' => 'archivo-modulo.index', 'nombre' => 'Módulo Archivo Index'])->syncRoles([$rol1]);
+        //permisos archivo Accesos
+        //-------------------------------------------------------------------------------------
+        // Permisos Hojas de vida
+        Permission::create(['name' => 'hojas_vida.index', 'nombre' => 'Hojas de Vida Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Manuales de funcion
+        Permission::create(['name' => 'manuales.index', 'nombre' => 'Manuales de funciones Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Soportes de Afiliación
+        Permission::create(['name' => 'soportes_afiliacion.index', 'nombre' => 'Soportes de Afiliación Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Documentos contractuales
+        Permission::create(['name' => 'documentos_contractuales.index', 'nombre' => 'Documentos contractuales Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Situaciones laborales generales
+        Permission::create(['name' => 'sit_lab_gen.index', 'nombre' => 'Situaciones laborales generales Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Historias clínicas ocupacionales
+        Permission::create(['name' => 'histclinicasocup.index', 'nombre' => 'Historias clínicas ocupacionales Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Entrega de dotación, elementos de trabajo y de protección
+        Permission::create(['name' => 'dotaciones.index', 'nombre' => 'Entrega de dotación, elementos de trabajo y de protección Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Proceso disciplinario, faltas y sanciones
+        Permission::create(['name' => 'proceso_discip.index', 'nombre' => 'Proceso disciplinario, faltas y sanciones Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Evaluaciones de desempeño
+        Permission::create(['name' => 'evaluacion_desemp.index', 'nombre' => 'Evaluaciones de desempeño Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Vacaciones y licencias
+        Permission::create(['name' => 'vacaciones.index', 'nombre' => 'Vacaciones y licencias Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Documentos de Retiro
+        Permission::create(['name' => 'doc_retiro.index', 'nombre' => 'Documentos de Retiro Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Capacitaciones y certificaciones
+        Permission::create(['name' => 'capacitacion.index', 'nombre' => 'Capacitaciones y certificaciones Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Políticas, Reglamentos y otros
+        Permission::create(['name' => 'politica.index', 'nombre' => 'Políticas, Reglamentos y otros Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Diagnósticos Legales
+        Permission::create(['name' => 'diagnosticos.index', 'nombre' => 'Diagnósticos Legales Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Gestión de Clientes
+        Permission::create(['name' => 'cliente.index', 'nombre' => 'Gestión de Clientes Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Gestión de Proveedores
+        Permission::create(['name' => 'proveedores.index', 'nombre' => 'Gestión de Proveedores Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // Permisos Permisos Archivo
+        Permission::create(['name' => 'permisosarchivo.index', 'nombre' => 'Permisos Archivo Index'])->syncRoles([$rol1]);
+        //-------------------------------------------------------------------------------------
+        // ===================================================================================
     }
 }

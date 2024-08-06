@@ -338,7 +338,8 @@ class ComponenteController extends Controller
 
     }
 
-    public function ajusteMiembrosProyecto($id){
+    public function ajusteMiembrosProyecto($id)
+    {
         $componente_ini = Componente::findOrFail($id);
         $idMiembros = [];
         $idMiembros[] = $componente_ini->proyecto->empleado_id;
