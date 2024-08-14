@@ -238,6 +238,10 @@ Route::prefix('dashboard')->middleware(['auth:sanctum', config('jetstream.auth_s
             // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
             Route::get('reasignacionTarea', 'reasignacionTarea')->name('tareas.reasignacionTarea');
             Route::get('getTareasEmpleadoGrupos', 'getTareasEmpleadoGrupos')->name('tareas.getTareasEmpleadoGrupos');
+            Route::delete('eliminarTareasEmpleadoGrupos/{id}', 'destroyTareasEmpleadoGrupos')->name('tareas.destroyTareasEmpleadoGrupos');
+            Route::post('crearEmplGrupoTareas/{empleado_id}', 'createEmplGrupoTareas')->name('tareas.createEmplGrupoTareas');
+            Route::get('reasignacionGrupoTarea', 'reasignacionGrupoTarea')->name('tareas.reasignacionGrupoTarea');
+
 
         });
         // ------------------------------------------------------------------------------------

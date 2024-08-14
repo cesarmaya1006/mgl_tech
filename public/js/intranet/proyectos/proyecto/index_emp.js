@@ -133,16 +133,66 @@ $(document).ready(function () {
     //===================================================================================================
     $('#btngruposTareasModal').on( "click", function(){
         const data_url = $('#getTareasEmpleadoGrupos').attr("data_url");
+        const data_destroy = $(this).attr('data_destroy').slice(0, -1);
         $.ajax({
             async: false,
             url: data_url,
             type: "GET",
             success: function (respuesta) {
+                var htmlModal = '';
                 console.log(respuesta);
+                $.each(respuesta.grupos, function (index, grupo) {
+                htmlModal +='<tr>';
+                htmlModal +='<th scope="row">'+grupo.grupo+'</th>';
+                htmlModal +='<td>'+grupo.fecha_ini+'</td>';
+                htmlModal +='<td>'+grupo.fecha_fin+'</td>';
+                htmlModal +='<td>';
+                htmlModal +='<button class="btn-accion-tabla eliminar tooltipsC destroyGrupo"';
+                htmlModal +='title="Eliminar este registro" data_grupo="'+grupo.id+'">';
+                htmlModal +='<i class="fa fa-fw fa-trash text-danger"></i>';
+                htmlModal +='</button>';
+                htmlModal +='<td>';
+                htmlModal +='</tr>';
+                });
+                $('#tbodyGruposEmpleados').html(htmlModal);
             },
             error: function () {},
         });
     });
+    //===================================================================================================
+
+    $("#formNuevoGrupo").submit(function(e) {
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var actionUrl = form.attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: actionUrl,
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+                console.log(data);
+                var htmlModal = '';
+                htmlModal +='<tr>';
+                htmlModal +='<th scope="row">'+data.grupo.grupo+'</th>';
+                htmlModal +='<td>'+data.grupo.fecha_ini+'</td>';
+                htmlModal +='<td>'+data.grupo.fecha_fin+'</td>';
+                htmlModal +='<td>';
+                htmlModal +='<button class="btn-accion-tabla eliminar tooltipsC destroyGrupo"';
+                htmlModal +='title="Eliminar este registro" data_grupo="'+data.grupo.id+'">';
+                htmlModal +='<i class="fa fa-fw fa-trash text-danger"></i>';
+                htmlModal +='</button>';
+                htmlModal +='<td>';
+                htmlModal +='</tr>';
+                $('#tbodyGruposEmpleados').append(htmlModal);
+            }
+        });
+
+    });
+    //===================================================================================================
     //===================================================================================================
     $('input[type=radio][name=tareasTipo]').change(function() {
         if (this.value == 'mias') {
@@ -358,6 +408,34 @@ $(document).ready(function () {
         };
         llenarTablaTareas(empleado_id, data_url, data);
     });
+    // = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = ==
+    $(".itemMove").draggable({
+        revert: true
+      });
+
+      $(".ulPadre").droppable({
+        accept: '.itemMove',
+        drop: function(event, ui) {
+            $(this).append($(ui.draggable));
+            const data_url = $(ui.draggable).attr('data_url');
+            var data = {
+                gtarea_id: $(this).attr('data_ULID'),
+                tarea_id: $(ui.draggable).attr('data_ID'),
+            };
+            $.ajax({
+                async: false,
+                url: data_url,
+                type: "GET",
+                data: data,
+                success: function (respuesta) {
+
+                },
+                error: function () {},
+            });
+        }
+      });
+    // = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = == = = ==
+
 });
 
 function llenarTablaProyectos(empleado_id, data_url, data) {
@@ -658,3 +736,6 @@ function llenarCalendario(data_url,data){
     });
 
 }
+
+//dragable li
+

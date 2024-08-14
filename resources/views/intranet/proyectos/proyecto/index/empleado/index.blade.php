@@ -3,7 +3,20 @@
 @section('css_pagina')
 <!-- fullCalendar -->
 <link rel="stylesheet" href="{{asset('lte/plugins/fullcalendar/main.css')}}">
-
+<style>
+    .parent {
+   float: left;
+   margin-left: 5px;
+   height: 200px;
+   width: 200px;
+   border: 3px solid black
+ }
+ .child {
+   height: 50px;
+   width: 50px;
+   background-color: khaki;
+ }
+</style>
 @endsection
 
 @section('titulo_pagina')
@@ -165,21 +178,81 @@
             </div>
         </div>
         <hr>
-        <div class="row d-flex justify-content-evenly">
-            <div class="col-12 d-flex flex-row justify-content-between">
-                <h6><strong>Grupos tareas</strong></h6>
-                <button type="button" class="btn btn-primary btn-xs mini_sombra" id="btngruposTareasModal" data-bs-toggle="modal" data-bs-target="#gruposTareasModal">
-                    Editar Grupos
-                  </button>
-            </div>
-            <div class="col-12">
-                {{$empleado->gtareas()->count()}}
-            </div>
-        </div>
-        <hr>
+
         <div class="row d-flex justify-content-evenly">
             <div class="col-12">
                 <div class="accordion accordion-flush" id="accordionFlushProyectos">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>Grupos tareas</strong>
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <div class="row">
+                                    <div class="col-12 mb-3">
+                                        <button type="button" class="btn btn-primary btn-xs mini_sombra"
+                                                id="btngruposTareasModal"
+                                                data_destroy =" {{route('tareas.destroyTareasEmpleadoGrupos',['id'=>0])}}"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#gruposTareasModal">
+                                            Editar Grupos
+                                        </button>
+                                    </div>
+                                    <hr>
+                                    <div class="col-12 mt-3">
+                                        <div class="row p-md-3">
+                                            <div class="col-12 col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <h5 class="card-title">Tareas Sin Asignar a grupo</h5>
+                                                            </div>
+                                                            <div class="col-12">
+                                                                <div class="card">
+                                                                    <ul class="list-group list-group-flush ulPadre" data_ULID="0" style="min-height: 30px;border: 1px solid black">
+                                                                        @foreach ($empleado->tareas->where('progreso','<',100) as $tarea)
+                                                                            @if ($tarea->grupo()->count() == 0)
+                                                                                <li class="list-group-item itemMove {{$tarea->progreso<25?'bg-danger':($tarea->progreso<25?'bg-warning':($tarea->progreso<75?'bg-primary':'bg-success'))}}" data_url="{{route('tareas.reasignacionGrupoTarea')}}" data_ID="{{$tarea->id}}" draggable="true" >{{$tarea->titulo}}</li>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @foreach ($empleado->gtareas as $grupo)
+                                                <div class="col-12 col-md-3">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-12">
+                                                                    <h5 class="card-title">{{$grupo->grupo}}</h5>
+                                                                </div>
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <ul class="list-group list-group-flush ulPadre" data_ULID="{{$grupo->id}}" style="min-height: 30px;border: 1px solid black">
+                                                                            @foreach ($grupo->tareas->where('progreso','<',100) as $tarea)
+                                                                                <li class="list-group-item itemMove {{$tarea->progreso<25?'bg-danger':($tarea->progreso<25?'bg-warning':($tarea->progreso<75?'bg-primary':'bg-success'))}}" data_url="{{route('tareas.reasignacionGrupoTarea')}}" data_ID="{{$tarea->id}}" draggable="true" >{{$tarea->titulo}}</li>
+                                                                            @endforeach
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     @can('proyectos.ver_datos_empresa')
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="flush-headingGrupo">
@@ -600,18 +673,82 @@
 <!-- Modal crear grupos tareas  -->
 <input type="hidden" id="getTareasEmpleadoGrupos" data_url="{{route('tareas.getTareasEmpleadoGrupos')}}">
 <div class="modal fade" id="gruposTareasModal" tabindex="-1" aria-labelledby="gruposTareasModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="gruposTareasModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="gruposTareasModalLabel">Grupos Tareas</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" id="bodyTareasEmpleadoGrupos">
-          ...
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <h5>Nuevo Grupo</h5>
+                            </div>
+                            <form class="col-12 form-horizontal" id="formNuevoGrupo" action="{{ route('tareas.createEmplGrupoTareas',['empleado_id' => session('id_usuario')]) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                                @csrf
+                                @method('post')
+                                <div class="row">
+                                    <div class="col-12 form-group">
+                                        <label class="requerido" for="grupo">Nombre del Grupo</label>
+                                        <input type="text" class="form-control form-control-sm" name="grupo" id="grupo" required>
+                                    </div>
+                                    <div class="col-12 form-group">
+                                        <label class="requerido" for="fecha_ini">Fecha Inicial</label>
+                                        <input type="date" class="form-control form-control-sm" min="{{date('Y-m-d')}}" value="{{date('Y-m-d')}}" name="fecha_ini" id="fecha_ini" required>
+                                    </div>
+                                    <div class="col-12 form-group">
+                                        <label class="requerido" for="fecha_fin">Fecha Final</label>
+                                        <input type="date" class="form-control form-control-sm" min="{{date('Y-m-d')}}" value="{{date('Y-m-d')}}" name="fecha_fin" id="fecha_fin" required>
+                                    </div>
+                                    <div class="col-12 d-grid gap-2 d-md-block d-flex align-self-center">
+                                        <button type="submit" class="btn btn-primary btn-xs mini_sombra pl-sm-3 pr-sm-3" style="font-size: 0.7em;">Guardar</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <hr>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <h6>Grupos Actuales</h6>
+                            </div>
+                            <div class="col-12 table-responsive">
+                                <form action="{{ route('tareas.destroyTareasEmpleadoGrupos', ['id' => 0]) }}"
+                                    class="d-inline" method="POST" id="formDestroyTareasEmpleadoGrupos">
+                                    @csrf @method('delete')
+                                </form>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Grupo</th>
+                                            <th scope="col">Fecha Incial</th>
+                                            <th scope="col">Fecha Limite</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyGruposEmpleados">
+                                        <tr>
+                                            <th scope="row"></th>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
@@ -620,6 +757,10 @@
 @endsection
 
 @section('scripts_pagina')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+
+
 @include('intranet.layout.data_table')
 <script src="{{asset('js/intranet/general/ninja/highcharts.js')}}"></script>
 <script src="{{asset('js/intranet/general/ninja/highcharts-3d.js')}}"></script>

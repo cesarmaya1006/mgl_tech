@@ -429,7 +429,35 @@ class TareaController extends Controller
     {
         if ($request->ajax()) {
             $empleado_id = session('id_usuario');
-            return response()->json(['tareas' => Tarea::with('grupo')->where('empleado_id',$empleado_id)->get(),'grupos' => GTareas::with('empleado')->with('tareas')->where('empleado_id',$empleado_id)]);
+            return response()->json(['tareas' => Tarea::with('grupo')->where('empleado_id',$empleado_id)->get(),'grupos' => GTareas::where('empleado_id',$empleado_id)->get()]);
+        } else {
+            abort(404);
+        }
+    }
+    public function createEmplGrupoTareas(Request $request, $empleado_id){
+        if ($request->ajax()) {
+            $request['empleado_id'] = $empleado_id;
+            $grupo = GTareas::create($request->all());
+            return response()->json(['grupo' => $grupo]);
+
+        } else {
+            abort(404);
+        }
+    }
+
+    public function reasignacionGrupoTarea(Request $request)
+    {
+        if ($request->ajax()) {
+            $tarea = Tarea::findOrFail($request['tarea_id']);
+            if ($request['gtarea_id']!= '0') {
+                $tarea->grupo()->sync([$request['gtarea_id']]);
+            } else {
+                $tarea->grupo()->sync([]);
+            }
+
+
+            return response()->json(['tarea' => $tarea]);
+
         } else {
             abort(404);
         }
