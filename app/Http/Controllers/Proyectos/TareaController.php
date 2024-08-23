@@ -437,6 +437,7 @@ class TareaController extends Controller
     public function createEmplGrupoTareas(Request $request, $empleado_id){
         if ($request->ajax()) {
             $request['empleado_id'] = $empleado_id;
+            //dd($request->all());
             $grupo = GTareas::create($request->all());
             return response()->json(['grupo' => $grupo]);
 

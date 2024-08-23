@@ -134,6 +134,9 @@ $(document).ready(function () {
     $('#btngruposTareasModal').on( "click", function(){
         const data_url = $('#getTareasEmpleadoGrupos').attr("data_url");
         const data_destroy = $(this).attr('data_destroy').slice(0, -1);
+
+        const gruposTareasModal = new bootstrap.Modal(document.getElementById("gruposTareasModal"));
+
         $.ajax({
             async: false,
             url: data_url,
@@ -155,6 +158,7 @@ $(document).ready(function () {
                 htmlModal +='</tr>';
                 });
                 $('#tbodyGruposEmpleados').html(htmlModal);
+                gruposTareasModal.show();
             },
             error: function () {},
         });
@@ -162,12 +166,10 @@ $(document).ready(function () {
     //===================================================================================================
 
     $("#formNuevoGrupo").submit(function(e) {
-
         e.preventDefault(); // avoid to execute the actual submit of the form.
-
         var form = $(this);
         var actionUrl = form.attr('action');
-
+        console.log('sip');
         $.ajax({
             type: "POST",
             url: actionUrl,
