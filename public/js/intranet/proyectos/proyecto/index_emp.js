@@ -234,8 +234,6 @@ $(document).ready(function () {
             success: function (respuesta) {
                 var respuesta_html = "";
                 console.log(data_url);
-
-
                 $.each(respuesta.proyectos, function (index, proyecto) {
                     respuesta_html += "<tr>";
                     respuesta_html += '<td class="project-actions text-right">';
@@ -711,6 +709,10 @@ function cerrarModal() {
     proyectosModal.hide();
 }
 
+function cerrarModalAny(modal) {
+    const proyectosModal = new bootstrap.Modal(document.getElementById("modal"));
+    proyectosModal.hide();
+}
 function llenarCalendario(data_url,data){
     var Calendar = FullCalendar.Calendar;
     var calendarEl = document.getElementById('calendar');

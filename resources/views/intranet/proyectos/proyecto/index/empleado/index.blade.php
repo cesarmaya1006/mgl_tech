@@ -748,7 +748,7 @@
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="cerrarModalAny('gruposTareasModal')">Cerrar</button>
         </div>
       </div>
     </div>
@@ -758,26 +758,13 @@
 
 @section('scripts_pagina')
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-
-<script src="{{asset('js/intranet/general/external/jquery/jquery.js')}}"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 
 
 @include('intranet.layout.data_table')
 <script src="{{asset('js/intranet/general/ninja/highcharts.js')}}"></script>
 <script src="{{asset('js/intranet/general/ninja/highcharts-3d.js')}}"></script>
-
 <script src="{{ asset('lte/plugins/moment/moment.min.js') }}"></script>
 <script src="{{ asset('lte/plugins/fullcalendar/main.js') }}"></script>
 <script src='{{ asset('lte/plugins/fullcalendar/locales/es.js') }}'></script>
-
-
-
 <script src="{{ asset('js/intranet/proyectos/proyecto/index_emp.js') }}"></script>
 @endsection
