@@ -22,7 +22,7 @@
     <div class="row fixed-bottom p-3 mt-5" style="background-color: rgba(26, 26, 26, 0.0);font-size: 0.8em">
         <div class="col-12 text-center text-black d-flex flex-row justify-content-center">
             <a href="#" class="text-black" style="pointer-events: none;cursor: default;color:#000;">
-                <strong>Copyright &copy; 2024 <a href="" style="color: black">Maya & Moya - Sistem <div class="float-right d-none d-sm-inline-block ml-3">
+                <strong>Copyright &copy; 2025 <a href="" style="color: black">Maya & Moya - Sistem <div class="float-right d-none d-sm-inline-block ml-3">
                     <b>Version</b> 1.0.0
                 </div></a>.</strong>
 
